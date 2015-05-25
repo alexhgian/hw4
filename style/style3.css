@@ -1,8 +1,8 @@
 /* * * * * * * * * * * * * * * *
-*                             *
-*           FONTS             *
-*                             *
-* * * * * * * * * * * * * * * */
+ *                             *
+ *           FONTS             *
+ *                             *
+ * * * * * * * * * * * * * * * */
 
 @font-face {
     font-family: "robotolight";
@@ -75,10 +75,10 @@
 }
 /* SASS VARIABLES */
 /* * * * * * * * * * * * * * * *
-*                             *
-*        GENERAL STYLE        *
-*                             *
-* * * * * * * * * * * * * * * */
+ *                             *
+ *        GENERAL STYLE        *
+ *                             *
+ * * * * * * * * * * * * * * * */
 
 * {
     margin: 0;
@@ -89,19 +89,16 @@ html,
 body {
     height: 100%;
     width: 100%;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 body {
-    /*     background: #1D1D1D; */
-
+/*     background: #1D1D1D; */
     background: #f3f3f4;
 
-
-    /* font-family: "monster_h", sans-serif; */
+    font-family: "monster_h", sans-serif;
     font-weight: 600;
-    /*     color: #E6E6E6; */
-    font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+/*     color: #E6E6E6; */
 }
 
 .m
@@ -114,10 +111,10 @@ in-section {
     padding-left: 103px;
 }
 /* * * * * * * * * * * * * * * *
-*                             *
-*     NAVIGATION & FOOTER     *
-*                             *
-* * * * * * * * * * * * * * * */
+ *                             *
+ *     NAVIGATION & FOOTER     *
+ *                             *
+ * * * * * * * * * * * * * * * */
 /* TOP NAV */
 
 nav {
@@ -126,8 +123,8 @@ nav {
     width: 100%;
     height: 60px;
     line-height: 60px;
-    /*     background: #272E32; */
-    background: #2f4050;
+/*     background: #272E32; */
+	background: #2f4050;
     font-size: 1.5em;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -240,7 +237,7 @@ aside {
     height: -webkit-calc(100% - 96px);
     height: calc(100% - 96px);
     width: 100px;
-    background: #2f4050;
+    background: #272E32;
     border-radius: 0px;
 }
 
@@ -253,9 +250,7 @@ aside figure {
     height: 100px;
     border-bottom: 3px solid #1D1D1D;
     cursor: pointer;
-
-    /*     color: #55B7C5; */
-    color:#00fbff;
+    color: #55B7C5;
     text-align: center;
     line-height: 80px;
     font-size: 2.5em;
@@ -269,14 +264,12 @@ aside figure figcaption {
     font-size: 14px;
     position: relative;
     top: -42px;
-    /*     font-family: "monster_h", sans-serif; */
-    /*     color: #B1B1B1; */
-    color: #00fbff;
+    font-family: "monster_h", sans-serif;
+    color: #B1B1B1;
 }
 
 aside figure svg {
-    /*     fill: #55B7C5; */
-    fill : #00fbff;
+    fill: #55B7C5;
     width: 50px;
     height: 50px;
     position: absolute;
@@ -290,25 +283,21 @@ aside figure svg {
 }
 
 aside figure:hover {
-    /*     color: #77EDFF; */
-    color:#00fbff;
+    color: #77EDFF;
     background: rgba(255, 255, 255, 0.1);
 }
 
 aside figure:hover svg {
-    /*     fill: #77EDFF; */
-    color:#00fbff;
+    fill: #77EDFF;
 }
 
 .nav-selected {
-    /*     color: #77EDFF; */
-    color:#00fbff;
+    color: #77EDFF;
     background: rgba(255, 255, 255, 0.1);
 }
 
 .nav-selected svg {
-    /*     fill: #77EDFF; */
-    fill : #00fbff;
+    fill: #77EDFF;
 }
 /* FOOTER */
 
@@ -321,42 +310,38 @@ footer {
     bottom: 0px;
     left: 0;
     color: white;
-    /*     color: #B1B1B1; */
-    /*     background: #272E32; */
-    background: #2f4050;
+/*     color: #B1B1B1; */
+/*     background: #272E32; */
+	background: #2f4050;
     font-size: 0.9em;
-    /*border-top: 3px solid #1D1D1D;*/
+    border-top: 3px solid #1D1D1D;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
 }
 /* * * * * * * * * * * * * * * *
-*                             *
-*        WIRE GENERAL         *
-*                             *
-* * * * * * * * * * * * * * * */
+ *                             *
+ *        WIRE GENERAL         *
+ *                             *
+ * * * * * * * * * * * * * * * */
 
 .coin_wrapper {
-    margin-top: 60px;
-    margin-left: 100px;
-    padding: 40px 40px;
+    padding: 75px 110px;
 }
 
 a {
     text-decoration: none;
-
-    /* color: #E6E6E6; */
-
-    color: black;
+/*     color: #E6E6E6; */
+color: black;
 }
 
 a:visited {
-    /* color: #E6E6E6; */
+    color: #E6E6E6;
 }
 /* * * * * * * * * * * * * * * *
-*                             *
-*           WIRE 1            *
-*                             *
-* * * * * * * * * * * * * * * */
+ *                             *
+ *           WIRE 1            *
+ *                             *
+ * * * * * * * * * * * * * * * */
 
 #w1-wrapper {
     text-align: center;
@@ -400,11 +385,11 @@ a:visited {
 }
 
 #sign-up-button {
-    /*
+/*
     background: #1C3A3F;
     border: 1px solid #151515;
-    */
-    background: white;
+*/
+   background: white;
     border: 1px solid #e7eaec;
 }
 
@@ -413,10 +398,10 @@ a:visited {
 }
 
 #log-in-button {
-    /*
+/*
     background: #397C86;
     border: 1px solid #151515;
-    */
+*/
     background: #1ab394;
     border: 1px solid #1ab394;
 
@@ -481,16 +466,15 @@ a:visited {
     bottom: 7px;
 }
 /* * * * * * * * * * * * * * * *
-*                             *
-*           WIRE 2            *
-*                             *
-* * * * * * * * * * * * * * * */
+ *                             *
+ *           WIRE 2            *
+ *                             *
+ * * * * * * * * * * * * * * * */
 
 .overview-panel {
     display: inline-block;
     vertical-align: top;
     width: 300px;
-    background-color: white;
 }
 
 .overview-panel .total-value {
@@ -512,7 +496,6 @@ a:visited {
     margin-top: 3px;
     font-size: 2em;
     font-weight: 900;
-    color:white;
 }
 
 .overview-panel .total-value .total-change {
@@ -524,7 +507,6 @@ a:visited {
 
 .overview-panel .total-value .total-label {
     font-size: 1.1em;
-    color:white;
 }
 
 .overview-panel .mobile-toggle {
@@ -561,12 +543,10 @@ a:visited {
 }
 
 .overview-panel .market-status {
-    width: 85%;
+    width: 100%;
     height: 20px;
     margin-top: 20px;
     font-size: 1.05em;
-    padding-left: 25px;
-    padding-right: 25px;
 }
 
 .overview-panel .market-status > div {
@@ -579,14 +559,11 @@ a:visited {
 
 .overview-panel .market-status .market-time {
     float: right;
-
 }
 
 .overview-panel .market-list {
-    width: 85%;
+    width: 100%;
     margin-top: 20px;
-    padding-left: 25px;
-    padding-right: 25px;
 }
 
 .overview-panel .market-list .market-item-header {
@@ -645,8 +622,7 @@ a:visited {
 }
 
 .overview-panel .pos-change {
-    /*     color: #A7FF8B !important; */
-    color: #63E03B !important;
+    color: #A7FF8B !important;
 }
 
 .overview-panel .neg-change {
@@ -665,9 +641,8 @@ a:visited {
     margin-left: 50px;
     width: -webkit-calc(100% - 360px);
     width: calc(100% - 360px);
-    height: 455px;
+    height: 400px;
     position: relative;
-
 }
 
 .graph-panel > section {
@@ -679,7 +654,6 @@ a:visited {
     width: -webkit-calc(100% - 150px);
     width: calc(100% - 150px);
     height: 100%;
-    background-color:white;
 }
 
 .graph-panel .chart-y-label {
@@ -752,16 +726,15 @@ a:visited {
     background: #C29FFF;
 }
 /* * * * * * * * * * * * * * * *
-*                             *
-*           WIRE 3            *
-*                             *
-* * * * * * * * * * * * * * * */
+ *                             *
+ *           WIRE 3            *
+ *                             *
+ * * * * * * * * * * * * * * * */
 
 .current_gold {
     margin-top: -24px;
     margin-left: 170px;
     margin-bottom: 0;
-    color:white;
 }
 
 .current_gold tr > td {
@@ -786,13 +759,10 @@ a:visited {
 .my_stack {
     clear: both;
     margin-top: 30px;
-
 }
 
 .my_stack table {
-    background-color: white;
-    /*width: 90%;*/
-    width: 100%;
+    width: 90%;
     margin-top: 25px;
     margin-left: auto;
     margin-right: auto;
@@ -802,17 +772,16 @@ a:visited {
 
 .my_stack table th {
     width: 16%;
+    border-bottom: 1px solid white;
     padding-top: 10px;
     padding-bottom: 10px;
     font-family: "monster_r";
     font-weight: bold;
-    border-bottom: 1px solid grey;
 }
 
 .my_stack table td {
     padding-top: 10px;
     padding-bottom: 10px;
-
 }
 
 .my_stack table tbody > tr:hover {
@@ -855,10 +824,10 @@ a:visited {
     background-color: #5D5D5D;
 }
 /* * * * * * * * * * * * * * * *
-*                             *
-*           WIRE 4            *
-*                             *
-* * * * * * * * * * * * * * * */
+ *                             *
+ *           WIRE 4            *
+ *                             *
+ * * * * * * * * * * * * * * * */
 
 .coin_main {
     width: 100%;
@@ -875,7 +844,7 @@ a:visited {
 }
 
 .coin_main .breadcrumb svg {
-    /* fill: #E6E6E6; */
+    fill: #E6E6E6;
     width: 20px;
     height: 20px;
     position: relative;
@@ -900,10 +869,7 @@ a:visited {
 
 .coin_detail {
     float: left;
-     padding-bottom: 50px;
-    background-color: white;   border-color: #e7eaec;   border-image: none;   border-style: solid solid none;   border-width: 4px 0px 0;   color: inherit;   margin-bottom: 0;
-    padding: 14px 15px 7px;   min-height: 48px;
-    border-top-width: 5px;     padding-top: 50px;     padding-right: 50px;     padding-left: 50px;     padding-bottom: 50px;
+    padding-bottom: 50px;
 }
 
 .coin_detail a {
@@ -938,7 +904,7 @@ a:visited {
 
 .coin_detail tr > td:nth-child(2) {
     text-align: left;
-    color: #919191;
+    color: #68CEDE;
 }
 
 .img_box {
@@ -946,9 +912,7 @@ a:visited {
     height: 200px;
     margin-left: auto;
     margin-right: auto;
-    border: 1px dashed grey;
-    background-color: white;
-    border-radius: 10px;
+    border: 1px dashed white;
 }
 
 .img_circle {
@@ -969,10 +933,10 @@ strong {
     font-weight: 700;
 }
 /* * * * * * * * * * * * * * * *
-*                             *
-*           WIRE 5            *
-*                             *
-* * * * * * * * * * * * * * * */
+ *                             *
+ *           WIRE 5            *
+ *                             *
+ * * * * * * * * * * * * * * * */
 
 input {
     background-color: #4c4c4c;
@@ -982,7 +946,7 @@ input {
     border: none;
     color: white;
     font-family: "monster_h";
-    font-size: 13px;
+    font-size: 12px;
     border-radius: 5px;
     outline: 0;
 }
@@ -1005,34 +969,28 @@ select {
     color: white;
     border: none;
     font-family: "monster_h";
-    font-size: 13px;
+    font-size: 12px;
     padding-left: 10px;
     border-radius: 5px;
     outline: 0;
 }
 
 #save {
-    /*     background: #397C86; */
-    /*     border: 1px solid #151515; */
-    background: #1ab394;
-    border: 1px solid #1ab394;
-
+    background: #397C86;
+    border: 1px solid #151515;
     color: white;
     text-decoration: none;
     width: 275px;
 }
 
 #save:hover {
-    background: #18a689;
-    border: 1px solid #18a689;
+    border: 1px solid #68CEDE;
 }
 
 #cancel {
-    /*     background: #1C3A3F; */
-    /*     border: 1px solid #151515; */
-    border: 1px solid #b9bec2;
-    background: white;
-    color: grey;
+    background: #1C3A3F;
+    border: 1px solid #151515;
+    color: white;
     text-decoration: none;
     width: 275px;
     height: 40px;
@@ -1041,13 +999,13 @@ select {
 }
 
 #cancel:hover {
-    border: 1px solid rgba(0, 0, 0, 0.50);
+    border: 1px solid #68CEDE;
 }
 /* * * * * * * * * * * * * * * *
-*                             *
-*     RESPONSIVE HANDLING     *
-*                             *
-* * * * * * * * * * * * * * * */
+ *                             *
+ *     RESPONSIVE HANDLING     *
+ *                             *
+ * * * * * * * * * * * * * * * */
 
 @media screen and (max-width: 1000px) {
     #w1-wrapper section {
@@ -1058,7 +1016,6 @@ select {
         visibility: hidden;
     }
     .main-section {
-
         padding-left: 0;
     }
     .coin_main {
@@ -1085,7 +1042,9 @@ select {
         margin-left: auto;
         margin-right: auto;
     }
-
+	.coin_wrapper {
+	    padding: 75px 0px;
+	}
 
     .breadcrumb {
         display: none;

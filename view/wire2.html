@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="bullion management site, rare coins, gold, silver, platinum">
+    <meta name="author" content="CSE134B Dream Team">
+    <link rel="stylesheet" type="text/css" href="../style/style.css">
+    <meta name=viewport content="width=device-width, initial-scale=.8, minimum-scale = .8, user-scalable=yes">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <script src="../js/jquery-1.11.2.min.js"></script>
+    <!--     <script src="../js/Chart.js"></script> -->
+    <script src="../bower_components/zingchart/client/zingchart.min.js"></script>
+    <script src="../js/main.js"></script>
+    <title>Home - CoinFlip</title>
+</head>
+
+<body>
+<script>loadTopNavPersist();</script>
+<script>loadSideNav(0);</script>
+
+<section class="main-section">
+    <section class="coin_wrapper">
+        <section class="overview-panel">
+            <section class="total-value">
+                <div class="total-dollars">$24,249.23</div>
+                <div class="total-change pos-change">+3.5%</div><br/>
+                <div class="total-label">My Total Coin Value</div>
+            </section>
+            <section class="mobile-toggle">
+                <div class="mobile-toggle-button mtb-1 mobile-toggle-selected">
+                    <svg class="icon icon-menu">
+                        <symbol id="icon-menu" viewBox="0 0 1024 1024">
+                            <title>menu</title>
+                            <path class="path1" d="M128 768h768v-85.333h-768v85.333zM128 554.667h768v-85.333h-768v85.333zM128 256v85.333h768v-85.333h-768z"></path>
+                        </symbol>
+                        <use xlink:href="#icon-menu"></use>
+                    </svg>
+                </div>
+                <div class="mobile-toggle-button mtb-2">
+                    <svg class="icon icon-graph">
+                        <symbol id="icon-graph" viewBox="0 -200 1424 1424">
+                            <title>graph</title>
+                            <path class="path1" d="M704 256h-192v640h192v-640zM960 448h-192v448h192v-448zM64 960v-128h64v-64h-64v-128h64v-64h-64v-128h64v-64h-64v-128h64v-64h-64v-128h64v-64h-128v1024h1024v-64h-960zM448 576h-192v320h192v-320z"></path>
+                        </symbol>
+                        <use xlink:href="#icon-graph"></use>
+                    </svg>
+                </div>
+            </section>
+            <section class="market-status">
+                <div class="market-open">Market is open</div>
+                <div class="market-time">closes in 3h 36min</div>
+            </section>
+            <section class="market-list">
+
+                <a href="wire3.html">
+                    <section class="market-item-header">
+                        Gold
+                        <svg class="icon icon-play-arrow">
+                            <symbol id="icon-play-arrow1" viewBox="0 0 1024 1024">
+                                <title>play-arrow</title>
+                                <path class="path1" d="M341.333 213.333v597.333l469.333-298.667z"></path>
+                            </symbol>
+                            <use xlink:href="#icon-play-arrow1"></use>
+                        </svg>
+                    </section>
+                </a>
+                <section class="market-item-stats">
+                    <table>
+                        <tr>
+                            <td>1206.10</td>
+                            <td>1207.10</td>
+                            <td class="pos-change">+23.40</td>
+                        </tr>
+                        <tr>
+                            <td>Bid</td>
+                            <td>Ask</td>
+                            <td>Change</td>
+                        </tr>
+                    </table>
+                </section>
+
+
+                <a href="wire3.html">
+                    <section class="market-item-header">
+                        Silver
+                        <svg class="icon icon-play-arrow">
+                            <symbol id="icon-play-arrow2" viewBox="0 0 1024 1024">
+                                <title>play-arrow</title>
+                                <path class="path1" d="M341.333 213.333v597.333l469.333-298.667z"></path>
+                            </symbol>
+                            <use xlink:href="#icon-play-arrow2"></use>
+                        </svg>
+                    </section>
+                </a>
+                <section class="market-item-stats">
+                    <table>
+                        <tr>
+                            <td>16.10</td>
+                            <td>16.50</td>
+                            <td class="neg-change">-0.36</td>
+                        </tr>
+                        <tr>
+                            <td>Bid</td>
+                            <td>Ask</td>
+                            <td>Change</td>
+                        </tr>
+                    </table>
+                </section>
+                <a href="wire3.html">
+                    <section class="market-item-header">
+                        Platinum
+                        <svg class="icon icon-play-arrow">
+                            <symbol id="icon-play-arrow3" viewBox="0 0 1024 1024">
+                                <title>play-arrow</title>
+                                <path class="path1" d="M341.333 213.333v597.333l469.333-298.667z"></path>
+                            </symbol>
+                            <use xlink:href="#icon-play-arrow3"></use>
+                        </svg>
+                    </section>
+                </a>
+                <section class="market-item-stats">
+                    <table>
+                        <tr>
+                            <td>1206.10</td>
+                            <td>1207.10</td>
+                            <td class="pos-change">+23.40</td>
+                        </tr>
+                        <tr>
+                            <td>Bid</td>
+                            <td>Ask</td>
+                            <td>Change</td>
+                        </tr>
+                    </table>
+                </section>
+            </section>
+        </section>
+
+        <section class="graph-panel">
+<!--
+            <section class="chart-legend">
+                <div class="legend-left-half">
+                    <section class="legend-item">
+                        <div class="legend-item-color" id="legend-1"></div>
+                        Gold Total
+                    </section>
+                    <section class="legend-item">
+                        <div class="legend-item-color" id="legend-2"></div>
+                        Platinum Total
+                    </section>
+                    <section class="legend-item">
+                        <div class="legend-item-color" id="legend-3"></div>
+                        Silver Total
+                    </section>
+                </div>
+                <div class="legend-right-half">
+                    <section class="legend-item">
+                        <div class="legend-item-color" id="legend-4"></div>
+                        1oz Gold
+                    </section>
+                    <section class="legend-item">
+                        <div class="legend-item-color" id="legend-5"></div>
+                        1oz Platinum
+                    </section>
+                    <section class="legend-item">
+                        <div class="legend-item-color" id="legend-6"></div>
+                        1oz Silver
+                    </section>
+                </div>
+            </section>
+-->
+            <div class="chart-y-label">PRICE</div>
+            <div class="chart-x-label">TIME</div>
+            <section class="chart-wrap">
+                <!--                     <canvas id="total-chart"></canvas> -->
+                <div id='chartDiv'></div>
+            </section>
+        </section>
+    </section>
+
+</section>
+
+<script>
+loadFooter();
+var myValue1 = [];
+for(var i = 0; i<180;i++){
+    myValue1.push([i, Math.floor((Math.random() * 200) + 150)]);
+}
+var myValue2 = [];
+for(var i = 0; i<180;i++){
+    myValue2.push([i, Math.floor((Math.random() * 500) + 400)]);
+}
+var chartData=
+{
+       "background-color":"none",
+       "type":"line",
+       "plotarea":{
+           "margin-top":10,
+           "margin-right":50,
+           "margin-bottom":50
+       },
+       "scroll-x":{
+           "handle":{
+               "height":20,
+               "background-color":"white",
+               "border-left":"1px solid #a6a6a6",
+               "border-right":"1px solid #a6a6a6",
+               "border-top":"1px solid #a6a6a6",
+               "border-bottom":"1px solid #a6a6a6",
+               "border-radius":"5px"
+           },
+           "bar":{
+               "background-color":"#a6a6a6",
+               "alpha":0.5,
+               "border-radius":"5px"
+           }
+       },
+       "scaleX":{
+           "values":["Oct 31,<br>2000","Nov 30,<br>2000","Dec 31,<br>2000","Jan 31,<br>2001","Feb 28,<br>2001","Mar 31,<br>2001","Apr 30,<br>2001","Mar 31,<br>2001","May 30,<br>2001","Jun 31,<br>2001","Jul 31,<br>2001","Aug 30,<br>2001","Oct 31,<br>2001","Nov 30,<br>2001","Dec 31,<br>2001","Jan 31,<br>2002","Feb 28,<br>2002","Mar 31,<br>2002","Apr 30,<br>2002","Mar 31,<br>2002","May 30,<br>2002","Jun 31,<br>2002","Jul 31,<br>2002","Aug 30,<br>2002","Oct 31,<br>2002","Nov 30,<br>2002","Dec 31,<br>2002","Jan 31,<br>2003","Feb 28,<br>2003","Mar 31,<br>2003","Apr 30,<br>2003","Mar 31,<br>2003","May 30,<br>2003","Jun 31,<br>2003","Jul 31,<br>2003","Aug 30,<br>2003","Oct 31,<br>2003","Nov 30,<br>2003","Dec 31,<br>2003","Jan 31,<br>2004","Feb 29,<br>2004","Mar 31,<br>2004","Apr 30,<br>2004","Mar 31,<br>2004","May 30,<br>2004","Jun 31,<br>2004","Jul 31,<br>2004","Aug 30,<br>2004","Oct 31,<br>2004","Nov 30,<br>2004","Dec 31,<br>2004","Jan 31,<br>2005","Feb 28,<br>2005","Mar 31,<br>2005","Apr 30,<br>2005","Mar 31,<br>2005","May 30,<br>2005","Jun 31,<br>2005","Jul 31,<br>2005","Aug 30,<br>2005","Oct 31,<br>2005","Nov 30,<br>2005","Dec 31,<br>2005","Jan 31,<br>2006","Feb 28,<br>2006","Mar 31,<br>2006","Apr 30,<br>2006","Mar 31,<br>2006","May 30,<br>2006","Jun 31,<br>2006","Jul 31,<br>2006","Aug 30,<br>2006","Oct 31,<br>2006","Nov 30,<br>2006","Dec 31,<br>2006","Jan 31,<br>2007","Feb 28,<br>2007","Mar 31,<br>2007","Apr 30,<br>2007","Mar 31,<br>2007","May 30,<br>2007","Jun 31,<br>2007","Jul 31,<br>2007","Aug 30,<br>2007","Oct 31,<br>2007","Nov 30,<br>2007","Dec 31,<br>2007","Jan 31,<br>2008","Feb 29,<br>2008","Mar 31,<br>2008","Apr 30,<br>2008","Mar 31,<br>2008","May 30,<br>2008","Jun 31,<br>2008","Jul 31,<br>2008","Aug 30,<br>2008","Oct 31,<br>2008","Nov 30,<br>2008","Dec 31,<br>2008","Jan 31,<br>2009","Feb 28,<br>2009","Mar 31,<br>2009","Apr 30,<br>2009","Mar 31,<br>2009","May 30,<br>2009","Jun 31,<br>2009","Jul 31,<br>2009","Aug 30,<br>2009","Oct 31,<br>2009","Nov 30,<br>2009","Dec 31,<br>2009","Jan 31,<br>2010","Feb 28,<br>2010","Mar 31,<br>2010","Apr 30,<br>2010","Mar 31,<br>2010","May 30,<br>2010","Jun 31,<br>2010","Jul 31,<br>2010","Aug 30,<br>2010","Oct 31,<br>2010","Nov 30,<br>2010","Dec 31,<br>2010","Jan 31,<br>2011","Feb 28,<br>2011","Mar 31,<br>2011","Apr 30,<br>2011","Mar 31,<br>2011","May 30,<br>2011","Jun 31,<br>2011","Jul 31,<br>2011","Aug 30,<br>2011","Oct 31,<br>2011","Nov 30,<br>2011","Dec 31,<br>2011","Jan 31,<br>2012","Feb 29,<br>2012","Mar 31,<br>2012","Apr 30,<br>2012","Mar 31,<br>2012","May 30,<br>2012","Jun 31,<br>2012","Jul 31,<br>2012","Aug 30,<br>2012","Oct 31,<br>2012","Nov 30,<br>2012","Dec 31,<br>2012","Jan 31,<br>2013","Feb 28,<br>2013","Mar 31,<br>2013","Apr 30,<br>2013","Mar 31,<br>2013","May 30,<br>2013","Jun 31,<br>2013","Jul 31,<br>2013","Aug 30,<br>2013","Oct 31,<br>2013","Nov 30,<br>2013","Dec 31,<br>2013","Jan 31,<br>2014","Feb 28,<br>2014","Mar 31,<br>2014","Apr 30,<br>2014","Mar 31,<br>2014","May 30,<br>2014","Jun 31,<br>2014","Jul 31,<br>2014","Aug 30,<br>2014","Oct 31,<br>2014"],
+           "line-width":0,
+           "max-items":6,
+           "tick":{
+               "visible":false
+           },
+           "zooming":false,
+           "guide":{
+               "visible":false
+           },
+           "items-overlap":true
+       },
+       "scaleY":{
+           "values":"0:1200:200",
+           "line-width":0,
+           "tick":{
+               "visible":false
+           },
+           "guide":{
+               "visible":true,
+               "line-color":"#333",
+               "line-width":"1px",
+               "line-style":"solid"
+           }
+       },
+       "crosshair-x":{
+           "scale-label":{
+               "border-color":"#00B5B5",
+               "border-width":"2px",
+               "background-color":"rgb(255, 255, 255)",
+               "font-color":"#000",
+               "text":"%v",
+               "alpha":1,
+               "width":70
+           }
+       },
+       "plot":{
+           "line-width":3,
+           "line-color":"#00B5B5",
+           "background-color":"#00B5B5",
+           "shadow":"false",
+           "zooming":true,
+           "marker":{
+               "visible":false
+           },
+           "tooltip":{
+               "visible":false
+           },
+           "active-area":true
+       },
+       "series":[
+           {
+               "values":myValue1
+           },
+           {
+               "values":myValue2
+           }
+       ]
+   };
+
+window.onload=function(){
+    zingchart.render({
+        id:'chartDiv',
+        height:455,
+        width:"100%",
+        data:chartData
+    });
+    console.log(document.getElementById('chartDiv-license'));
+};
+
+</script>
+</body>
+
+</html>

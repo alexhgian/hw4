@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script data-require="cookies@1.2.1" data-semver="1.2.1" src="https://cdnjs.cloudflare.com/ajax/libs/Cookies.js/1.2.1/cookies.min.js"></script>
+
+	<!-- What the bottom link does in one request
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/base-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/forms-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/buttons-min.css">
+	-->
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/combo?pure/0.6.0/base-min.css&pure/0.6.0/buttons-min.css&pure/0.6.0/forms-min.css">
+    <style>
+	    .wrapper {
+		    margin:2em 2em 2em 2em;
+	    }
+	</style>
+</head>
+
+<body>
+    <section class="wrapper">
+        <form class="pure-form pure-form-stacked">
+            <fieldset>
+                <legend>User Login</legend>
+                <label for="username">Username</label>
+                <input id="username" type="text" placeholder="username" value="alex">
+                <label for="password">Password</label>
+                <input id="password" type="password" placeholder="Password" value="password">
+<!--
+                <label for="remember" class="pure-checkbox">
+                    <input id="remember" type="checkbox" />Remember me
+                </label>
+-->
+                <button id="submitButton" type="button" class="pure-button pure-button-primary">Sign in</button>
+            </fieldset>
+        </form>
+        <pre id="data">Data: </pre>
+    </section>
+    <script>
+	    // Wait till the DOM completely loads before allowing the script to run.
+        window.onload = function() {
+            document.getElementById("submitButton")
+            .addEventListener("click", function() {
+	            // APP and API Key for Parse
+	            var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
+                var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
+
+                // Get the username and password from the DOM
+                var username = document.getElementById('username').value;
+                var password = document.getElementById('password').value;
+
+                // URL Encode the string so it gets sent properlly
+                var encodedString = encodeURI('username=' + username + '&password=' + password);
+                console.log(encodedString);
+
+				// Create a request
+                var req = new XMLHttpRequest();
+
+				// Request Handler
+				req.onreadystatechange = function (oEvent) {
+					if (req.readyState === 4) {
+						if (req.status === 200) { // Handle Success and Failure
+							// Parse the string into a JSON obj
+							var tmpObj = JSON.parse(req.responseText);
+							// Cookies wrapper library at 1kb for convenience
+							Cookies.set('sessionToken', tmpObj.sessionToken);
+							console.log('Session Token: '+ Cookies.get('sessionToken'));
+						} else {
+
+							console.log("Error: ", req.statusText); // Error Message
+						}
+					}
+				};
+
+				// Open the request with the Url Encoded String for login
+                req.open("GET", "https://api.parse.com/1/login?" + encodedString, true);
+
+                // Set Request Header for Parse
+                req.setRequestHeader("X-Parse-Application-Id", appId);
+                req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+                req.send();  // Finally send the request
+            });
+        }
+    </script>
+</body>
+
+</html>

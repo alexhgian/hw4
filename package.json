@@ -1,0 +1,19 @@
+{
+  "name": "hw4",
+  "version": "1.0.0",
+  "description": "CSE134B Bull's Hit by CacheIT",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cse134b-cacheit/hw4.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cse134b-cacheit/hw4/issues"
+  },
+  "homepage": "https://github.com/cse134b-cacheit/hw4"
+}

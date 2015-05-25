@@ -1,0 +1,21 @@
+{
+  "name": "hw4",
+  "version": "0.0.0",
+  "homepage": "https://github.com/cse134b-cacheit/hw4",
+  "authors": [
+    "Alex Gian <alexhgian@gmail.com>"
+  ],
+  "description": "CSE134B Coin Collection App",
+  "main": "view/index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "zingchart": "~2.1.0"
+  }
+}
