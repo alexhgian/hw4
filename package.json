@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/cse134b-cacheit/hw4/issues"
   },
-  "homepage": "https://github.com/cse134b-cacheit/hw4"
+  "homepage": "https://github.com/cse134b-cacheit/hw4",
+  "dependencies": {
+    "gulp-live-server": "0.0.14"
+  }
 }
