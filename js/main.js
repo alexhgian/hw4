@@ -110,7 +110,7 @@ $(window).load(function() {
 	 * * * * * * * * * * * * * */
 
 	 $('.icon-spinner2').click(function(){
-	 	location.reload();	
+	 	location.reload();
 	 });
 
 	 $('tr').click(function(){
