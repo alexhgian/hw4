@@ -729,8 +729,8 @@ a:visited {
     display: inline-block;
     vertical-align: top;
     margin-left: 50px;
-    width: -webkit-calc(100% - 354px);
-    width: calc(100% - 354px);
+    width: -webkit-calc(100% - 360x);
+    width: calc(100% - 360px);
     height: 455px;
     position: relative;
 
@@ -825,7 +825,7 @@ a:visited {
 
 .current_gold {
     margin-top: -24px;
-    margin-left: 170px;
+    margin-left: 150px;
     margin-bottom: 0;
     color:white;
 }
