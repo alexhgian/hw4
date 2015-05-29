@@ -202,6 +202,7 @@ nav a {
     color: #E6E6E6;
 }
 
+
 .mobile-nav {
     position: fixed;
     top: 0;
@@ -354,6 +355,7 @@ footer {
     /*border-top: 3px solid #1D1D1D;*/
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
+    z-index:100;
 }
 /* * * * * * * * * * * * * * * *
 *                             *
@@ -608,11 +610,42 @@ a:visited {
 
 }
 
+.overview-panel .market-item-container {
+    width: 100%;
+    height: 125px;
+    position: relative;
+}
+.overview-panel .market-item-loader {
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: grey;
+    background-color: rgba(255, 255, 255, 0.75);
+    z-index: 10;
+}
+
+.overview-panel .market-item-loader i {
+    position: relative;
+    font-size: 2em;
+    right: -45%;
+    top: 15%;
+}
+
 .overview-panel .market-list {
     width: 85%;
     margin-top: 20px;
-    padding-left: 25px;
-    padding-right: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+
+    /*width: 100%;*/
+    height: 100%;
+    /*position: absolute;*/
+    top: 0;
+    left: 0;
 }
 
 .overview-panel .market-list .market-item-header {
@@ -649,7 +682,10 @@ a:visited {
     color:black;
 }
 
+
 .overview-panel .market-list .market-item-stats {
+
+
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -807,6 +843,10 @@ a:visited {
     color: #A7FF8B;
 }
 
+.current_gold .pos-change-main {
+    color: #A7FF8B
+}
+
 #my_gold_value {
     position: absolute;
     margin-top: -23px;
@@ -818,6 +858,31 @@ a:visited {
     margin-top: 30px;
     font-family: "lato-regular";
 
+
+}
+/*Transparent Divs*/
+.my_stack .table-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.my_stack .table-loader {
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: grey;
+    background-color: rgba(255, 255, 255, 0.75);
+    z-index: 10;
+}
+
+.my_stack .table-loader i {
+    position: relative;
+    font-size: 2em;
+    right: -48%;
+    top: 45%;
 }
 
 .my_stack table {
@@ -880,6 +945,10 @@ a:visited {
 .my_stack table caption section .stack_ctrl svg {
     margin-bottom: -7px;
     cursor: pointer;
+}
+
+.my_stack table caption section .stack_ctrl i {
+    vertical-align: middle;
 }
 
 .coin_mini {
@@ -1011,12 +1080,12 @@ strong {
 * * * * * * * * * * * * * * * */
 
 input {
-    /*background-color: #4c4c4c;*/
+    background-color: #4c4c4c;
     width: 125px;
     height: 27px;
     padding: 0 10px;
     border: none;
-
+    color:white;
     font-family: "lato-light";
     font-size: 13px;
     border-radius: 5px;
@@ -1024,9 +1093,9 @@ input {
 }
 
 input:focus {
-    /*outline: 2px solid #68CEDE;*/
-    box-shadow: 0 0 10px rgba(81, 203, 238, 1);
-    border: 1px solid rgba(81, 203, 238, 1);
+    outline: 2px solid #68CEDE;
+    /*box-shadow: 0 0 10px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);*/
 }
 
 select {
@@ -1137,6 +1206,9 @@ select {
     }
     .overview-panel {
         width: 100%;
+    }
+    .overview-panel .market-item-loader i {
+        right: -48%;
     }
     .overview-panel .mobile-toggle {
         display: block;

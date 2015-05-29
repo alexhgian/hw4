@@ -1,9 +1,9 @@
 var myValue1 = [];
-for(var i = 0; i<64;i++){
+for(var i = 0; i<32;i++){
     myValue1.push([i, Math.floor((Math.random() * 200) + 150)]);
 }
 var myValue2 = [];
-for(var i = 0; i<64;i++){
+for(var i = 0; i<32;i++){
     myValue2.push([i, Math.floor((Math.random() * 500) + 400)]);
 }
 var xAxis = [];
