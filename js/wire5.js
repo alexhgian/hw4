@@ -1,22 +1,12 @@
 
-$(document).ready(function(){});
-
-
-
 var headers = {
          "X-Parse-Application-Id": "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W",
          "X-Parse-REST-API-Key": "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1"
       };
 
-
-
 function triggerFunction() {
     $('#file_upload').trigger("click");
 }
-
-
-
-
 
 var loadFile = function(event) {
   var reader = new FileReader();
@@ -29,9 +19,8 @@ var loadFile = function(event) {
    $(function() {
 
    // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
-   $('#uploadbutton').click(function() {
+   $('#save').click(function() {
       var serverUrl = 'https://api.parse.com/1/files/' + file.name;
-
       $.ajax({
          type: "POST",
          "headers": headers,
@@ -49,7 +38,7 @@ var loadFile = function(event) {
 
 
    function successUpload(data) {
-      $('#uploadedLink').append(data.url);
+      
       $.ajax({
          'type': "POST",
          'headers': headers,
@@ -58,6 +47,8 @@ var loadFile = function(event) {
          "dataType": "json",
          'success': function(data) {
             console.log("Success Add.");
+            document.location.href=("wire3.html");
+
          },
          'error': function(data) {
             console.log("Error Add.");
