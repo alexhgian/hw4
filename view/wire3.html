@@ -15,8 +15,9 @@
     <title>My Gold - CoinFlip</title>
     <script src="../js/main.js"></script>
     <script src="../js/wire3.js"></script>
+
     <script src="../bower_components/zingchart/client/zingchart.min.js"></script>
-    <script src="../js/zingdata.js"></script>
+    <script src="../js/wire3.chart.js"></script>
 </head>
 
 <body>
@@ -99,14 +100,14 @@ loadSideNav(1);
                     <div class="market-item-stats">
                         <table>
                             <tr>
-                                <td id='bid'></td>
-                                <td id='ask'></td>
-                                <td id='change'></td>
+                                <td title="Bid Price per Troy Ounce" id='bid'></td>
+                                <td title="Ask Price per Troy Ounce" id='ask'></td>
+                                <td title="Change Price per Troy Ounce" id='change'></td>
                             </tr>
                             <tr>
-                                <td>Bid</td>
-                                <td>Ask</td>
-                                <td>Change</td>
+                                <td title="Bid Price per Troy Ounce">Bid</td>
+                                <td title="Ask Price per Troy Ounce">Ask</td>
+                                <td title="Change Price per Troy Ounce">Change</td>
                             </tr>
                         </table>
                     </div>
@@ -115,22 +116,6 @@ loadSideNav(1);
             </section>
         </section>
         <section class="graph-panel">
-            <section class="chart-legend">
-                <div class="legend-left-half">
-                    <section class="legend-item">
-                        <div class="legend-item-color" id="legend-1"></div>
-                        Gold Total
-                    </section>
-                </div>
-                <div class="legend-right-half">
-                    <section class="legend-item">
-                        <div class="legend-item-color" id="legend-4"></div>
-                        1oz Gold
-                    </section>
-                </div>
-            </section>
-            <div class="chart-y-label">PRICE</div>
-            <div class="chart-x-label">TIME</div>
             <section class="chart-wrap">
                 <div id="chartDiv"></div>
             </section>
