@@ -173,14 +173,29 @@ window.onload = function(){
         pBid.innerHTML = (lData[2].bid).toFixed(2);
         pChange.innerHTML = (lData[2].bid - lData[2].ask).toFixed(2);
 
+        getMetalPrice('gold','2015-05-11','2015-05-29', function(gDate, err){
+
+            getMetalPrice('silver','2015-05-11','2015-05-29', function(sData, err){
+
+                getMetalPrice('platinum','2015-05-11','2015-05-29', function(pDate, err){
+                    console.log('Gold: ');
+                    console.log('Silver: ');
+                    console.log('Platinum: ');
+                    console.log(gDate);
+                    console.log(sData);
+                    console.log(pDate);
+                });
+            });
+        });
+
+
+
 
         getTotalData(function(tData){
-
             // Total Metal
             var total = ((lData[0].bid*tData[0].totalGold) +
             (lData[1].bid*tData[0].totalSilver) +
             (lData[2].bid*tData[0].totalPlatinum)).toFixed(2)
-
 
             var totalEl = document.getElementsByClassName('total-dollars')[0];
             totalEl.innerHTML='$'+total;
