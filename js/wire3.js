@@ -110,43 +110,6 @@ function getLiveData (cb){
                 var tmpObj = JSON.parse(req.responseText);
                 cb(tmpObj, false);
                 // console.log(tmpObj);
-                console.log("DOM: ");
-                var dailyPercent = document.getElementById('daily-percent');
-                var dpVal = tmpObj[0].oneDayPercentChange;
-                if(dpVal>=0){
-                    dailyPercent.className = "pos-change-main";
-                    dailyPercent.innerHTML='+'+dpVal.toFixed(2)+'%';
-                } else {
-                    dailyPercent.className = "neg-change";
-                    dailyPercent.innerHTML=dpVal.toFixed(2)+'%';
-                }
-
-                var overall = document.getElementById('overall-percent');
-                var overallVal = tmpObj[0].yearToDatePercentChange;
-                if(overallVal>=0){
-                    overall.className = "pos-change-main";
-                    overall.innerHTML='+'+overallVal.toFixed(2)+'%';
-                } else {
-                    overall.className = "neg-change";
-                    overall.innerHTML='-'+overallVal.toFixed(2)+'%';
-                }
-
-                var askNode = document.getElementById('ask');
-                askNode.innerHTML=tmpObj[0].ask;
-
-                var bidNode = document.getElementById('bid');
-                bidNode.innerHTML=tmpObj[0].bid;
-
-                var changeNode = document.getElementById('change');
-                var diff = (tmpObj[0].bid-tmpObj[0].ask).toFixed(2);
-
-                if(diff>=0){
-                    changeNode.className = "pos-change";
-                    changeNode.innerHTML='+'+diff;
-                } else {
-                    changeNode.className = "neg-change";
-                    changeNode.innerHTML=diff;
-                }
             } else {
                 console.log("Error: ", req.statusText); // Error Message
                 cb(req.statusText, true);
@@ -227,6 +190,44 @@ window.onload = function() {
 
     // Get the live data required to calculate table and overview panel data
     getLiveData(function(liveData){
+
+        var dailyPercent = document.getElementById('daily-percent');
+        var dpVal = liveData[0].oneDayPercentChange;
+        if(dpVal>=0){
+            dailyPercent.className = "pos-change-main";
+            dailyPercent.innerHTML='+'+dpVal.toFixed(2)+'%';
+        } else {
+            dailyPercent.className = "neg-change";
+            dailyPercent.innerHTML=dpVal.toFixed(2)+'%';
+        }
+
+        var overall = document.getElementById('overall-percent');
+        var overallVal = liveData[0].yearToDatePercentChange;
+        if(overallVal>=0){
+            overall.className = "pos-change-main";
+            overall.innerHTML='+'+overallVal.toFixed(2)+'%';
+        } else {
+            overall.className = "neg-change";
+            overall.innerHTML='-'+overallVal.toFixed(2)+'%';
+        }
+
+        var askNode = document.getElementById('ask');
+        askNode.innerHTML=liveData[0].ask;
+
+        var bidNode = document.getElementById('bid');
+        bidNode.innerHTML=liveData[0].bid;
+
+        var changeNode = document.getElementById('change');
+        var diff = (liveData[0].bid-liveData[0].ask).toFixed(2);
+
+        if(diff>=0){
+            changeNode.className = "pos-change";
+            changeNode.innerHTML='+'+diff;
+        } else {
+            changeNode.className = "neg-change";
+            changeNode.innerHTML=diff;
+        }
+
         // Set loader div to hidden since were loaded
         document.getElementById('mloader').style.visibility = "hidden";
 
@@ -292,23 +293,19 @@ window.onload = function() {
                         height:455,
                         width:"100%",
                         data: myChart(data, marketData,"2015-05-11","2015-05-29")
-                        });
                     });
-                });
-
-                // Get coin data for table, require current price to calculate value
-                getTableData(currentMetal, function(rowData) {
-                    rowData.forEach(function(object, key) {
-                        // 1oz = 0.911458333 ozt
-                        object.value = (object.weight * TROY_PER_GRAM * object.percent * currentPrice ).toFixed(2);
-                        appendRow('table-data', object);
-                    });
-                    // Set loader div to hidden since were loaded
-                    document.getElementById('tloader').style.visibility = "hidden";
                 });
             });
 
-
-
-
-        };
+            // Get coin data for table, require current price to calculate value
+            getTableData(currentMetal, function(rowData) {
+                rowData.forEach(function(object, key) {
+                    // 1oz = 0.911458333 ozt
+                    object.value = (object.weight * TROY_PER_GRAM * object.percent * currentPrice ).toFixed(2);
+                    appendRow('table-data', object);
+                });
+                // Set loader div to hidden since were loaded
+                document.getElementById('tloader').style.visibility = "hidden";
+            });
+        });
+    };
