@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="bullion management site, rare coins, gold, silver, platinum">
@@ -12,15 +11,16 @@
     <script src="../js/jquery-1.11.2.min.js"></script>
     <script src="../js/velocity.min.js"></script>
     <script src="../js/main.js"></script>
+    <script src="../js/wire5.js"></script>
     <title>New Item - CoinFlip</title>
 </head>
 
 <body>
     <script>
-    loadTopNav();
+    //loadTopNav();
     </script>
     <script>
-    loadSideNav(1);
+    //loadSideNav(1);
     </script>
     <section class="main-section">
         <section class="coin_wrapper">
@@ -51,8 +51,15 @@
                 </a>
                 <section class="coin_image">
                     <div class="img_box">
-                        <div class="img_circle"></div>
+                        <input type="file" id ="file_upload"  accept="image/*" onchange="loadFile(event)"style="visibility:hidden"; >
+                        <label id="btn-logo" onclick="triggerFunction()"><strong>+</strong></label>
+
+                        <img id="output"width="170px" height="170px"/>
+
                     </div>
+                   
+                    
+
                 </section>
                 <section class="coin_detail">
                     <table>
@@ -123,14 +130,14 @@
                             <td><strong>1199.10</strong></td>
                         </tr>
                     </table>
-                    <a href="wire3.html"><span id="save">Save to My Stack</span></a>
+                    <button id="uploadbutton"  ><span>Save to My Stack</span></button>
                     <a href="wire3.html"><span id="cancel">Cancel</span></a>
                 </section>
             </div>
         </section>
     </section>
     <script>
-    loadFooter();
+    //loadFooter();
     </script>
 </body>
 
