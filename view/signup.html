@@ -77,7 +77,8 @@
                                 var tmpObj = JSON.parse(req.responseText);
                                 console.log('Success');
                                 console.log(tmpObj.results);
-                                Cookies.set('sessionToken', tmpObj.sessionToken);
+                                cookie.set('sessionToken', tmpObj.sessionToken);
+                                console.log(cookie.get('sessionToken'));
                                 window.location.href = "wire2.html";
                             } else {                            // CASE ERROR
                                 console.log("Error: ", req.statusText);
