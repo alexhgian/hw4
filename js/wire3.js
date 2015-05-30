@@ -199,6 +199,21 @@ window.onload = function() {
             var totalElement = totalPanelElement.getElementsByClassName('total-dollars')[0];
             var metalTotal = data[0][totalString];
             totalElement.innerHTML = '$'+(metalTotal*currentPrice).toFixed(2);
+
+            getMetalPrice('gold','2015-05-11','2015-05-29', function(marketData, err){
+                console.log('Gold: ');
+                console.log(marketData);
+            });
+            
+            getMetalPrice('silver','2015-05-11','2015-05-29', function(marketData, err){
+                console.log('Silver: ');
+                console.log(marketData);
+            });
+
+            getMetalPrice('platinum','2015-05-11','2015-05-29', function(marketData, err){
+                console.log('Platinum: ');
+                console.log(marketData);
+            });
         });
 
         // Get coin data for table, require current price to calculate value
