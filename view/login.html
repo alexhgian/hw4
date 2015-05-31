@@ -1,45 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <script data-require="cookies@1.2.1" data-semver="1.2.1" src="https://cdnjs.cloudflare.com/ajax/libs/Cookies.js/1.2.1/cookies.min.js"></script>
-
-	<!-- What the bottom link does in one request
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/base-min.css">
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/forms-min.css">
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/buttons-min.css">
-	-->
-
-    <link rel="stylesheet" href="http://yui.yahooapis.com/combo?pure/0.6.0/base-min.css&pure/0.6.0/buttons-min.css&pure/0.6.0/forms-min.css">
-    <style>
-	    .wrapper {
-		    margin:2em 2em 2em 2em;
-	    }
-	</style>
+    <meta name="description" content="bullion management site, rare coins, gold, silver, platinum">
+    <meta name="author" content="CSE134B Dream Team">
+    <title>Log In To Bull's Hit</title>
+    <link rel="stylesheet" type="text/css" href="../style/style.css">
+    <meta name=viewport content="width=device-width, initial-scale=.8, minimum-scale = .8, user-scalable=yes">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link data-require="purecss@*" data-semver="0.6.0" rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" />
+    <script src="../js/jquery-1.11.2.min.js"></script>
+    <script src="../js/velocity.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/cookies.min.js"></script>
 </head>
 
 <body>
-    <section class="wrapper">
-        <form class="pure-form pure-form-stacked">
+    <nav>
+        Bull's Hit
+    </nav>
+    <div class="mobile-nav">
+        Bull's Hit
+    </div>
+
+    <div id="w0-wrapper">
+        <form class="pure-form pure-form-stacked reg">
             <fieldset>
-                <legend>User Login</legend>
+                <legend>Log In</legend>
                 <label for="username">Username</label>
-                <input id="username" type="text" placeholder="username" value="alex">
+                <input class="reg" id="username" name="username" type="text" placeholder="Username" required>
+
                 <label for="password">Password</label>
-                <input id="password" type="password" placeholder="Password" value="password">
-<!--
-                <label for="remember" class="pure-checkbox">
-                    <input id="remember" type="checkbox" />Remember me
-                </label>
--->
-                <button id="submitButton" type="button" class="pure-button pure-button-primary">Sign in</button>
+                <input class="reg" id="password" name="password" type="password" placeholder="Password" required>
+
+                <button id="submitButton" type="button" class="pure-button pure-button-primary">Log In</button>
+
+                <div id="alert-box">
+                    Please enter your user information.
+                </div>
             </fieldset>
         </form>
-        <pre id="data">Data: </pre>
-    </section>
+    </div>
     <script>
 	    // Wait till the DOM completely loads before allowing the script to run.
         window.onload = function() {
@@ -63,15 +66,24 @@
 				// Request Handler
 				req.onreadystatechange = function (oEvent) {
 					if (req.readyState === 4) {
-						if (req.status === 200) { // Handle Success and Failure
+						if (req.status === 200) {                 // CASE SUCESS
 							// Parse the string into a JSON obj
 							var tmpObj = JSON.parse(req.responseText);
 							// Cookies wrapper library at 1kb for convenience
-							Cookies.set('sessionToken', tmpObj.sessionToken);
-							console.log('Session Token: '+ Cookies.get('sessionToken'));
-						} else {
-
-							console.log("Error: ", req.statusText); // Error Message
+							cookie.set('sessionToken', tmpObj.sessionToken);
+							console.log('Session Token: '+ cookie.get('sessionToken'));
+                            window.location.href = "wire2.html";
+						} else {                      // CASE ERROR
+                            var errorMessage = "Invalid information.<br>Please try again.";
+                            /*
+                            if (username === "")
+                                errorMessage = errorMessage + "Username is required!<br>";
+                            if (password === "")
+                                errorMessage = errorMessage + "Password is required!<br>";
+                            */
+							console.log("Error: ", req.statusText);
+                            document.getElementById('alert-box').style.color = "RED";
+                            document.getElementById('alert-box').innerHTML = errorMessage;
 						}
 					}
 				};
@@ -84,8 +96,10 @@
                 req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
                 req.send();  // Finally send the request
             });
+            
         }
     </script>
+    <script>loadFooter();</script>
 </body>
 
 </html>
