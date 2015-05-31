@@ -63,10 +63,7 @@
                         <label id="btn-logo" onclick="triggerFunction()"><strong>+</strong></label>
                         <img id="output" width = "150px" height="150px"/>
                     </div>
-                    
-                   
-                    
-
+           
                 </section>
                 <section class="coin_detail">
                     <table>
@@ -74,25 +71,18 @@
                             <td>Metal</td>
                             <td>
                                 <select id= "metal">
-                                    <option value="gold">Gold</option>
-                                    <option value="silver">Silver</option>
-                                    <option value="platinum">Platinum</option>
+                                    <option value="Gold">Gold</option>
+                                    <option value="Silver">Silver</option>
+                                    <option value="Platinum">Platinum</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>Type</td>
                             <td>
-                                <select id = "type">
-                                    <option selected value="us_eagle">US Eagle</option>
+                                <select id="item">
+                                    <option ></option>
                                 </select>
-
-                                <!-- <select name="categoryType">
-                                    <option value="all" selected> ... </option>
-                                    while (categoryNames.next()) {
-                                    <option value="categoryNames.getString(name")> =categoryNames.getString("name") </option>
-                                </select> -->
-
                             </td>
                         </tr>
                         <tr>
@@ -104,48 +94,48 @@
                         <tr>
                             <td>Qty.</td>
                             <td>
-                                <input name="qty" id="qty" value="1" />
+                                <input name="qty" type = "number" id="qty" value="1" />
                             </td>
                         </tr>
                         <tr>
                             <td>Premium</td>
                             <td>
-                                <input name="premium" id="premium" value="47.00" />
+                                <input name="premium" type = "number" id="premium" value="47.00" />
                             </td>
                         </tr>
                         <tr>
                             <td>Unit Price</td>
                             <td>
-                                <input name="price" id="price" value="1250.60" />
+                                <input name="price" id="price" type = "number" value="1250.60" />
                             </td>
                         </tr>
                         <tr>
                             <td>Gold %</td>
-                            <td>0.999</td>
+                            <td id="percent">0.999</td>
                         </tr>
                         <tr>
                             <td>Weight/unit (g)</td>
-                            <td>1.244</td>
+                            <td id="weight">1.244</td>
                         </tr>
                         <tr>
                             <td>Gold g/u</td>
-                            <td>1.244</td>
+                            <td id="goldg">1.244</td>
                         </tr>
                         <tr>
                             <td>Gold ozt/u</td>
-                            <td>0.0400</td>
+                            <td id="goldo">0.0400</td>
                         </tr>
                         <tr>
                             <td>Total au (ozt)</td>
-                            <td>0.0400</td>
+                            <td id="totala">0.0400</td>
                         </tr>
                         <tr>
                             <td><strong>TOTAL</strong></td>
-                            <td><strong>1199.10</strong></td>
+                            <td><strong id="total">1199.10</strong></td>
                         </tr>
                     </table>
                     
-                    <span type="submit"  onclick="uploadtoParse()"id="save">Save to my Stack</span>
+                    <span type="submit" id="save">Save to my Stack</span>
                     <a href="wire3.html"><span id="cancel">Cancel</span></a>
                 </section>
             </div>

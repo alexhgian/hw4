@@ -41,11 +41,14 @@ window.onload = function () {
   var datetime= '';
   datetime += dateToString(currentdate );
   document.getElementById('datepicker').value = datetime;
+ 
+  getparse();
 
 
 
 
 
+//uplaod to server parse
   document.getElementById("save")
     .addEventListener("click", function() {
       console.log("Click");
@@ -79,11 +82,23 @@ window.onload = function () {
      
 
  };
-
+//associating image with the class
 function successUpload(data) {  
+  var qty = parseFloat(document.getElementById('qty').value);
+  var item =  document.getElementById('item').value;
+  var metal = document.getElementById('metal').value;
+  var premium = parseFloat(document.getElementById('premium').value);
+  var percent = parseFloat(document.getElementById('percent').innerHTML);
+  var weight = parseFloat(document.getElementById('weight').innerHTML);
+
   var bodyData = {
-      item : 'test',
-      images : {
+      item : item,
+      metal: metal,
+      quantity: qty,
+      premium: premium,
+      percent: percent,
+      weight: weight,
+      image : {
               'name': JSON.parse(data).name,
               '__type': 'File'
       }      
@@ -107,3 +122,38 @@ function successUpload(data) {
   req.send(JSON.stringify(bodyData));
 };
 
+function getparse () {
+  var req1 = new XMLHttpRequest();
+  req1.onreadystatechange = function(oEvent) {
+      if (req1.readyState === 4) {
+          if (req1.status === 200) { // Handle Success and Failure  
+            // Parse the string into a JSON obj
+            var tmpObj = JSON.parse(req1.responseText);
+            console.log('Success');
+            populateDropdown(tmpObj);
+
+          } else {
+            console.log("Error: ", req1.statusText); // Error Message
+          }
+      }
+  };
+  req1.open("GET", "https://api.parse.com/1/classes/Info", true);
+  req1.setRequestHeader("X-Parse-Application-Id", appId);
+  req1.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+  req1.setRequestHeader("Content-Type", 'application/json');
+  req1.send();
+};
+
+//populating the metal type dropdown
+function populateDropdown (tmpObj) {
+  var dropdown = document.getElementById("item");
+  dropdown.length = 0;
+  
+  for (var i = 0; i < tmpObj.results.length; i++) {
+    if(tmpObj.results[i].metal === document.getElementById('metal').value){
+      console.log('get info: '+tmpObj.results[i].name);
+      dropdown[dropdown.length] = new Option(tmpObj.results[i].name ,tmpObj.results[i].name);
+      
+    } 
+  }
+};
