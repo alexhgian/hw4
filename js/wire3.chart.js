@@ -3,7 +3,7 @@ var myChart = function(data, totalData, start, end){
     // Create Chart Data
     var series = []
 
-    console.log(totalData);
+    //console.log(totalData);
 
     if(!data || !totalData) {
         return null;
@@ -11,7 +11,7 @@ var myChart = function(data, totalData, start, end){
 
 
     var cData = getAxis(start, end, data.totalGoldArray, totalData);
-    console.log(cData);
+    //console.log(cData);
 
     var myChartData = {
         "background-color":"none",

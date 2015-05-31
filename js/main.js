@@ -203,7 +203,7 @@ function getAxis(start, end, d1, d2) {
         axis.push(tmpFormat);
         startTime.setDate(startTime.getDate() + 1);
         if (startTime.getTime() > endTime.getTime()) {
-            console.log("Break");
+            //console.log("Break");
             break;
         }
 
@@ -212,7 +212,7 @@ function getAxis(start, end, d1, d2) {
             break;
         }
     }
-    console.log(data1)
+    //console.log(data1)
     return {
         'data1': data1,
         'data2': data2,

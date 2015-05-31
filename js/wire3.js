@@ -5,6 +5,8 @@ var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
 var currentMetal = 'gold';
 var TROY_PER_GRAM = 0.0321507466;
 
+var Cache = CacheIt(appId,apiKey);
+
 // Get the totals and percentage
 function getTotalData(id, cb){
     var req = new XMLHttpRequest();
@@ -15,10 +17,10 @@ function getTotalData(id, cb){
             if (req.status === 200) { // Handle Success and Failure
                 // Parse the string into a JSON obj
                 var tmpObj = JSON.parse(req.responseText);
-                console.log(tmpObj);
+                //console.log(tmpObj);
                 cb(tmpObj, false);
             } else {
-                console.log("Error: ", req.statusText); // Error Message
+                //console.log("Error: ", req.statusText); // Error Message
                 cb(req.statusText, true);
             }
         }
@@ -48,7 +50,7 @@ function getLiveData (cb){
                 cb(tmpObj, false);
                 // console.log(tmpObj);
             } else {
-                console.log("Error: ", req.statusText); // Error Message
+                //console.log("Error: ", req.statusText); // Error Message
                 cb(req.statusText, true);
             }
         }
@@ -100,30 +102,30 @@ function appendRow(id, data) {
 // Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
 // through my proxy server cse134b.herokuapp.com
 function getTableData(query, cb) {
-    var req = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
 
     // Request Handler
-    req.onreadystatechange = function(oEvent) {
-        if (req.readyState === 4) {
-            if (req.status === 200) { // Handle Success and Failure
+    xhr.onreadystatechange = function(oEvent) {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) { // Handle Success and Failure
                 // Parse the string into a JSON obj
-                var tmpObj = JSON.parse(req.responseText);
-                console.log(tmpObj.results);
+                var tmpObj = JSON.parse(xhr.responseText);
+                //console.log(tmpObj.results);
                 cb(tmpObj.results);
             } else {
 
-                console.log("Error: ", req.statusText); // Error Message
+                //console.log("Error: ", xhr.statusText); // Error Message
             }
         }
     };
 
     // Open the request with the Url Encoded String for login
-    req.open("GET", "https://api.parse.com/1/classes/coin?where="+JSON.stringify({metal:query}), true);
+    xhr.open("GET", "https://api.parse.com/1/classes/coin?where="+JSON.stringify({metal:query}), true);
 
     // Set Request Header for Parse
-    req.setRequestHeader("X-Parse-Application-Id", appId);
-    req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
-    req.send(); // Finally send the request
+    xhr.setRequestHeader("X-Parse-Application-Id", appId);
+    xhr.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+    xhr.send(); // Finally send the request
 }
 
 
@@ -132,29 +134,13 @@ function getTableData(query, cb) {
 // if it's changed replace the element, if not continue,
 // if the element does not exist, append
 window.onload = function() {
-
     // Get the live data required to calculate table and overview panel data
     getLiveData(function(liveData){
-
-        var dailyPercent = document.getElementById('daily-percent');
         var dpVal = liveData[0].oneDayPercentChange;
-        if(dpVal>=0){
-            dailyPercent.className = "pos-change-main";
-            dailyPercent.innerHTML='+'+dpVal.toFixed(2)+'%';
-        } else {
-            dailyPercent.className = "neg-change";
-            dailyPercent.innerHTML=dpVal.toFixed(2)+'%';
-        }
+        Cache.toggleClass('daily-percent','pos-change-main','neg-change',dpVal.toFixed(2),'%');
 
-        var overall = document.getElementById('overall-percent');
         var overallVal = liveData[0].yearToDatePercentChange;
-        if(overallVal>=0){
-            overall.className = "pos-change-main";
-            overall.innerHTML='+'+overallVal.toFixed(2)+'%';
-        } else {
-            overall.className = "neg-change";
-            overall.innerHTML='-'+overallVal.toFixed(2)+'%';
-        }
+        Cache.toggleClass('overall-percent','pos-change-main','neg-change',overallVal.toFixed(2),'%');
 
         var askNode = document.getElementById('ask');
         askNode.innerHTML=liveData[0].ask;
@@ -162,16 +148,8 @@ window.onload = function() {
         var bidNode = document.getElementById('bid');
         bidNode.innerHTML=liveData[0].bid;
 
-        var changeNode = document.getElementById('change');
         var diff = (liveData[0].bid-liveData[0].ask).toFixed(2);
-
-        if(diff>=0){
-            changeNode.className = "pos-change";
-            changeNode.innerHTML='+'+diff;
-        } else {
-            changeNode.className = "neg-change";
-            changeNode.innerHTML=diff;
-        }
+        Cache.toggleClass('change','pos-change','neg-change',diff);
 
         // Set loader div to hidden since were loaded
         document.getElementById('mloader').style.visibility = "hidden";
@@ -203,7 +181,18 @@ window.onload = function() {
             var metalTotal = data[totalString];
             totalElement.innerHTML = '$'+(metalTotal*currentPrice).toFixed(2);
 
-            getMetalPrice('gold','2015-05-20','2015-05-29', function(marketData, err){
+
+            /*
+            * Get the current date and the date 30 days into the past
+            */
+            var curTime = new Date();
+            var prevTime = new Date();
+            prevTime.setDate(curTime.getDate()-30);
+            var currentDate = Cache.formatTime(curTime);
+            var previousDate = Cache.formatTime(prevTime);
+
+
+            getMetalPrice('gold',previousDate,currentDate, function(marketData, err){
                 if(err){
                     zingchart.render({
                         id:'chartDiv',
@@ -237,7 +226,7 @@ window.onload = function() {
                         id:'chartDiv',
                         height:455,
                         width:"100%",
-                        data: myChart(data, marketData,"2015-05-20","2015-05-29")
+                        data: myChart(data, marketData,previousDate,currentDate)
                     });
                 });
             });
