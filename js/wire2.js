@@ -6,69 +6,6 @@ var currentMetal = 'gold';
 var TROY_PER_GRAM = 0.0321507466;
 
 
-//Get the metal prices from a start to end date
-function getMetalPrice(metal, start, end, cb)
-{
-    var json_url = "https://www.quandl.com/api/v1/datasets/WSJ/"; // there is a daily limit of 50 connections for unregistered users. You can create an account and add your security token like: https://www.quandl.com/api/v1/datasets/WSJ/PL_MKT.csv?auth_token=933vrq6wUfABXEf_sgH7&trim_start=2015-05-01 However the security is updated daily. Also you can use your own, or third party proxy like http://websitescraper.herokuapp.com/?url=https://www.quandl.com/api/v1/datasets/WSJ/AU_EIB.csv for additional 50 connections. This proxy will accept any url and return you the data, also helping to deal with same origin policy
-    switch (metal) {
-        case 'gold':
-        json_url+="AU_EIB";
-        break;
-        case 'silver':
-        json_url+="AG_EIB";
-        break;
-        case 'platinum':
-        json_url+="PL_MKT";
-        break;
-    }
-    json_url+=".csv?auth_token=933vrq6wUfABXEf_sgH7&trim_start="+start;
-    if(end){
-        json_url+="&trim_end="+end;
-    }
-    getCSV(json_url, cb);
-}
-
-//Get the csv
-function getCSV(url, cb) {
-    var req = new XMLHttpRequest();
-
-    // Request Handler
-    req.onreadystatechange = function(oEvent) {
-        if (req.readyState === 4) {
-            if (req.status === 200) { // Handle Success and Failure
-                cb(csvArray(req.responseText), false);
-            } else {
-                console.log("Error: ", req.statusText); // Error Message
-                cb(req.statusText, true);
-            }
-        }
-    };
-
-    // Open the request with the Url Encoded String for login
-    req.open("GET", url, true);
-    // Set Request Header
-    req.setRequestHeader("Accept", 'text');
-    req.send(); // Finally send the request
-}
-
-//CSV to JSON used in the monex scrapper
-function csvArray(csv) {
-    var lines = csv.split("\n");
-    var result = [];
-
-    for (var i = 1; i < lines.length; i++) {
-        var obj = {};
-        var currentline = lines[i].split(",");
-
-        result.push([currentline[0],parseInt(currentline[1])]);
-    }
-
-    // Remove the uwanted empty string and NaN at the end
-    if(result[result.length-1]) { result.pop(); }
-
-    return result.reverse(); //JSON
-}
-
 // Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
 // through my proxy server cse134b.herokuapp.com
 function getLiveData (cb){
@@ -123,31 +60,11 @@ function getTotalData(cb){
     req.send(); // Finally send the request
 }
 
-function updateTime(){
-    var timeString = '';
-    // market-time
-    var myTime = new Date();
-
-    var marketOpenEl = document.getElementsByClassName('market-open')[0];
-
-    if( myTime.getDay()==1 || myTime.getDay()==6 ){
-        marketOpenEl.innerHTML = "Market is close";
-        timeString = 'opening in ';
-
-    } else {
-
-        marketOpenEl.innerHTML = "Market is open";
-        timeString = 'closing in ';
-    }
-
-
-    var timeEl = document.getElementsByClassName('market-time')[0];
-
-    timeEl.innerHTML = timeString + myTime.getUTCHours()+'h '+myTime.getUTCMinutes()+'m';
-}
-
-
 window.onload = function(){
+
+    /****************************
+    * Get Live Data From Quandl *
+    ****************************/
     getLiveData(function(lData){
         console.log(lData);
         var gAsk = document.getElementById('gold-ask');
@@ -173,24 +90,9 @@ window.onload = function(){
         pBid.innerHTML = (lData[2].bid).toFixed(2);
         pChange.innerHTML = (lData[2].bid - lData[2].ask).toFixed(2);
 
-        getMetalPrice('gold','2015-05-11','2015-05-29', function(gDate, err){
-
-            getMetalPrice('silver','2015-05-11','2015-05-29', function(sData, err){
-
-                getMetalPrice('platinum','2015-05-11','2015-05-29', function(pDate, err){
-                    console.log('Gold: ');
-                    console.log('Silver: ');
-                    console.log('Platinum: ');
-                    console.log(gDate);
-                    console.log(sData);
-                    console.log(pDate);
-                });
-            });
-        });
-
-
-
-
+        /****************************
+        * Get Total                 *
+        ****************************/
         getTotalData(function(tData){
             // Total Metal
             var total = ((lData[0].bid*tData[0].totalGold) +
@@ -216,7 +118,84 @@ window.onload = function(){
                 percentEl.classList.remove("neg-change");
             }
 
+            /****************************
+            * Get Metal Prices          *
+            ****************************/
+            getMetalPrice('gold','2015-05-20','2015-05-29', function(gData, err){
+
+                getMetalPrice('silver','2015-05-20','2015-05-29', function(sData, err){
+
+                    getMetalPrice('platinum','2015-05-20','2015-05-29', function(pData, err){
+                        console.log('Gold: ');
+                        console.log('Silver: ');
+                        console.log('Platinum: ');
+                        console.log(gData);
+                        console.log(sData);
+                        console.log(pData);
+                        console.log('Parse: ');
+                        console.log(tData);
+                        // Load Up the zingchart
+                        zingchart.render({
+                            id:'chartDiv',
+                            height:455,
+                            width:"100%",
+                            data: myChart2(tData[0], gData, sData, pData,"2015-05-20","2015-05-29")
+                        });
+                    });
+                });
+            });
         });
     });
     updateTime();
+}
+
+
+
+function updateTime() {
+    var timeString = '';
+    // market-time
+
+    var nyTime = getOffset(-4);
+    var nyTimeOpen = getOffset(-4);
+    //startTime.setDate(startTime.getDate() + 1);
+
+    var marketOpenEl = document.getElementsByClassName('market-open')[0];
+
+    if (nyTime.getUTCDay() == 0) { // Sunday
+        nyTimeOpen.setDate(nyTimeOpen.getDate() + 1);
+        nyTimeOpen.setUTCHours(7);
+        marketOpenEl.innerHTML = "Market is close";
+        timeString = 'opening in ' + getHourDiff(nyTime, nyTimeOpen) + 'h ' + ('0' + (60 - nyTime.getUTCMinutes())).slice(-2) + 'm';
+    } else if (nyTime.getDay() == 6) { // Saturday
+        nyTimeOpen.setDate(nyTimeOpen.getDate() + 2);
+        nyTimeOpen.setUTCHours(7);
+        marketOpenEl.innerHTML = "Market is close";
+        timeString = 'opening in ' + getHourDiff(nyTime, nyTimeOpen.setHours(nyTime.getHours() + 8)) + 'h ' + ('0' + (60 - nyTime.getUTCMinutes())).slice(-2) + 'm';
+    } else { //Monday - Friday
+        if (nyTime.getUTCHours() >= 8 && nyTime.getUTCHours() <= 17) {
+            marketOpenEl.innerHTML = "Market is open";
+            timeString = 'closing in ' + (17 - nyTime.getUTCHours()) + 'h ' + ('0' + nyTime.getUTCMinutes()).slice(-2) + 'm';
+        } else {
+            marketOpenEl.innerHTML = "Market is close";
+            timeString = 'opening in ' + (nyTime.getUTCHours() + 8) + 'h ' + ('0' + (60 - nyTime.getUTCMinutes())).slice(-2) + 'm';
+        }
+    }
+
+
+    var timeEl = document.getElementsByClassName('market-time')[0];
+    // var nyTimeEl = document.getElementsByClassName('newyork-time')[0];
+    // var open = document.getElementsByClassName('newyork-open-time')[0];
+
+    // nyTimeEl.innerHTML = 'New York Time: ' + nyTime.toUTCString();
+    //open.innerHTML = 'Open Date/Time: ' + nyTimeOpen.toUTCString();
+    timeEl.innerHTML = timeString;
+}
+
+
+function getOffset(offset) {
+    return new Date(new Date().getTime() + offset * 3600 * 1000);
+}
+
+function getHourDiff(date1, date2) {
+    return Math.abs(date1 - date2) / 36e5;
 }
