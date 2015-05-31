@@ -8,10 +8,17 @@
     <meta name=viewport content="width=device-width, initial-scale=.8, minimum-scale = .8, user-scalable=yes">
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="../js/jquery-1.11.2.min.js"></script>
     <script src="../js/velocity.min.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/wire5.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+
+
+
+
     <title>New Item - CoinFlip</title>
 </head>
 
@@ -37,6 +44,7 @@
                 ADD ITEM
             </div>
             <div class="coin_main">
+                <form>
                 <a href="wire3.html">
                     <div class="breadcrumb">
                         <svg class="icon icon-play-arrow-rev">
@@ -65,7 +73,7 @@
                         <tr>
                             <td>Metal</td>
                             <td>
-                                <select>
+                                <select id= "metal">
                                     <option value="gold">Gold</option>
                                     <option value="silver">Silver</option>
                                     <option value="platinum">Platinum</option>
@@ -75,33 +83,40 @@
                         <tr>
                             <td>Type</td>
                             <td>
-                                <select>
+                                <select id = "type">
                                     <option selected value="us_eagle">US Eagle</option>
                                 </select>
+
+                                <!-- <select name="categoryType">
+                                    <option value="all" selected> ... </option>
+                                    while (categoryNames.next()) {
+                                    <option value="categoryNames.getString(name")> =categoryNames.getString("name") </option>
+                                </select> -->
+
                             </td>
                         </tr>
                         <tr>
                             <td>Purchase Date</td>
                             <td>
-                                <input name="purchase_date" value="04 March 2015" />
+                                <input class="coin-field" type="text" size = "12" id="datepicker" >
                             </td>
                         </tr>
                         <tr>
                             <td>Qty.</td>
                             <td>
-                                <input name="quantity" value="1" />
+                                <input name="qty" id="qty" value="1" />
                             </td>
                         </tr>
                         <tr>
                             <td>Premium</td>
                             <td>
-                                <input name="quantity" value="47.00" />
+                                <input name="premium" id="premium" value="47.00" />
                             </td>
                         </tr>
                         <tr>
                             <td>Unit Price</td>
                             <td>
-                                <input name="quantity" value="1250.60" />
+                                <input name="price" id="price" value="1250.60" />
                             </td>
                         </tr>
                         <tr>
@@ -130,11 +145,11 @@
                         </tr>
                     </table>
                     
-                    <span  id="save">Save to my Stack</span>
-                    <a href="wire.html" id="link"></a>
+                    <span type="submit"  onclick="uploadtoParse()"id="save">Save to my Stack</span>
                     <a href="wire3.html"><span id="cancel">Cancel</span></a>
                 </section>
             </div>
+        </form>
         </section>
     </section>
     <script>
