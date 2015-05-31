@@ -388,6 +388,28 @@ a {
 a:visited {
     /* color: #E6E6E6; */
 }
+
+#w0-wrapper {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 120px;
+}
+
+form.reg {
+    display:inline-block;
+    width: 30%;
+    text-align: center;
+}
+
+input.reg {
+    color: white;
+    width: 100%;
+}
+
+#alert-box {
+    padding-top:10px;
+}
 /* * * * * * * * * * * * * * * *
 *                             *
 *           WIRE 1            *
