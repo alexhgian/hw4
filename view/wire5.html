@@ -44,7 +44,6 @@
                 ADD ITEM
             </div>
             <div class="coin_main">
-                <form>
                 <a href="wire3.html">
                     <div class="breadcrumb">
                         <svg class="icon icon-play-arrow-rev">
@@ -88,25 +87,25 @@
                         <tr>
                             <td>Purchase Date</td>
                             <td>
-                                <input class="coin-field" type="text" size = "12" id="datepicker" >
+                                <input class="coin-field" type="text" size = "12" id="datepicker" required>
                             </td>
                         </tr>
                         <tr>
                             <td>Qty.</td>
                             <td>
-                                <input name="qty" type = "number" id="qty" value="1" />
+                                <input name="qty" type = "number" id="qty" value="1" min = "0"required>
                             </td>
                         </tr>
                         <tr>
                             <td>Premium</td>
                             <td>
-                                <input name="premium" type = "number" id="premium" value="47.00" />
+                                <input name="premium" type = "number" id="premium" value="47.00"min = "0" required>
                             </td>
                         </tr>
                         <tr>
                             <td>Unit Price</td>
                             <td>
-                                <input name="price" id="price" type = "number" value="1250.60" />
+                                <input name="price" id="price" type = "number" value="1250.60"min = "0" required>
                             </td>
                         </tr>
                         <tr>
@@ -139,7 +138,6 @@
                     <a href="wire3.html"><span id="cancel">Cancel</span></a>
                 </section>
             </div>
-        </form>
         </section>
     </section>
     <script>

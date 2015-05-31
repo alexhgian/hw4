@@ -1,6 +1,8 @@
 var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
 
+var price = 1250.60;
+
 //"+" triggers the hidden button for previewing image.
 function triggerFunction() {
     document.getElementById('file_upload').click();
@@ -27,9 +29,6 @@ var loadFile = function(event) {
     output.src = reader.result;
   };
   reader.readAsDataURL(event.target.files[0]);
-   var file = event.target.files[0];
-   console.log("file for loadFile: "+event.target.files[0]);
-  
 };
 
 
@@ -42,16 +41,11 @@ window.onload = function () {
   datetime += dateToString(currentdate );
   document.getElementById('datepicker').value = datetime;
  
-  getparse();
-
-
-
-
+  getparseData();
 
 //uplaod to server parse
   document.getElementById("save")
     .addEventListener("click", function() {
-      console.log("Click");
         var input = document.getElementById('file_upload');
         var file = input.files[0];
         var serverUrl = 'https://api.parse.com/1/files/' + file.name;
@@ -62,7 +56,6 @@ window.onload = function () {
                 if (req.status === 201) { // Handle Success and Failure
                   // Parse the string into a JSON obj
                   console.log('Success: '+req.responseText);
-                  console.log(JSON.parse(req.responseText).name);
                   successUpload(req.responseText);
                  
                 } else {
@@ -109,6 +102,7 @@ function successUpload(data) {
       if (req.readyState === 4) {
           if (req.status === 201) { // Handle Success and Failure
               console.log('Success');
+              document.location.href=("wire3.html");
           } else {
 
               console.log("Error: ", req.statusText); // Error Message
@@ -122,7 +116,8 @@ function successUpload(data) {
   req.send(JSON.stringify(bodyData));
 };
 
-function getparse () {
+//getting parse data from info class
+function getparseData () {
   var req1 = new XMLHttpRequest();
   req1.onreadystatechange = function(oEvent) {
       if (req1.readyState === 4) {
@@ -148,12 +143,43 @@ function getparse () {
 function populateDropdown (tmpObj) {
   var dropdown = document.getElementById("item");
   dropdown.length = 0;
-  
+
   for (var i = 0; i < tmpObj.results.length; i++) {
     if(tmpObj.results[i].metal === document.getElementById('metal').value){
-      console.log('get info: '+tmpObj.results[i].name);
       dropdown[dropdown.length] = new Option(tmpObj.results[i].name ,tmpObj.results[i].name);
       
     } 
   }
+  
+
+  console.log(document.getElementById('metal').value);
+  console.log(document.getElementById('item').value);
+
+
+  document.getElementById('metal').onchange =  function metalType(){
+    dropdown.length = 0;
+
+    for (var i = 0; i < tmpObj.results.length; i++) {
+      if(tmpObj.results[i].metal === document.getElementById('metal').value){
+        dropdown[dropdown.length] = new Option(tmpObj.results[i].name ,tmpObj.results[i].name);  
+      } 
+      if (tmpObj.results[i].metal === document.getElementById('metal').value && 
+          tmpObj.results[i].name === document.getElementById('item').value){
+          document.getElementById('percent').innerHTML = 
+          (parseFloat(tmpObj.results[i].weight)/price).toFixed(3);
+          document.getElementById('weight').innerHTML = tmpObj.results[i].weight;
+          var goldo = tmpObj.results[i].weight *
+          (parseFloat(tmpObj.results[i].weight)/price);
+          document.getElementById('goldo').innerHTML  = (goldo).toFixed(3);
+          document.getElementById('total').innerHTML = 
+          (parseFloat(document.getElementById('qty').value)*price*goldo).toFixed(3);
+
+
+
+      }
+    }
+    console.log("document"+document.getElementById('metal').value);
+    console.log("document"+document.getElementById('item').value);
+
+  };
 };
