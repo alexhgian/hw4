@@ -2,7 +2,7 @@
 var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
 var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
-var TROY = 0.911458333;
+var TROY = 31.1034768;
 var coinId = "iG7BDqvF25";
 var currentMetal;
 
@@ -74,21 +74,23 @@ function getTableData(id) {
                 metalweight.innerHTML = 'Weight/unit (' + tmpObj.metal + ')';
 
                 var weightunit = document.getElementById('weightunit');
-                percent.innerHTML = tmpObj.weight / unitprice;
+                weightunit.innerHTML = tmpObj.weight / unitprice;
 
                 var metalunit = document.getElementById('metalunit');
                 metalunit.innerHTML = tmpObj.metal + ' ' + tmpObj.metal.charAt(0) + '/u';
 
-                var perunit = document.getElementById('perunit');
-                perunit.innerHTML = 'derp';
+                var ounceunit = document.getElementById('ounceunit');
+                ounceunit.innerHTML = tmpObj.weight * 0.035274 / tmpObj.unitPrice;
 
                 var metalozt = document.getElementById('metalozt');
                 metalozt.innerHTML = tmpObj.metal + ' ozt/u';
 
-                var totalmetal = document.getElementById('totalmetal');
-                totalmetal.innerHTML = 'derp';
+                var troyounces = document.getElementById('troyounces');
+                troyounces.innerHTML = (tmpObj.weight / TROY) / tmpObj.unitPrice;
 
-                var total = document.getElementById('total');
+                var totaltroy = document.getElementById('totaltroy');
+                totaltroy.innerHTML = (tmpObj.weight / TROY);
+
                 total.innerHTML = 'derp';
 
             } else {
