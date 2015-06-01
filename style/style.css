@@ -377,6 +377,10 @@ footer {
     padding: 40px 40px;
 }
 
+.coin_image-required {
+    color: red;
+}
+
 a {
     text-decoration: none;
 
@@ -1148,14 +1152,14 @@ input {
 }
 #btn-logo {
     padding-top: 2px;
-  position: absolute;
-  color: rgb(76, 76, 76);
+    position: absolute;
+    color: rgb(76, 76, 76);
 }
- .light {
+.light {
     color:white;
 }
 
- .dark {
+.dark {
     color:black;
 }
 #search {
