@@ -90,6 +90,8 @@ window.onload = function(){
         pBid.innerHTML = (lData[2].bid).toFixed(2);
         pChange.innerHTML = (lData[2].bid - lData[2].ask).toFixed(2);
 
+        document.getElementById('market-list-loader').style.visibility = "hidden";
+
         /****************************
         * Get Total                 *
         ****************************/

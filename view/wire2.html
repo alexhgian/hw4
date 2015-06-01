@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="bullion management site, rare coins, gold, silver, platinum">
-    <meta name="author" content="CSE134B Dream Team">
-    <link rel="stylesheet" type="text/css" href="../style/style.css">
+    <meta name="author" content="CSE134B CacheIt Team">
     <meta name=viewport content="width=device-width, initial-scale=.8, minimum-scale = .8, user-scalable=yes">
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <!--     <script src="../js/Chart.js"></script> -->
 
+
+    <link rel="stylesheet" type="text/css" href="../style/style.css">
+    <link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css">
 
     <script src="../js/main.js"></script>
     <script src="../assets/promise.js"></script>
@@ -58,89 +59,95 @@
                 <div class="market-open">Market is open</div>
                 <div class="market-time">closes in 3h 36min</div>
             </section>
-            <section class="market-list">
+            <section class="market-list-container">
+                <div id="market-list-loader">
+                    <i class=""><span class="fa fa-spinner fa-spin"></span></i>
+                </div>
+                <section class="market-list">
 
-                <a href="wire3.html">
-                    <section class="market-item-header">
-                        Gold
-                        <svg class="icon icon-play-arrow">
-                            <symbol id="icon-play-arrow1" viewBox="0 0 1024 1024">
-                                <title>play-arrow</title>
-                                <path class="path1" d="M341.333 213.333v597.333l469.333-298.667z"></path>
-                            </symbol>
-                            <use xlink:href="#icon-play-arrow1"></use>
-                        </svg>
+                    <a href="wire3.html">
+                        <section class="market-item-header">
+                            Gold
+                            <svg class="icon icon-play-arrow">
+                                <symbol id="icon-play-arrow1" viewBox="0 0 1024 1024">
+                                    <title>play-arrow</title>
+                                    <path class="path1" d="M341.333 213.333v597.333l469.333-298.667z"></path>
+                                </symbol>
+                                <use xlink:href="#icon-play-arrow1"></use>
+                            </svg>
+                        </section>
+                    </a>
+                    <section class="market-item-stats">
+                        <table>
+                            <tr>
+                                <td id="gold-ask">0</td>
+                                <td id="gold-bid">0</td>
+                                <td id="gold-change"class="pos-change">0</td>
+                            </tr>
+                            <tr>
+                                <td>Bid</td>
+                                <td>Ask</td>
+                                <td>Change</td>
+                            </tr>
+                        </table>
                     </section>
-                </a>
-                <section class="market-item-stats">
-                    <table>
-                        <tr>
-                            <td id="gold-ask">0</td>
-                            <td id="gold-bid">0</td>
-                            <td id="gold-change"class="pos-change">0</td>
-                        </tr>
-                        <tr>
-                            <td>Bid</td>
-                            <td>Ask</td>
-                            <td>Change</td>
-                        </tr>
-                    </table>
-                </section>
 
 
-                <a href="wire3.html">
-                    <section class="market-item-header">
-                        Silver
-                        <svg class="icon icon-play-arrow">
-                            <symbol id="icon-play-arrow2" viewBox="0 0 1024 1024">
-                                <title>play-arrow</title>
-                                <path class="path1" d="M341.333 213.333v597.333l469.333-298.667z"></path>
-                            </symbol>
-                            <use xlink:href="#icon-play-arrow2"></use>
-                        </svg>
+                    <a href="wire3.html">
+                        <section class="market-item-header">
+                            Silver
+                            <svg class="icon icon-play-arrow">
+                                <symbol id="icon-play-arrow2" viewBox="0 0 1024 1024">
+                                    <title>play-arrow</title>
+                                    <path class="path1" d="M341.333 213.333v597.333l469.333-298.667z"></path>
+                                </symbol>
+                                <use xlink:href="#icon-play-arrow2"></use>
+                            </svg>
+                        </section>
+                    </a>
+                    <section class="market-item-stats">
+                        <table>
+                            <tr>
+                                <td id="silver-bid">0</td>
+                                <td id="silver-ask">0</td>
+                                <td id="silver-change" class="neg-change">0</td>
+                            </tr>
+                            <tr>
+                                <td>Bid</td>
+                                <td>Ask</td>
+                                <td>Change</td>
+                            </tr>
+                        </table>
                     </section>
-                </a>
-                <section class="market-item-stats">
-                    <table>
-                        <tr>
-                            <td id="silver-bid">0</td>
-                            <td id="silver-ask">0</td>
-                            <td id="silver-change" class="neg-change">0</td>
-                        </tr>
-                        <tr>
-                            <td>Bid</td>
-                            <td>Ask</td>
-                            <td>Change</td>
-                        </tr>
-                    </table>
-                </section>
-                <a href="wire3.html">
-                    <section class="market-item-header">
-                        Platinum
-                        <svg class="icon icon-play-arrow">
-                            <symbol id="icon-play-arrow3" viewBox="0 0 1024 1024">
-                                <title>play-arrow</title>
-                                <path class="path1" d="M341.333 213.333v597.333l469.333-298.667z"></path>
-                            </symbol>
-                            <use xlink:href="#icon-play-arrow3"></use>
-                        </svg>
+                    <a href="wire3.html">
+                        <section class="market-item-header">
+                            Platinum
+                            <svg class="icon icon-play-arrow">
+                                <symbol id="icon-play-arrow3" viewBox="0 0 1024 1024">
+                                    <title>play-arrow</title>
+                                    <path class="path1" d="M341.333 213.333v597.333l469.333-298.667z"></path>
+                                </symbol>
+                                <use xlink:href="#icon-play-arrow3"></use>
+                            </svg>
+                        </section>
+                    </a>
+                    <section class="market-item-stats">
+                        <table>
+                            <tr>
+                                <td id="platinum-bid">0</td>
+                                <td id="platinum-ask">0</td>
+                                <td id="platinum-change" class="pos-change">0</td>
+                            </tr>
+                            <tr>
+                                <td>Bid</td>
+                                <td>Ask</td>
+                                <td>Change</td>
+                            </tr>
+                        </table>
                     </section>
-                </a>
-                <section class="market-item-stats">
-                    <table>
-                        <tr>
-                            <td id="platinum-bid">0</td>
-                            <td id="platinum-ask">0</td>
-                            <td id="platinum-change" class="pos-change">0</td>
-                        </tr>
-                        <tr>
-                            <td>Bid</td>
-                            <td>Ask</td>
-                            <td>Change</td>
-                        </tr>
-                    </table>
                 </section>
             </section>
+
         </section>
 
         <section class="graph-panel">

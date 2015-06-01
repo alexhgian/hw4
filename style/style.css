@@ -170,7 +170,7 @@ nav {
 nav svg {
     width: 30px;
     height: 30px;
-    fill: #55B7C5;
+    fill: white;
     position: absolute;
     top: 50%;
     margin-top: -15px;
@@ -199,7 +199,8 @@ nav .icon-cog {
 
 nav a {
     text-decoration: none;
-    color: #E6E6E6;
+    /*color: #E6E6E6;*/
+    color: white;
 }
 
 
@@ -281,7 +282,7 @@ aside figure {
     cursor: pointer;
 
     /*     color: #55B7C5; */
-    color:#00fbff;
+    color:#999;
     text-align: center;
     line-height: 80px;
     font-size: 2.5em;
@@ -298,12 +299,12 @@ aside figure figcaption {
     /*     font-family: "monster_h", sans-serif; */
     /*     color: #B1B1B1; */
     font-family: lato-light;
-    color: #00fbff;
+    color: #999;
 }
 
 aside figure svg {
     /*     fill: #55B7C5; */
-    fill : #00fbff;
+    fill : #999;
     width: 50px;
     height: 50px;
     position: absolute;
@@ -318,24 +319,31 @@ aside figure svg {
 
 aside figure:hover {
     /*     color: #77EDFF; */
-    color:#00fbff;
-    background: rgba(255, 255, 255, 0.1);
+    color:white;
+    background: #1f8dd6;
 }
 
 aside figure:hover svg {
+    fill: white;
+    color:white;
+}
+
+aside figure:hover figcaption {
     /*     fill: #77EDFF; */
-    color:#00fbff;
+    color:white;
 }
 
 .nav-selected {
     /*     color: #77EDFF; */
-    color:#00fbff;
-    background: rgba(255, 255, 255, 0.1);
+    color:white;
+    background: #1f8dd6;
 }
-
+.nav-selected  figcaption {
+    color:white;
+}
 .nav-selected svg {
     /*     fill: #77EDFF; */
-    fill : #00fbff;
+    fill : white;
 }
 /* FOOTER */
 
@@ -669,6 +677,31 @@ input.reg {
     top: 0;
     left: 0;
 }
+.overview-panel .market-list-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+
+#market-list-loader {
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: grey;
+    background-color: rgba(255, 255, 255, 0.75);
+    z-index: 10;
+}
+
+#market-list-loader i {
+    position: relative;
+    font-size: 2em;
+    right: -45%;
+    top: 40%;
+}
 
 .overview-panel .market-list .market-item-header {
     font-family: "lato-regular";
@@ -974,8 +1007,8 @@ input.reg {
 }
 
 .coin_mini {
-    width: 35px;
-    height: 35px;
+    width: 64px;
+    height: 64px;
     border-radius: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -1112,6 +1145,10 @@ input {
     font-size: 13px;
     border-radius: 5px;
     outline: 0;
+}
+
+#search {
+    background-color: white;
 }
 
 input:focus {

@@ -7,7 +7,7 @@ function loadTopNav(){
 	document.write("            <\/symbol>");
 	document.write("            <use xlink:href=\"#icon-spinner2\"><\/use>");
 	document.write("        <\/svg>");
-	document.write("        <a href=\"wire2.html\">COINFLIP<\/a>");
+	document.write("        <a href=\"wire2.html\"><i class=\"fa fa-archive\"></i> CoinBucket<\/a>");
 	document.write("        <svg class=\"icon-cog\">");
 	document.write("            <symbol id=\"icon-cog\" viewBox=\"0 0 1024 1024\">");
 	document.write("                <title>cog<\/title>");
@@ -27,7 +27,7 @@ function loadTopNavPersist(){
 	document.write("            <\/symbol>");
 	document.write("            <use xlink:href=\"#icon-spinner2\"><\/use>");
 	document.write("        <\/svg>");
-	document.write("        <a href=\"wire2.html\">COINFLIP<\/a>");
+	document.write("        <a href=\"wire2.html\"><i class=\"fa fa-archive\"></i> CoinBucket<\/a>");
 	document.write("        <svg class=\"icon-cog\">");
 	document.write("            <symbol id=\"icon-cog\" viewBox=\"0 0 1024 1024\">");
 	document.write("                <title>cog<\/title>");
@@ -89,7 +89,7 @@ function loadSideNav(selected){
 
 function loadFooter(){
 	document.write("    <footer>");
-	document.write("        &copy; 2015 CoinFlip");
+	document.write("        &copy; 2015 CoinBucket");
 	document.write("    <\/footer> ");
 
 }
@@ -203,7 +203,7 @@ function getAxis(start, end, d1, d2) {
         axis.push(tmpFormat);
         startTime.setDate(startTime.getDate() + 1);
         if (startTime.getTime() > endTime.getTime()) {
-            console.log("Break");
+            //console.log("Break");
             break;
         }
 
@@ -212,7 +212,7 @@ function getAxis(start, end, d1, d2) {
             break;
         }
     }
-    console.log(data1)
+    //console.log(data1)
     return {
         'data1': data1,
         'data2': data2,

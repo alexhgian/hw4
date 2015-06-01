@@ -14,7 +14,7 @@
     <script src="../js/jquery-1.11.2.min.js"></script>
     <script src="../js/velocity.min.js"></script>
     <script src="../js/main.js"></script>
-    <script src="../js/cookies.min.js"></script>
+    <script src="../js/component/cookies.min.js"></script>
 </head>
 
 <body>
@@ -104,7 +104,7 @@
 
          // Using the 1kb Promise.js Utility Library for Promises and AJAX
         /*function(){
-        
+
             promise.get('https://api.parse.com/1/login', encodedString, {
                         "Accept": "application/json",
                         "X-Parse-Application-Id": "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W",
@@ -115,7 +115,7 @@
                             return;
                         }
                         var tmpObj = JSON.parse(text);
-                        //Cookies another 1kb 
+                        //Cookies another 1kb
                         console.log(tmpObj);
                         Cookies.set('sessionToken', tmpObj.sessionToken);
                         console.log(Cookie.get('sessionToken'));
