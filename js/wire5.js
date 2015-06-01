@@ -2,6 +2,7 @@ var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
 
 var price = 1250.60;
+var tmpObj = {};
 
 //"+" triggers the hidden button for previewing image.
 function triggerFunction() {
@@ -40,7 +41,6 @@ window.onload = function () {
   var datetime= '';
   datetime += dateToString(currentdate );
   document.getElementById('datepicker').value = datetime;
- 
   getparseData();
 
 //uplaod to server parse
@@ -123,9 +123,10 @@ function getparseData () {
       if (req1.readyState === 4) {
           if (req1.status === 200) { // Handle Success and Failure  
             // Parse the string into a JSON obj
-            var tmpObj = JSON.parse(req1.responseText);
+            var tmpObj1 = JSON.parse(req1.responseText);
             console.log('Success');
-            populateDropdown(tmpObj);
+            tmpObj = tmpObj1.results;
+            populateDropdown();
 
           } else {
             console.log("Error: ", req1.statusText); // Error Message
@@ -139,47 +140,128 @@ function getparseData () {
   req1.send();
 };
 
+
+
+
 //populating the metal type dropdown
-function populateDropdown (tmpObj) {
-  var dropdown = document.getElementById("item");
-  dropdown.length = 0;
+// function populateDropdown () {
+//   var dropdown = document.getElementById("item");
+//   var galdo;
+//   dropdown.length = 0;
 
-  for (var i = 0; i < tmpObj.results.length; i++) {
-    if(tmpObj.results[i].metal === document.getElementById('metal').value){
-      dropdown[dropdown.length] = new Option(tmpObj.results[i].name ,tmpObj.results[i].name);
-      
-    } 
-  }
-  
+//   for (var j = 0; j < tmpObj.results.length; j++) {
 
-  console.log(document.getElementById('metal').value);
-  console.log(document.getElementById('item').value);
+//     if(tmpObj.results[j].metal === document.getElementById('metal').value){
 
+//      dropdown[dropdown.length] = new Option(tmpObj.results[j].name ,tmpObj.results[j].name);
 
-  document.getElementById('metal').onchange =  function metalType(){
-    dropdown.length = 0;
-
-    for (var i = 0; i < tmpObj.results.length; i++) {
-      if(tmpObj.results[i].metal === document.getElementById('metal').value){
-        dropdown[dropdown.length] = new Option(tmpObj.results[i].name ,tmpObj.results[i].name);  
-      } 
-      if (tmpObj.results[i].metal === document.getElementById('metal').value && 
-          tmpObj.results[i].name === document.getElementById('item').value){
-          document.getElementById('percent').innerHTML = 
-          (parseFloat(tmpObj.results[i].weight)/price).toFixed(3);
-          document.getElementById('weight').innerHTML = tmpObj.results[i].weight;
-          var goldo = tmpObj.results[i].weight *
-          (parseFloat(tmpObj.results[i].weight)/price);
-          document.getElementById('goldo').innerHTML  = (goldo).toFixed(3);
-          document.getElementById('total').innerHTML = 
-          (parseFloat(document.getElementById('qty').value)*price*goldo).toFixed(3);
+//        document.getElementById('item').onchange =  function itemType(){
+//       }
+//     } 
+//   }
 
 
+//   document.getElementById('metal').onchange =  function metalType(){
+//     dropdown.length = 0;
 
-      }
-    }
-    console.log("document"+document.getElementById('metal').value);
-    console.log("document"+document.getElementById('item').value);
+//     for (var i = 0; i < tmpObj.results.length; i++) {
+//       if(tmpObj.results[i].metal === document.getElementById('metal').value){
 
-  };
+//         dropdown[dropdown.length] = new Option(tmpObj.results[i].name ,tmpObj.results[i].name);  
+//       } 
+
+//       if (tmpObj.results[i].metal === document.getElementById('metal').value && 
+//           tmpObj.results[i].name === document.getElementById('item').value){
+
+
+//           document.getElementById('percent').innerHTML = 
+//           (parseFloat(tmpObj.results[i].weight)/price).toFixed(3);
+
+//           document.getElementById('weight').innerHTML = tmpObj.results[i].weight;
+
+//           goldo = tmpObj.results[i].weight *
+//           (parseFloat(tmpObj.results[i].weight)/price);
+
+//           document.getElementById('goldo').innerHTML  = (goldo).toFixed(3);
+
+//           document.getElementById('total').innerHTML = 
+//           (parseFloat(document.getElementById('qty').value)*price*goldo).toFixed(3);
+
+//       }
+//     }
+//   };
+// };
+
+function populateDropdown() {
+    
+    var goldObj = _.where(tmpObj, {
+        metal: "Gold"
+    });
+    var silverObj = _.where(tmpObj, {
+        metal: "Silver"
+    });
+    var platinumObj = _.where(tmpObj, {
+        metal: "Platinum"
+    });
+
+    var metalEl = document.getElementById('metal');
+    var typeEl = document.getElementById('item');
+    var percent = document.getElementById('percent');
+    var weight = document.getElementById('weight');
+    var goldo = document.getElementById('goldo');
+    var total = document.getElementById('total');
+
+    // Initial Info
+    goldObj.forEach(function(val, key) {
+        var opt = document.createElement('option');
+        opt.value = val.name;
+        opt.text = val.name;
+        typeEl.appendChild(opt);
+
+    });
+     console.log(getCoinInfo(typeEl.firstChild.value, goldObj));
+     console.log(typeEl.value);
+     var coinInfoEl  = getCoinInfo(typeEl.value, goldObj);
+     consolel.log("coinInfoEl "+coinInfoEl);
+     percent.innerHTML = coinInfoEl.percent;
+   
+    var currentObj = goldObj;
+    
+    // Listiners
+    metalEl.onchange = function() {
+        switch (this.value) {
+            case 'Gold':
+                currentObj = goldObj;
+                break;
+            case 'Silver':
+                currentObj = silverObj;
+                break;
+            case 'Platinum':
+                currentObj = platinumObj;
+                break;
+        }
+        while (typeEl.firstChild) {
+            typeEl.removeChild(typeEl.firstChild);
+        }
+        currentObj.forEach(function(val, key) {
+            var opt = document.createElement('option');
+            opt.value = val.name;
+            opt.text = val.name;
+            typeEl.appendChild(opt);
+        });
+         var coin = getCoinInfo(typeEl.firstChild.value, currentObj);
+        percent.innerHTML = coin.percent;
+    };
+
+    typeEl.onchange = function() {
+        var selectedCoin = this.options[this.selectedIndex].value;
+         var coinInfo = getCoinInfo(selectedCoin, currentObj);
+        percent.innerHTML = coinInfo.percent;
+    };
 };
+
+function getCoinInfo(name, metalObject) {
+    return _.findWhere(metalObject, {
+        name: name
+    });
+}
