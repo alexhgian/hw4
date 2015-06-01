@@ -71,8 +71,11 @@ function getTableData(id) {
                     var perunitdata = document.getElementById('perunitdata');
                     perunitdata.innerHTML = (tmpObj.weight / marketPrice).toFixed(5);
 
-                    total.innerHTML = document.getElementById('total');
+                    var total = document.getElementById('total');
                     total.innerHTML = (marketPrice * tmpObj.weight * tmpObj.percent).toFixed(2);
+
+                    var img = document.getElementById('coin-img');
+                    img.src = tmpObj.image.url;
                 });
 
 
