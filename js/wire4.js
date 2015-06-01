@@ -1,41 +1,13 @@
 // API ID and API Key for parse
-var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
-var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
+var appId = 'iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W';
+var apiKey = 'xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1';
 var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
 var TROY = 31.1034768;
-var coinId = "iG7BDqvF25";
+var coinId = 'cr1B03e4N2';
 var currentMetal;
+var marketPrice;
 
-// Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
-// through my proxy server cse134b.herokuapp.com
-function getLiveData (cb){
-    var req = new XMLHttpRequest();
-    // Request Handler
-    req.onreadystatechange = function(oEvent) {
-        if (req.readyState === 4) {
-            if (req.status === 200) { // Handle Success and Failure
-                // Parse the string into a JSON obj
-                var tmpObj = JSON.parse(req.responseText);
-                cb(tmpObj, false);
-                // console.log(tmpObj);
-                console.log("DOM: ");
-
-            } else {
-                console.log("Error: ", req.statusText); // Error Message
-                cb(req.statusText, true);
-            }
-        }
-    };
-
-    // Open the request with the Url Encoded String for login
-    req.open("GET", "http://cse134b.herokuapp.com/jm", true);
-    req.send(); // Finally send the request
-}
-
-
-
-// Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
-// through my proxy server cse134b.herokuapp.com
+//Get and set coin table data
 function getTableData(id) {
     var req = new XMLHttpRequest();
 
@@ -43,55 +15,66 @@ function getTableData(id) {
     req.onreadystatechange = function(oEvent) {
         if (req.readyState === 4) {
             if (req.status === 200) { // Handle Success and Failure
-                // Parse the string into a JSON obj
-                var tmpObj = JSON.parse(req.responseText);
+                var Cache = CacheIt(appId, apiKey);
+                Cache.getMarketPrice(function(data, err){
+                    if(err){
+                        console.log("Oh no an error!");
+                        return err;
+                    }
+                    
+                    // Parse the string into a JSON obj
+                    var tmpObj = JSON.parse(req.responseText);
 
-                var metal = document.getElementById('metal');
-                metal.innerHTML = tmpObj.metal;
+                    console.log(tmpObj.metal);
+                    switch(tmpObj.metal) {
+                        case 'Gold':
+                            marketPrice = data[0].bid;
+                            break;
+                        case 'Silver':
+                            marketPrice = data[1].bid;
+                            break;
+                        case 'Platinum':
+                            marketPrice = data[2].bid;
+                            break;
+                    }
 
-                var type = document.getElementById('type');
-                type.innerHTML = tmpObj.item;
+                    var metal = document.getElementById('metal');
+                    metal.innerHTML = tmpObj.metal;
 
-                var date = document.getElementById('date');
-                date.innerHTML = tmpObj.createdAt;
+                    var type = document.getElementById('type');
+                    type.innerHTML = tmpObj.item;
 
-                var quantity = document.getElementById('qty');
-                quantity.innerHTML = tmpObj.quantity;
+                    var date = document.getElementById('date');
+                    date.innerHTML = tmpObj.createdAt;
 
-                var premium = document.getElementById('premium');
-                premium.innerHTML = tmpObj.premium;
+                    var quantity = document.getElementById('qty');
+                    quantity.innerHTML = tmpObj.quantity;
 
-                var unitprice = document.getElementById('unitprice');
-                unitprice.innerHTML = tmpObj.unitPrice;
+                    var premium = document.getElementById('premium');
+                    premium.innerHTML = tmpObj.premium;
 
-                var metalpercent = document.getElementById('metalpercent');
-                metalpercent.innerHTML = tmpObj.metal + ' %';
+                    var marketprice = document.getElementById('marketprice');
+                    marketprice.innerHTML = marketPrice;
 
-                var percent = document.getElementById('percent');
-                percent.innerHTML = tmpObj.percent;
+                    var percent = document.getElementById('percent');
+                    percent.innerHTML = tmpObj.metal + ' %';
 
-                var metalweight = document.getElementById('metalweight');
-                metalweight.innerHTML = 'Weight/unit (' + tmpObj.metal + ')';
+                    var percentdata = document.getElementById('percentdata');
+                    percentdata.innerHTML = tmpObj.percent;
 
-                var weightunit = document.getElementById('weightunit');
-                weightunit.innerHTML = tmpObj.weight / unitprice;
+                    var weightdata = document.getElementById('weightdata');
+                    weightdata.innerHTML = tmpObj.weight;
 
-                var metalunit = document.getElementById('metalunit');
-                metalunit.innerHTML = tmpObj.metal + ' ' + tmpObj.metal.charAt(0) + '/u';
+                    var perunit = document.getElementById('perunit');
+                    perunit.innerHTML = 'Weight/unit (' + tmpObj.metal + ')';
 
-                var ounceunit = document.getElementById('ounceunit');
-                ounceunit.innerHTML = tmpObj.weight * 0.035274 / tmpObj.unitPrice;
+                    var perunitdata = document.getElementById('perunitdata');
+                    perunitdata.innerHTML = (tmpObj.weight / marketPrice).toFixed(5);
 
-                var metalozt = document.getElementById('metalozt');
-                metalozt.innerHTML = tmpObj.metal + ' ozt/u';
+                    total.innerHTML = document.getElementById('total');
+                    total.innerHTML = (marketPrice * tmpObj.weight * tmpObj.percent).toFixed(2);
+                });
 
-                var troyounces = document.getElementById('troyounces');
-                troyounces.innerHTML = (tmpObj.weight / TROY) / tmpObj.unitPrice;
-
-                var totaltroy = document.getElementById('totaltroy');
-                totaltroy.innerHTML = (tmpObj.weight / TROY);
-
-                total.innerHTML = 'derp';
 
             } else {
 
@@ -114,10 +97,5 @@ function getTableData(id) {
 // if it's changed replace the element, if not continue,
 // if the element does not exist, append
 window.onload = function() {
-
-    getLiveData(function(liveData){
-
-        // Get coin data for table, require current price to calculate value
-        getTableData(coinId);
-    });
+    getTableData(coinId);
 };
