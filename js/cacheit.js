@@ -9,9 +9,35 @@ function CacheIt(appId, apiKey){
     var appId = appId || "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
     var apiKey = apiKey ||"xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
 
+    // Custom Timer Library Variables
+    var prevTime;
+    var checked = false;
+    var hasStarted = false;
+    var timer;
+    var callbackThreshold = 400;
+
+    // Timer checker, invokes a given callback after a threshold
+    function checkTimer(callback) {
+        var cb = callback || function() {};
+        if (prevTime) {
+            var currentTime = new Date();
+            var diff = currentTime.getTime() - prevTime.getTime();
+            // Do something after 400 threshold is reached
+            if (diff > callbackThreshold && checked === false) {
+                cb();
+                checked = true; // Reset the flag until set
+                prevTime.setTime(currentTime);
+            }
+        }
+        timer = setTimeout(function() {
+            checkTimer(cb);
+        }, callbackThreshold);
+    }
+
     //Get the metal prices from a start to end date
     function getMetalPrice(metal, start, end, cb)
     {
+        var p = new promise.Promise();// Create a Promise
         var json_url = "https://www.quandl.com/api/v1/datasets/WSJ/"; // there is a daily limit of 50 connections for unregistered users. You can create an account and add your security token like: https://www.quandl.com/api/v1/datasets/WSJ/PL_MKT.csv?auth_token=933vrq6wUfABXEf_sgH7&trim_start=2015-05-01 However the security is updated daily. Also you can use your own, or third party proxy like http://websitescraper.herokuapp.com/?url=https://www.quandl.com/api/v1/datasets/WSJ/AU_EIB.csv for additional 50 connections. This proxy will accept any url and return you the data, also helping to deal with same origin policy
         switch (metal) {
             case 'gold':
@@ -29,6 +55,8 @@ function CacheIt(appId, apiKey){
             json_url+="&trim_end="+end;
         }
         getCSV(json_url, cb);
+        return p;// Return the Promise
+
     }
 
     //Get the csv
@@ -77,19 +105,22 @@ function CacheIt(appId, apiKey){
         toggleClass : function(id, c1, c2, value, postfix){
             var pf = postfix || '';
             var toggleNode = document.getElementById(id);
-            if(value>=0){
+            if(value>0){
                 toggleNode.className = c1;
                 toggleNode.innerHTML='+'+value+pf;
-            } else {
+            } else if (value<0) {
                 toggleNode.className = c2;
+                toggleNode.innerHTML=value+pf;
+            } else {
+                toggleNode.className = c1;
                 toggleNode.innerHTML=value+pf;
             }
         },
         getClass: function(i, className, option, cb){
             var p = new promise.Promise();// Create a Promise
             var req = new XMLHttpRequest();
-            var id = i || '';
-            var query = (option.query) ? '?'+JSON.stringify(option.query) : '';
+            var id = (i)? '/'+i : '';
+            var query = (option.query) ? '?where='+JSON.stringify(option.query) : '';
             console.log('Id: ' + id);
             console.log('Query: ' + query);
 
@@ -104,7 +135,7 @@ function CacheIt(appId, apiKey){
                     }
                 }
             };
-            req.open("GET", 'https://api.parse.com/1/classes/'+className+'/'+id+query, true);
+            req.open("GET", 'https://api.parse.com/1/classes/'+className+id+query, true);
             req.setRequestHeader("X-Parse-Application-Id", appId);
             req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
             req.setRequestHeader("X-Parse-Session-Token", option.sessionToken);
@@ -115,6 +146,7 @@ function CacheIt(appId, apiKey){
         // through my proxy server cse134b.herokuapp.com
         // parameters: cb - a callback that returns an obj and err
         getMarketPrice: function(cb){
+            var p = new promise.Promise();// Create a Promise
             var req = new XMLHttpRequest();
             // Request Handler
             req.onreadystatechange = function(oEvent) {
@@ -133,6 +165,7 @@ function CacheIt(appId, apiKey){
             // Open the request with the Url Encoded String for login
             req.open("GET", "http://cse134b.herokuapp.com/jm", true);
             req.send(); // Finally send the request
+            return p;// Return the Promise
         },
         chartDown : {
             "graphset":[
@@ -154,7 +187,31 @@ function CacheIt(appId, apiKey){
                     }
                 ]
             },
-            getMetalPrice : getMetalPrice
+            getMetalPrice : getMetalPrice,
+            TROY_PER_GRAM : 0.0321507466,
+
+            //Timer Library reset, start, and stop
+            resetTimer: function() {
+                checked = false;
+                prevTime = prevTime || new Date();
+                var currentTime = new Date();
+                var diff = currentTime.getTime() - prevTime.getTime();
+                prevTime.setTime(currentTime);
+            },
+            initTimer: function(cb) {
+                if (!hasStarted) {
+                    console.log("Timer Started!");
+                    checkTimer(cb)
+                }
+                hasStarted = true;
+            },
+            stopTimer: function() {
+                if (timer) {
+                    console.log("Timer Stoped!");
+                    clearTimeout(timer);
+                    hasStarted = false;
+                }
+            }
         }
     }
 

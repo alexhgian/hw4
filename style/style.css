@@ -1140,13 +1140,19 @@ input {
     height: 27px;
     padding: 0 10px;
     border: none;
-    color:white;
     font-family: "lato-light";
     font-size: 13px;
     border-radius: 5px;
     outline: 0;
 }
 
+input .light {
+    color:black;
+}
+
+input .dark {
+    color:black;
+}
 #search {
     background-color: white;
 }
