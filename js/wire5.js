@@ -141,57 +141,6 @@ function getparseData () {
 };
 
 
-
-
-//populating the metal type dropdown
-// function populateDropdown () {
-//   var dropdown = document.getElementById("item");
-//   var galdo;
-//   dropdown.length = 0;
-
-//   for (var j = 0; j < tmpObj.results.length; j++) {
-
-//     if(tmpObj.results[j].metal === document.getElementById('metal').value){
-
-//      dropdown[dropdown.length] = new Option(tmpObj.results[j].name ,tmpObj.results[j].name);
-
-//        document.getElementById('item').onchange =  function itemType(){
-//       }
-//     } 
-//   }
-
-
-//   document.getElementById('metal').onchange =  function metalType(){
-//     dropdown.length = 0;
-
-//     for (var i = 0; i < tmpObj.results.length; i++) {
-//       if(tmpObj.results[i].metal === document.getElementById('metal').value){
-
-//         dropdown[dropdown.length] = new Option(tmpObj.results[i].name ,tmpObj.results[i].name);  
-//       } 
-
-//       if (tmpObj.results[i].metal === document.getElementById('metal').value && 
-//           tmpObj.results[i].name === document.getElementById('item').value){
-
-
-//           document.getElementById('percent').innerHTML = 
-//           (parseFloat(tmpObj.results[i].weight)/price).toFixed(3);
-
-//           document.getElementById('weight').innerHTML = tmpObj.results[i].weight;
-
-//           goldo = tmpObj.results[i].weight *
-//           (parseFloat(tmpObj.results[i].weight)/price);
-
-//           document.getElementById('goldo').innerHTML  = (goldo).toFixed(3);
-
-//           document.getElementById('total').innerHTML = 
-//           (parseFloat(document.getElementById('qty').value)*price*goldo).toFixed(3);
-
-//       }
-//     }
-//   };
-// };
-
 function populateDropdown() {
     
     var goldObj = _.where(tmpObj, {
@@ -207,9 +156,13 @@ function populateDropdown() {
     var metalEl = document.getElementById('metal');
     var typeEl = document.getElementById('item');
     var percent = document.getElementById('percent');
+    var qty = document.getElementById('qty');
+    //var price = document.getElementById('price');
     var weight = document.getElementById('weight');
     var goldo = document.getElementById('goldo');
+    var goldTotal = document.getElementById('totala');
     var total = document.getElementById('total');
+    var totalPremium = document.getElementById('totalPremium');
 
     // Initial Info
     goldObj.forEach(function(val, key) {
@@ -219,11 +172,18 @@ function populateDropdown() {
         typeEl.appendChild(opt);
 
     });
-     console.log(getCoinInfo(typeEl.firstChild.value, goldObj));
-     console.log(typeEl.value);
+
      var coinInfoEl  = getCoinInfo(typeEl.value, goldObj);
-     consolel.log("coinInfoEl "+coinInfoEl);
+     var fineness = parseFloat(coinInfoEl.weight)*parseFloat(coinInfoEl.percent);
+
+
      percent.innerHTML = coinInfoEl.percent;
+     weight.innerHTML = coinInfoEl.weight;
+     goldo.innerHTML =  (fineness).toFixed(3);
+     goldTotal.innerHTML = (parseFloat(qty.value) * fineness).toFixed(3);
+     total.innerHTML = (price * parseFloat(qty.value) * fineness).toFixed(3);
+     totalPremium.innerHTML = ((price * parseFloat(qty.value) * fineness) + parseFloat(premium.value)).toFixed(3);
+
    
     var currentObj = goldObj;
     
@@ -249,14 +209,27 @@ function populateDropdown() {
             opt.text = val.name;
             typeEl.appendChild(opt);
         });
-         var coin = getCoinInfo(typeEl.firstChild.value, currentObj);
+         var coin = getCoinInfo(typeEl.value, currentObj);
+        fineness = parseFloat(coin.weight)*parseFloat(coin.percent);
         percent.innerHTML = coin.percent;
+         weight.innerHTML = coin.weight;
+         goldo.innerHTML =  (fineness).toFixed(3);
+         goldTotal.innerHTML = (parseFloat(qty.value) * fineness).toFixed(3);
+         total.innerHTML = (price * parseFloat(qty.value) * fineness).toFixed(3);
+         totalPremium.innerHTML = ((price * parseFloat(qty.value) * fineness) + parseFloat(premium.value)).toFixed(3) ;
     };
 
     typeEl.onchange = function() {
         var selectedCoin = this.options[this.selectedIndex].value;
-         var coinInfo = getCoinInfo(selectedCoin, currentObj);
+        var coinInfo = getCoinInfo(selectedCoin, currentObj);
+        fineness = parseFloat(coinInfo.weight)*parseFloat(coinInfo.percent);
         percent.innerHTML = coinInfo.percent;
+         weight.innerHTML = coinInfo.weight;
+         goldo.innerHTML =  (fineness).toFixed(3);
+         goldTotal.innerHTML = (parseFloat(qty.value) * fineness).toFixed(3);
+         total.innerHTML = (price * parseFloat(qty.value) * fineness).toFixed(3);
+         console.log("total: "+parseFloat(total.value));
+         totalPremium.innerHTML = ((price * parseFloat(qty.value) * fineness)  + parseFloat(premium.value)).toFixed(3);
     };
 };
 
