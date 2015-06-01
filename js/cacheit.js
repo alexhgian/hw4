@@ -1,7 +1,5 @@
-// Author: Alex Gian
-//
-// Parse
-//
+///Author: Alex Gian
+// Date:
 // Mini helper library that we wrote with Parse calls and utilities.
 
 function CacheIt(appId, apiKey){
@@ -211,6 +209,10 @@ function CacheIt(appId, apiKey){
                     clearTimeout(timer);
                     hasStarted = false;
                 }
+            },
+            // Uppercase First Letter Util
+            upperFirst : function(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
             }
         }
     }
