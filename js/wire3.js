@@ -16,29 +16,6 @@ function getTotalData(id, cb){
 
 // Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
 // through my proxy server cse134b.herokuapp.com
-function getLiveData (cb){
-    var req = new XMLHttpRequest();
-    // Request Handler
-    req.onreadystatechange = function(oEvent) {
-        if (req.readyState === 4) {
-            if (req.status === 200) { // Handle Success and Failure
-                // Parse the string into a JSON obj
-                var tmpObj = JSON.parse(req.responseText);
-                cb(tmpObj, false);
-                // console.log(tmpObj);
-            } else {
-                //console.log("Error: ", req.statusText); // Error Message
-                cb(req.statusText, true);
-            }
-        }
-    };
-    // Open the request with the Url Encoded String for login
-    req.open("GET", "http://cse134b.herokuapp.com/jm", true);
-    req.send(); // Finally send the request
-}
-
-// Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
-// through my proxy server cse134b.herokuapp.com
 function getTableData(q, cb) {
     Cache.getClass(null, 'coin',{
         query: {
@@ -82,14 +59,11 @@ function appendRow(id, data) {
     document.getElementById(id).appendChild(tr);
 }
 
-// Timestamp table look up only refresh certain row
-// Loop through table, check timestamp of each row,
-// if it's changed replace the element, if not continue,
-// if the element does not exist, append
-window.onload = function() {
+// Create a function and invoke on onload and invoke on an interveral after that
+window.onload = function update() {
 
     // Get the live data required to calculate table and overview panel data
-    getLiveData(function(liveData){
+    Cache.getMarketPrice(function(liveData){
         var dpVal = liveData[0].oneDayPercentChange;
         Cache.toggleClass('daily-percent','pos-change-main','neg-change',dpVal.toFixed(2),'%');
 
@@ -152,10 +126,11 @@ window.onload = function() {
                         id:'chartDiv',
                         height:455,
                         width:"100%",
-                        data: Cache.chartDown
+                        data: Cache.chartDown// Load the error message for the chart if metal price is down.
                         });
                         return err;
                     }
+
                     // Load Up the zingchart
                     zingchart.render({
                         id:'chartDiv',

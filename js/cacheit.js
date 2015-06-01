@@ -110,6 +110,28 @@ function CacheIt(appId, apiKey){
             req.send();
             return p;// Return the Promise
         },
+        // Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
+        // through my proxy server cse134b.herokuapp.com
+        getMarketPrice: function(cb){
+            var req = new XMLHttpRequest();
+            // Request Handler
+            req.onreadystatechange = function(oEvent) {
+                if (req.readyState === 4) {
+                    if (req.status === 200) { // Handle Success and Failure
+                        // Parse the string into a JSON obj
+                        var tmpObj = JSON.parse(req.responseText);
+                        cb(tmpObj, false);
+                        // console.log(tmpObj);
+                    } else {
+                        //console.log("Error: ", req.statusText); // Error Message
+                        cb(req.statusText, true);
+                    }
+                }
+            };
+            // Open the request with the Url Encoded String for login
+            req.open("GET", "http://cse134b.herokuapp.com/jm", true);
+            req.send(); // Finally send the request
+        },
         chartDown : {
             "graphset":[
                 {
