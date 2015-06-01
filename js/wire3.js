@@ -15,7 +15,7 @@ function getTotalData(id, cb){
 }
 // getTableData wrapper for getClass method in our custom library
 // Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
-// through my proxy server cse134b.herokuapp.com
+// through our proxy server cse134b.herokuapp.com
 function getTableData(q, cb) {
     var tmpQuery = {
         metal: q.metal,

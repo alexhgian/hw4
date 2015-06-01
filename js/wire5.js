@@ -9,17 +9,17 @@ function triggerFunction() {
 }
 
 //formatting the date
-function dateToString(date) {
-    var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December' ];
-
-    var month = date.getMonth() ;
-    var day = date.getDate();
-    var dateOfString = (('' + month).length < 2 ? '' : '') +  monthNames[month] + ' ';
-    dateOfString += (('' + day).length < 2 ? '0' : '') + day + ' ';
-    dateOfString += date.getFullYear();
-    return dateOfString;
-}
+// function dateToString(date) {
+//     var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June',
+//     'July', 'August', 'September', 'October', 'November', 'December' ];
+//
+//     var month = date.getMonth() ;
+//     var day = date.getDate();
+//     var dateOfString = (('' + month).length < 2 ? '' : '') +  monthNames[month] + ' ';
+//     dateOfString += (('' + day).length < 2 ? '0' : '') + day + ' ';
+//     dateOfString += date.getFullYear();
+//     return dateOfString;
+// }
 
 //this function lets to preview the image
 var loadFile = function(event) {
@@ -41,9 +41,8 @@ window.onload = function () {
     imgReq.style.visibility = "hidden";
 
     var currentdate = new Date();
-    var datetime= '';
-    datetime += dateToString(currentdate );
-    document.getElementById('datepicker').value = datetime;
+
+    document.getElementById('datepicker').value = currentdate.toDateString();
     getparseData();
 
     //uplaod to server parse
@@ -88,8 +87,10 @@ function successUpload(data) {
     var premium = parseFloat(document.getElementById('premium').value);
     var percent = parseFloat(document.getElementById('percent').innerHTML);
     var weight = parseFloat(document.getElementById('weight').innerHTML);
+    var date = document.getElementById('datepicker').value;
 
     var bodyData = {
+        date : date,
         item : item,
         metal: metal.toLowerCase(),
         quantity: qty,
