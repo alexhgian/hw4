@@ -1,17 +1,18 @@
-var myChart = function(data, totalData, start, end){
+var myChart2 = function(parseData, gData, sData, pData, start, end){
 
     // Create Chart Data
     var series = []
 
-    //console.log(totalData);
-
-    if(!data || !totalData) {
+    if(!gData || !sData || !pData || !parseData) {
         return null;
     }
 
 
-    var cData = getAxis(start, end, data.totalGoldArray, totalData);
-    //console.log(cData);
+    var gpData = getAxis(start, end, parseData.totalGoldArray, gData);
+    var spData = getAxis(start, end, parseData.totalSilverArray, sData);
+    var ppData = getAxis(start, end, parseData.totalPlatinumArray, pData);
+    console.log("Processed Gold Data: ");
+    console.log(gpData);
 
     var myChartData = {
         "background-color":"none",
@@ -41,7 +42,7 @@ var myChart = function(data, totalData, start, end){
             "label":{
                 "text":"Time"
             },
-            "values": cData.xAxis,
+            "values": gpData.xAxis,
             "line-width":0,
             "max-items":4,
             "tick":{
@@ -57,7 +58,7 @@ var myChart = function(data, totalData, start, end){
             "label":{
                 "text":"Price"
             },
-            "values":"1000:3000:50",
+            "values":"0:2700:50",
             "line-width":0,
             "tick":{
                 "visible":false
@@ -99,12 +100,32 @@ var myChart = function(data, totalData, start, end){
         "series":[{
             "text": "Gold Total",
             // "values": myValue1,
-            "values":cData.data1,
+            "values":gpData.data1,
             "line-color": "red"
+        },
+        {
+            "text": "Silver Total",
+            // "values": myValue1,
+            "values":spData.data1,
+            "line-color": "orange"
+        },
+        {
+            "text": "Platinum Total",
+            // "values": myValue1,
+            "values":ppData.data1,
+            "line-color": "yellow"
         },{
             "text": "1ozt Gold",
-            "values":cData.data2,
+            "values":gpData.data2,
             "line-color": "lightgreen"
+        },{
+            "text": "1ozt Silver",
+            "values":spData.data2,
+            "line-color": "blue"
+        },{
+            "text": "1ozt Platinum",
+            "values":ppData.data2,
+            "line-color": "purple"
         }]
     };
 

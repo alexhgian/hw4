@@ -3,127 +3,38 @@ var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
 var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
 var currentMetal = 'gold';
-var TROY_PER_GRAM = 0.0321507466;
 
-//Get the metal prices from a start to end date
-function getMetalPrice(metal, start, end, cb)
-{
-    var json_url = "https://www.quandl.com/api/v1/datasets/WSJ/"; // there is a daily limit of 50 connections for unregistered users. You can create an account and add your security token like: https://www.quandl.com/api/v1/datasets/WSJ/PL_MKT.csv?auth_token=933vrq6wUfABXEf_sgH7&trim_start=2015-05-01 However the security is updated daily. Also you can use your own, or third party proxy like http://websitescraper.herokuapp.com/?url=https://www.quandl.com/api/v1/datasets/WSJ/AU_EIB.csv for additional 50 connections. This proxy will accept any url and return you the data, also helping to deal with same origin policy
-    switch (metal) {
-        case 'gold':
-        json_url+="AU_EIB";
-        break;
-        case 'silver':
-        json_url+="AG_EIB";
-        break;
-        case 'platinum':
-        json_url+="PL_MKT";
-        break;
-    }
-    json_url+=".csv?auth_token=933vrq6wUfABXEf_sgH7&trim_start="+start;
-    if(end){
-        json_url+="&trim_end="+end;
-    }
-    getCSV(json_url, cb);
-}
-
-//Get the csv
-function getCSV(url, cb) {
-    var req = new XMLHttpRequest();
-
-    // Request Handler
-    req.onreadystatechange = function(oEvent) {
-        if (req.readyState === 4) {
-            if (req.status === 200) { // Handle Success and Failure
-                cb(csvArray(req.responseText), false);
-            } else {
-                console.log("Error: ", req.statusText); // Error Message
-                cb(req.statusText, true);
-            }
-        }
-    };
-
-    // Open the request with the Url Encoded String for login
-    req.open("GET", url, true);
-    // Set Request Header
-    req.setRequestHeader("Accept", 'text');
-    req.send(); // Finally send the request
-}
-
-//CSV to JSON used in the monex scrapper
-function csvArray(csv) {
-    var lines = csv.split("\n");
-    var result = [];
-
-    for (var i = 1; i < lines.length; i++) {
-        var obj = {};
-        var currentline = lines[i].split(",");
-
-        result.push([currentline[0],parseInt(currentline[1])]);
-    }
-
-    // Remove the uwanted empty string and NaN at the end
-    if(result[result.length-1]) { result.pop(); }
-
-    return result.reverse(); //JSON
-}
+// Initialize our CacheIT Library containing our reusable code.
+var Cache = CacheIt(appId,apiKey);
 
 // Get the totals and percentage
 function getTotalData(id, cb){
-    var req = new XMLHttpRequest();
-
-    // Request Handler
-    req.onreadystatechange = function(oEvent) {
-        if (req.readyState === 4) {
-            if (req.status === 200) { // Handle Success and Failure
-                // Parse the string into a JSON obj
-                var tmpObj = JSON.parse(req.responseText);
-                console.log(tmpObj);
-                cb(tmpObj, false);
-            } else {
-                console.log("Error: ", req.statusText); // Error Message
-                cb(req.statusText, true);
-            }
-        }
-    };
-
-    // Open the request with the Url Encoded String for login
-    req.open("GET", "https://api.parse.com/1/classes/Overview/"+id, true);
-
-    // Set Request Header for Parse
-    req.setRequestHeader("X-Parse-Application-Id", appId);
-    req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
-    req.setRequestHeader("X-Parse-Session-Token", sessionToken);
-    req.send(); // Finally send the request
+    Cache.getClass(id, 'Overview',{
+        sessionToken: sessionToken
+    },cb);
 }
-
-
+// getTableData wrapper for getClass method in our custom library
 // Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
 // through my proxy server cse134b.herokuapp.com
-function getLiveData (cb){
-    var req = new XMLHttpRequest();
-    // Request Handler
-    req.onreadystatechange = function(oEvent) {
-        if (req.readyState === 4) {
-            if (req.status === 200) { // Handle Success and Failure
-                // Parse the string into a JSON obj
-                var tmpObj = JSON.parse(req.responseText);
-                cb(tmpObj, false);
-                // console.log(tmpObj);
-            } else {
-                console.log("Error: ", req.statusText); // Error Message
-                cb(req.statusText, true);
-            }
-        }
+function getTableData(q, cb) {
+    var tmpQuery = {
+        metal: q.metal,
+        item: q.item
     };
+    if(!q.item || (q.item).length <=0){
+        delete tmpQuery['item'];
+    }
 
-    // Open the request with the Url Encoded String for login
-    req.open("GET", "http://cse134b.herokuapp.com/jm", true);
-    req.send(); // Finally send the request
+    Cache.getClass(null, 'coin',{
+        query: tmpQuery,
+        sessionToken: sessionToken
+    },cb);
 }
 
 // Append Coin data to a row
+// this is only used here so we don't need it in our cacheit.js library
 function appendRow(id, data) {
+
     var tr = document.createElement("tr");
     var td = document.createElement("td");
     var imageNode = document.createElement("img");
@@ -131,13 +42,19 @@ function appendRow(id, data) {
     tr.id = data.objectId; // Add objectId to row for lookup
     tr.setAttribute('updatedat', data.updatedAt); // Add timestamp to row for lookup
 
-    imageNode.src = data.image.url;
-    imageNode.className = 'coin_mini';
-    imageNode.width = 64;
-    td.className = 'stack_img_col'
-    td.appendChild(imageNode);
-    tr.appendChild(td);
-    delete data.image;
+    // Handle possible empty image
+    if(data.image){
+        imageNode.src = data.image.url;
+        imageNode.className = 'coin_mini';
+        imageNode.width = 64;
+        td.className = 'stack_img_col'
+        td.appendChild(imageNode);
+        tr.appendChild(td);
+        delete data.image;
+    } else {
+        td.appendChild(document.createTextNode(""));
+        tr.appendChild(td);
+    }
 
     var tmpArr = [data.item, data.quantity, data.weight, data.percent, data.value];
     tmpArr.forEach(function(val, key) {
@@ -151,103 +68,101 @@ function appendRow(id, data) {
     document.getElementById(id).appendChild(tr);
 }
 
+// Create a function and invoke on onload and invoke on an interveral after that
+window.onload = function update() {
+    // initalize a timer's callback will be called next time the timer is reset
+    // after the user is finished typing
+    Cache.initTimer(function(){
+        var search = document.getElementById('search');
 
-// Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
-// through my proxy server cse134b.herokuapp.com
-function getTableData(query, cb) {
-    var req = new XMLHttpRequest();
+        Cache.getMarketPrice(function(liveData){
+            var currentPrice = 0;
+            var totalString = '';
+            var currentMetalAsInt = 0;
 
-    // Request Handler
-    req.onreadystatechange = function(oEvent) {
-        if (req.readyState === 4) {
-            if (req.status === 200) { // Handle Success and Failure
-                // Parse the string into a JSON obj
-                var tmpObj = JSON.parse(req.responseText);
-                console.log(tmpObj.results);
-                cb(tmpObj.results);
-            } else {
-
-                console.log("Error: ", req.statusText); // Error Message
+            switch(currentMetal.toLowerCase()){
+                case 'gold':
+                currentMetalAsInt = 0;
+                currentPrice = liveData[0].bid;
+                totalString = 'totalGold';
+                break;
+                case 'silver':
+                currentMetalAsInt = 1;
+                currentPrice = liveData[1].bid;
+                totalString = 'totalSilver';
+                break;
+                case 'platinum':
+                currentMetalAsInt = 2;
+                currentPrice = liveData[2].bid;
+                totalString = 'totalPlatinum';
+                break;
             }
-        }
-    };
+            getTableData({
+                metal:currentMetal,
+                item: search.value
+            }, function(rowData){
+                console.log((rowData));
+                var myNode = document.getElementById('table-data');
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
+                rowData.results.forEach(function(object, key) {
+                    // 1oz = 0.911458333 ozt
+                    object.value = (object.weight * Cache.TROY_PER_GRAM * object.percent * currentPrice ).toFixed(2);
+                    appendRow('table-data', object);
+                });
+            });
+        });
+    });
 
-    // Open the request with the Url Encoded String for login
-    req.open("GET", "https://api.parse.com/1/classes/coin?where="+JSON.stringify({metal:query}), true);
-
-    // Set Request Header for Parse
-    req.setRequestHeader("X-Parse-Application-Id", appId);
-    req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
-    req.send(); // Finally send the request
-}
-
-
-// Timestamp table look up only refresh certain row
-// Loop through table, check timestamp of each row,
-// if it's changed replace the element, if not continue,
-// if the element does not exist, append
-window.onload = function() {
+    // Add the listner to the search bar
+    // call resetTimer() which will invoke startTimer's callback
+    var search = document.getElementById('search');
+    search.onkeyup = function() {
+        Cache.resetTimer();
+    }
 
     // Get the live data required to calculate table and overview panel data
-    getLiveData(function(liveData){
-
-        var dailyPercent = document.getElementById('daily-percent');
-        var dpVal = liveData[0].oneDayPercentChange;
-        if(dpVal>=0){
-            dailyPercent.className = "pos-change-main";
-            dailyPercent.innerHTML='+'+dpVal.toFixed(2)+'%';
-        } else {
-            dailyPercent.className = "neg-change";
-            dailyPercent.innerHTML=dpVal.toFixed(2)+'%';
-        }
-
-        var overall = document.getElementById('overall-percent');
-        var overallVal = liveData[0].yearToDatePercentChange;
-        if(overallVal>=0){
-            overall.className = "pos-change-main";
-            overall.innerHTML='+'+overallVal.toFixed(2)+'%';
-        } else {
-            overall.className = "neg-change";
-            overall.innerHTML='-'+overallVal.toFixed(2)+'%';
-        }
-
-        var askNode = document.getElementById('ask');
-        askNode.innerHTML=liveData[0].ask;
-
-        var bidNode = document.getElementById('bid');
-        bidNode.innerHTML=liveData[0].bid;
-
-        var changeNode = document.getElementById('change');
-        var diff = (liveData[0].bid-liveData[0].ask).toFixed(2);
-
-        if(diff>=0){
-            changeNode.className = "pos-change";
-            changeNode.innerHTML='+'+diff;
-        } else {
-            changeNode.className = "neg-change";
-            changeNode.innerHTML=diff;
-        }
-
-        // Set loader div to hidden since were loaded
-        document.getElementById('mloader').style.visibility = "hidden";
-
+    Cache.getMarketPrice(function(liveData){
         var currentPrice = 0;
         var totalString = '';
+        var currentMetalAsInt = 0;
 
         switch(currentMetal.toLowerCase()){
             case 'gold':
+            currentMetalAsInt = 0;
             currentPrice = liveData[0].bid;
             totalString = 'totalGold';
             break;
             case 'silver':
+            currentMetalAsInt = 1;
             currentPrice = liveData[1].bid;
             totalString = 'totalSilver';
             break;
             case 'platinum':
+            currentMetalAsInt = 2;
             currentPrice = liveData[2].bid;
             totalString = 'totalPlatinum';
             break;
         }
+
+        // Top part of the overview panel
+        var dpVal = liveData[currentMetalAsInt].oneDayPercentChange;
+        var overallVal = liveData[currentMetalAsInt].yearToDatePercentChange;
+        Cache.toggleClass('daily-percent','pos-change-main','neg-change',dpVal.toFixed(2),'%');
+        Cache.toggleClass('overall-percent','pos-change-main','neg-change',overallVal.toFixed(2),'%');
+
+        // Bottom part of the overview panel
+        var askNode = document.getElementById('ask');
+        var bidNode = document.getElementById('bid');
+
+        // Set the ask, bid, and change since the previous day
+        askNode.innerHTML=liveData[currentMetalAsInt].ask;
+        bidNode.innerHTML=liveData[currentMetalAsInt].bid;
+        Cache.toggleClass('change','pos-change','neg-change',liveData[currentMetalAsInt].oneDayChange);
+
+        // Set loader div to hidden since were loaded
+        document.getElementById('mloader').style.visibility = "hidden";
 
         // Get Total for Overview Panel
         getTotalData('sV6tdOBQCe', function(data, err){
@@ -258,54 +173,44 @@ window.onload = function() {
             var metalTotal = data[totalString];
             totalElement.innerHTML = '$'+(metalTotal*currentPrice).toFixed(2);
 
-            getMetalPrice('gold','2015-05-11','2015-05-29', function(marketData, err){
+            // Get the current date and the date 30 days into the past
+            var curTime = new Date();
+            var prevTime = new Date();
+            prevTime.setDate(curTime.getDate()-30);
+            var currentDate = Cache.formatTime(curTime);
+            var previousDate = Cache.formatTime(prevTime);
+
+            getMetalPrice('gold',previousDate,currentDate, function(marketData, err){
                 if(err){
                     zingchart.render({
                         id:'chartDiv',
                         height:455,
                         width:"100%",
-                        data: {
-                            "graphset":[
-                                {
-                                    "type":"bar",
-                                    "labels":[
-                                        {
-                                            "text":"Sorry, the chart is down! Try again later.",
-                                            "vertical-align": "middle",
-                                            "width" : 1,
-                                            "height" : 1,
-                                            "wrap-text":true,
-                                            "font-family":"helvetica",
-                                            "font-size":"22px",
-                                            "shadow":true,
-                                            "shadow-distance":"1px",
-                                            "shadow-angle":225
-                                        }]
-                                    }
-                                ]
-                            }
-                        });
-                        return err;
-                    }
-                    // Load Up the zingchart
-                    zingchart.render({
-                        id:'chartDiv',
-                        height:455,
-                        width:"100%",
-                        data: myChart(data, marketData,"2015-05-11","2015-05-29")
+                        data: Cache.chartDown// Load the error message for the chart if metal price is down.
                     });
-                });
-            });
+                    return err;
+                }
 
-            // Get coin data for table, require current price to calculate value
-            getTableData(currentMetal, function(rowData) {
-                rowData.forEach(function(object, key) {
-                    // 1oz = 0.911458333 ozt
-                    object.value = (object.weight * TROY_PER_GRAM * object.percent * currentPrice ).toFixed(2);
-                    appendRow('table-data', object);
+                // Load Up the zingchart
+                zingchart.render({
+                    id:'chartDiv',
+                    height:455,
+                    width:"100%",
+                    data: myChart(data, marketData,previousDate,currentDate)
                 });
-                // Set loader div to hidden since were loaded
-                document.getElementById('tloader').style.visibility = "hidden";
             });
         });
-    };
+
+        // Get coin data for table, require current price to calculate value
+        getTableData({metal:currentMetal}, function(rowData) {
+            console.log((rowData));
+            rowData.results.forEach(function(object, key) {
+                // 1oz = 0.911458333 ozt
+                object.value = (object.weight * Cache.TROY_PER_GRAM * object.percent * currentPrice ).toFixed(2);
+                appendRow('table-data', object);
+            });
+            // Set loader div to hidden since were loaded
+            document.getElementById('tloader').style.visibility = "hidden";
+        });
+    });
+};
