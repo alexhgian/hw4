@@ -3,6 +3,7 @@
 // Parse
 //
 // Mini helper library that we wrote with Parse calls and utilities.
+
 function CacheIt(appId, apiKey){
     // Init the parse keys.
     var appId = appId || "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
@@ -112,6 +113,7 @@ function CacheIt(appId, apiKey){
         },
         // Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
         // through my proxy server cse134b.herokuapp.com
+        // parameters: cb - a callback that returns an obj and err
         getMarketPrice: function(cb){
             var req = new XMLHttpRequest();
             // Request Handler
