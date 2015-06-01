@@ -16,6 +16,9 @@
     "tests"
   ],
   "dependencies": {
-    "zingchart": "~2.1.0"
+    "zingchart": "~2.1.0",
+    "font-awesome": "~4.3.0",
+    "underscore": "~1.8.3",
+    "pure": "~0.6.0"
   }
 }

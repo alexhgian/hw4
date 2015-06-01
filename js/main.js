@@ -7,7 +7,7 @@ function loadTopNav(){
 	document.write("            <\/symbol>");
 	document.write("            <use xlink:href=\"#icon-spinner2\"><\/use>");
 	document.write("        <\/svg>");
-	document.write("        <a href=\"wire2.html\">COINFLIP<\/a>");
+	document.write("        <a href=\"wire2.html\"><i class=\"fa fa-archive\"></i> CoinBucket<\/a>");
 	document.write("        <svg class=\"icon-cog\">");
 	document.write("            <symbol id=\"icon-cog\" viewBox=\"0 0 1024 1024\">");
 	document.write("                <title>cog<\/title>");
@@ -27,7 +27,7 @@ function loadTopNavPersist(){
 	document.write("            <\/symbol>");
 	document.write("            <use xlink:href=\"#icon-spinner2\"><\/use>");
 	document.write("        <\/svg>");
-	document.write("        <a href=\"wire2.html\">COINFLIP<\/a>");
+	document.write("        <a href=\"wire2.html\"><i class=\"fa fa-archive\"></i> CoinBucket<\/a>");
 	document.write("        <svg class=\"icon-cog\">");
 	document.write("            <symbol id=\"icon-cog\" viewBox=\"0 0 1024 1024\">");
 	document.write("                <title>cog<\/title>");
@@ -89,303 +89,133 @@ function loadSideNav(selected){
 
 function loadFooter(){
 	document.write("    <footer>");
-	document.write("        &copy; 2015 CoinFlip");
+	document.write("        &copy; 2015 CoinBucket");
 	document.write("    <\/footer> ");
 
 }
 
+//Get the metal prices from a start to end date
+function getMetalPrice(metal, start, end, cb)
+{
+    var json_url = "https://www.quandl.com/api/v1/datasets/WSJ/"; // there is a daily limit of 50 connections for unregistered users. You can create an account and add your security token like: https://www.quandl.com/api/v1/datasets/WSJ/PL_MKT.csv?auth_token=933vrq6wUfABXEf_sgH7&trim_start=2015-05-01 However the security is updated daily. Also you can use your own, or third party proxy like http://websitescraper.herokuapp.com/?url=https://www.quandl.com/api/v1/datasets/WSJ/AU_EIB.csv for additional 50 connections. This proxy will accept any url and return you the data, also helping to deal with same origin policy
+    switch (metal) {
+        case 'gold':
+        json_url+="AU_EIB";
+        break;
+        case 'silver':
+        json_url+="AG_EIB";
+        break;
+        case 'platinum':
+        json_url+="PL_MKT";
+        break;
+    }
+    json_url+=".csv?auth_token=933vrq6wUfABXEf_sgH7&trim_start="+start;
+    if(end){
+        json_url+="&trim_end="+end;
+    }
+    getCSV(json_url, cb);
+}
 
+//Get the csv
+function getCSV(url, cb) {
+    var req = new XMLHttpRequest();
 
-$(window).load(function() {
+    // Request Handler
+    req.onreadystatechange = function(oEvent) {
+        if (req.readyState === 4) {
+            if (req.status === 200) { // Handle Success and Failure
+                cb(csvArray(req.responseText), false);
+            } else {
+                console.log("Error: ", req.statusText); // Error Message
+                cb(req.statusText, true);
+            }
+        }
+    };
 
-	var path = window.location.pathname;
-	var page = path.split("/").pop();
+    // Open the request with the Url Encoded String for login
+    req.open("GET", url, true);
+    // Set Request Header
+    req.setRequestHeader("Accept", 'text');
+    req.send(); // Finally send the request
+}
 
+//CSV to JSON used in the monex scrapper
+function csvArray(csv) {
+    var lines = csv.split("\n");
+    var result = [];
 
+    for (var i = 1; i < lines.length; i++) {
+        var obj = {};
+        var currentline = lines[i].split(",");
 
-	/* * * * * * * * * * * * * *
-	 *                         *
-	 *        GENERAL          *
-	 *                         *
-	 * * * * * * * * * * * * * */
+        result.push([currentline[0],parseInt(currentline[1])]);
+    }
 
-	 $('.icon-spinner2').click(function(){
-	 	location.reload();	
-	 });
+    // Remove the uwanted empty string and NaN at the end
+    if(result[result.length-1]) { result.pop(); }
 
-	 $('tr').click(function(){
-	 	$(this).find('a')[0].click();
-	 });
+    return result.reverse(); //JSON
+}
 
-	/* * * * * * * * * * * * * *
-	 *                         *
-	 *        GRAPHING         *
-	 *                         *
-	 * * * * * * * * * * * * * */
- 	// graph for wire2 page
- 	var drawGraph = function(){
- 		var pointStroke = "rgba(255,255,255,0.6)";
- 		var pointHighlightFill = "#fff";
- 		var pointHighlightStroke = "#fff";
+function getAxis(start, end, d1, d2) {
+    var axis = [];
+    var startTime = new Date(start);
+    var endTime = new Date(end);
 
- 		if(page == "wire2.html") {
- 			var data = {
- 				labels: ["January", "February", "March", "April", "May", "June", "July"],
- 				datasets: [
- 				{
- 					label: "Gold Total",
- 					fillColor: "rgba(104, 206, 222, 0.05)",
- 					strokeColor: "#FF6D67",
- 					pointColor: "#FF6D67",
- 					pointStrokeColor: pointStroke,
- 					pointHighlightFill: pointHighlightFill,
- 					pointHighlightStroke: pointHighlightStroke,
- 					data: [700,820,700,800,730,950,900]
- 				},
- 				{
- 					label: "Platinum Total",
- 					fillColor: "rgba(104, 206, 222, 0.05)",
- 					strokeColor: "#FFA859",
- 					pointColor: "#FFA859",
- 					pointStrokeColor: pointStroke,
- 					pointHighlightFill: pointHighlightFill,
- 					pointHighlightStroke: pointHighlightStroke,
- 					data: [467, 555, 490, 550, 555, 560, 660]
- 				},
- 				{
- 					label: "Silver Total",
- 					fillColor: "rgba(104, 206, 222, 0.05)",
- 					strokeColor: "#F3FF88",
- 					pointColor: "#F3FF88",
- 					pointStrokeColor: pointStroke,
- 					pointHighlightFill: pointHighlightFill,
- 					pointHighlightStroke: pointHighlightStroke,
- 					data: [200, 350, 300, 389, 330, 400, 488]
- 				},
- 				{
- 					label: "1oz Gold",
- 					fillColor: "rgba(104, 206, 222, 0.05)",
- 					strokeColor: "#9FFF98",
- 					pointColor: "#9FFF98",
- 					pointStrokeColor: pointStroke,
- 					pointHighlightFill: pointHighlightFill,
- 					pointHighlightStroke: pointHighlightStroke,
- 					data: [100, 110, 120, 90, 102, 135, 115]
- 				},
- 				{
- 					label: "1oz Platinum",
- 					fillColor: "rgba(104, 206, 222, 0.05)",
- 					strokeColor: "#BBF5FF",
- 					pointColor: "#BBF5FF",
- 					pointStrokeColor: pointStroke,
- 					pointHighlightFill: pointHighlightFill,
- 					pointHighlightStroke: pointHighlightStroke,
- 					data: [56, 78, 67, 68, 73, 80, 76]
- 				},
- 				{
- 					label: "1oz Silver",
- 					fillColor: "rgba(104, 206, 222, 0.05)",
- 					strokeColor: "#C29FFF",
- 					pointColor: "#C29FFF",
- 					pointStrokeColor: pointStroke,
- 					pointHighlightFill: pointHighlightFill,
- 					pointHighlightStroke: pointHighlightStroke,
- 					data: [20, 22, 20, 32, 35, 50, 40]
- 				},
- 				]
- 			};
+    var limit = 100;
+    var counter = 0;
 
- 			var options = {
+    var rd1 = d1.reverse();
+    var rd2 = d2.reverse();
+    var data1 = [];
+    var data2 = [];
 
-			    ///Boolean - Whether grid lines are shown across the chart
-			    scaleShowGridLines : true,
+    var results = {
+        data1: [],
+        data2: [],
+        xAxis: []
+    }
 
-			    //String - Colour of the grid lines
-			    scaleGridLineColor : "rgba(104, 206, 222, 0.1)",
+    var d1Prev=0;
+    var d2prev=0;
+    while (true) {
+        // Format time yyyy-mm-dd
+        var tmpFormat = startTime.getUTCFullYear() + '-' +
+        ('0' + (startTime.getUTCMonth() + 1)).slice(-2) + '-' +
+        ('0' + startTime.getUTCDate()).slice(-2);
 
-			    //Number - Width of the grid lines
-			    scaleGridLineWidth : 1,
+        if(rd1.length>0){
+            var tmpD1 = new Date(rd1[rd1.length - 1][0]);
+            if (startTime.getTime() == tmpD1.getTime()) {
+                d1Prev=rd1.pop()[1];
+            }
+        }
+        data1.push(d1Prev);
 
-			    //Boolean - Whether to show horizontal lines (except X axis)
-			    scaleShowHorizontalLines: true,
+        if(rd2.length>0){
+            var tmpD2 = new Date(rd2[rd2.length - 1][0]);
+            if (startTime.getTime() == tmpD2.getTime()) {
+                d2prev=rd2.pop()[1];
+            }
+        }
+        data2.push(d2prev);
 
-			    //Boolean - Whether to show vertical lines (except Y axis)
-			    scaleShowVerticalLines: true,
+        axis.push(tmpFormat);
+        startTime.setDate(startTime.getDate() + 1);
+        if (startTime.getTime() > endTime.getTime()) {
+            //console.log("Break");
+            break;
+        }
 
-			    //Boolean - Whether the line is curved between points
-			    bezierCurve : true,
-
-			    //Number - Tension of the bezier curve between points
-			    bezierCurveTension : 0.4,
-
-			    //Boolean - Whether to show a dot for each point
-			    pointDot : true,
-
-			    //Number - Radius of each point dot in pixels
-			    pointDotRadius : 4,
-
-			    //Number - Pixel width of point dot stroke
-			    pointDotStrokeWidth : 1,
-
-			    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-			    pointHitDetectionRadius : 20,
-
-			    //Boolean - Whether to show a stroke for datasets
-			    datasetStroke : true,
-
-			    //Number - Pixel width of dataset stroke
-			    datasetStrokeWidth : 2,
-
-			    //Boolean - Whether to fill the dataset with a colour
-			    datasetFill : true,
-
-			    //String - A legend template
-			    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
-
-			    responsive: true,
-
-			    maintainAspectRatio: false,
-
-
-			};
-
-			var ctx = document.getElementById("total-chart").getContext("2d");
-			var coinChart = new Chart(ctx).Line(data,options);
-			coinChart.update();
-		}
-		else if(page =="wire3.html"){
-			var data = {
-				labels: ["January", "February", "March", "April", "May", "June", "July"],
-				datasets: [
-				{
-					label: "Gold Total",
-					fillColor: "rgba(104, 206, 222, 0.05)",
-					strokeColor: "#FF6D67",
-					pointColor: "#FF6D67",
-					pointStrokeColor: pointStroke,
-					pointHighlightFill: pointHighlightFill,
-					pointHighlightStroke: pointHighlightStroke,
-					data: [700,820,700,800,730,950,900]
-				},
-				{
-					label: "1oz Gold",
-					fillColor: "rgba(104, 206, 222, 0.05)",
-					strokeColor: "#9FFF98",
-					pointColor: "#9FFF98",
-					pointStrokeColor: pointStroke,
-					pointHighlightFill: pointHighlightFill,
-					pointHighlightStroke: pointHighlightStroke,
-					data: [100, 110, 120, 90, 102, 135, 115]
-				}
-				]
-			};
-
-			var options = {
-
-			    ///Boolean - Whether grid lines are shown across the chart
-			    scaleShowGridLines : true,
-
-			    //String - Colour of the grid lines
-			    scaleGridLineColor : "rgba(104, 206, 222, 0.1)",
-
-			    //Number - Width of the grid lines
-			    scaleGridLineWidth : 1,
-
-			    //Boolean - Whether to show horizontal lines (except X axis)
-			    scaleShowHorizontalLines: true,
-
-			    //Boolean - Whether to show vertical lines (except Y axis)
-			    scaleShowVerticalLines: true,
-
-			    //Boolean - Whether the line is curved between points
-			    bezierCurve : true,
-
-			    //Number - Tension of the bezier curve between points
-			    bezierCurveTension : 0.4,
-
-			    //Boolean - Whether to show a dot for each point
-			    pointDot : true,
-
-			    //Number - Radius of each point dot in pixels
-			    pointDotRadius : 4,
-
-			    //Number - Pixel width of point dot stroke
-			    pointDotStrokeWidth : 1,
-
-			    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-			    pointHitDetectionRadius : 20,
-
-			    //Boolean - Whether to show a stroke for datasets
-			    datasetStroke : true,
-
-			    //Number - Pixel width of dataset stroke
-			    datasetStrokeWidth : 2,
-
-			    //Boolean - Whether to fill the dataset with a colour
-			    datasetFill : true,
-
-			    //String - A legend template
-			    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
-
-			    responsive: true,
-
-			    maintainAspectRatio: false,
-
-
-			};
-
-			var ctx = document.getElementById("total-chart").getContext("2d");
-			var coinChart = new Chart(ctx).Line(data,options);
-			coinChart.update();
-		}
-	};
-
-	drawGraph();
-
-	/* * * * * * * * * * * * * *
-	 *                         *
-	 *     MOBILE HANDLING     *
-	 *                         *
-	 * * * * * * * * * * * * * */
-
-	 $('.mtb-1').click(function(){
-	 	$('.graph-panel').removeClass('graph-panel-show');
-	 	$('.market-status').fadeIn(0);
-	 	$('.market-list').fadeIn(0);
-	 	if( page == "wire3.html")
-	 		$('.my_stack').fadeIn(0);
-	 	$('.mtb-2').removeClass('mobile-toggle-selected');
-	 	$('.mtb-1').addClass('mobile-toggle-selected');
-
-	 });
-
-	 $('.mtb-2').click(function(){
-	 	$('.market-status').fadeOut(0);
-	 	$('.market-list').fadeOut(0);
-	 	if( page == "wire3.html")
-	 		$('.my_stack').fadeOut(0);
-	 	$('.mtb-1').removeClass('mobile-toggle-selected');
-	 	$('.mtb-2').addClass('mobile-toggle-selected');
-	 	$('.graph-panel').addClass('graph-panel-show');
-	 	drawGraph();
-	 });
-
-	 var resizer = function(){
-	 	winWidth = $(window).width();
-	 	winHeight = $(window).height();
-
-	 	if (winWidth > 999){
-	 		$('.graph-panel').removeClass('graph-panel-show');
-	 		$('.market-status').fadeIn(0);
-	 		$('.market-list').fadeIn(0);
-	 		if( page == "wire3.html")
-	 			$('.my_stack').fadeIn(0);
-	 		$('.mtb-2').removeClass('mobile-toggle-selected');
-	 		$('.mtb-1').addClass('mobile-toggle-selected');
-	 	}
-	 };
-
-	 $(window).resize(resizer);
-
-
-	});
+        counter++;
+        if (counter > limit) {
+            break;
+        }
+    }
+    //console.log(data1)
+    return {
+        'data1': data1,
+        'data2': data2,
+        'xAxis': axis
+    };
+}

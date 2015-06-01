@@ -73,6 +73,31 @@
     font-weight: normal;
     src: url("../fonts/montserrat-regular-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/montserrat-regular-webfont.ttf") format("truetype");
 }
+@font-face {
+    font-family: "lato-light";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/lato/Lato-Light.ttf");
+}
+@font-face {
+    font-family: "lato-regular";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/lato/Lato-Regular.ttf");
+}
+@font-face {
+    font-family: "lato-bold";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/lato/Lato-Bold.ttf");
+}
+@font-face {
+    font-family: "lato-black";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/lato/Lato-Black.ttf");
+}
+
 /* SASS VARIABLES */
 /* * * * * * * * * * * * * * * *
 *                             *
@@ -96,12 +121,12 @@ body {
     /*     background: #1D1D1D; */
 
     background: #f3f3f4;
-
-
-    /* font-family: "monster_h", sans-serif; */
     font-weight: 600;
+
+    font-family: "monster_h", sans-serif;
+
     /*     color: #E6E6E6; */
-    font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
 }
 
 .m
@@ -145,7 +170,7 @@ nav {
 nav svg {
     width: 30px;
     height: 30px;
-    fill: #55B7C5;
+    fill: white;
     position: absolute;
     top: 50%;
     margin-top: -15px;
@@ -174,8 +199,10 @@ nav .icon-cog {
 
 nav a {
     text-decoration: none;
-    color: #E6E6E6;
+    /*color: #E6E6E6;*/
+    color: white;
 }
+
 
 .mobile-nav {
     position: fixed;
@@ -255,7 +282,7 @@ aside figure {
     cursor: pointer;
 
     /*     color: #55B7C5; */
-    color:#00fbff;
+    color:#999;
     text-align: center;
     line-height: 80px;
     font-size: 2.5em;
@@ -271,12 +298,13 @@ aside figure figcaption {
     top: -42px;
     /*     font-family: "monster_h", sans-serif; */
     /*     color: #B1B1B1; */
-    color: #00fbff;
+    font-family: lato-light;
+    color: #999;
 }
 
 aside figure svg {
     /*     fill: #55B7C5; */
-    fill : #00fbff;
+    fill : #999;
     width: 50px;
     height: 50px;
     position: absolute;
@@ -291,24 +319,31 @@ aside figure svg {
 
 aside figure:hover {
     /*     color: #77EDFF; */
-    color:#00fbff;
-    background: rgba(255, 255, 255, 0.1);
+    color:white;
+    background: #1f8dd6;
 }
 
 aside figure:hover svg {
+    fill: white;
+    color:white;
+}
+
+aside figure:hover figcaption {
     /*     fill: #77EDFF; */
-    color:#00fbff;
+    color:white;
 }
 
 .nav-selected {
     /*     color: #77EDFF; */
-    color:#00fbff;
-    background: rgba(255, 255, 255, 0.1);
+    color:white;
+    background: #1f8dd6;
 }
-
+.nav-selected  figcaption {
+    color:white;
+}
 .nav-selected svg {
     /*     fill: #77EDFF; */
-    fill : #00fbff;
+    fill : white;
 }
 /* FOOTER */
 
@@ -328,6 +363,7 @@ footer {
     /*border-top: 3px solid #1D1D1D;*/
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
+    z-index:100;
 }
 /* * * * * * * * * * * * * * * *
 *                             *
@@ -351,6 +387,28 @@ a {
 
 a:visited {
     /* color: #E6E6E6; */
+}
+
+#w0-wrapper {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 120px;
+}
+
+form.reg {
+    display:inline-block;
+    width: 30%;
+    text-align: center;
+}
+
+input.reg {
+    color: white;
+    width: 100%;
+}
+
+#alert-box {
+    padding-top:10px;
 }
 /* * * * * * * * * * * * * * * *
 *                             *
@@ -376,7 +434,7 @@ a:visited {
 }
 
 #w1-left h1 {
-    font-family: "monster_l", sans-serif;
+    font-family: "lato-light", sans-serif;
     font-size: 2em;
 }
 
@@ -582,14 +640,71 @@ a:visited {
 
 }
 
+.overview-panel .market-item-container {
+    width: 100%;
+    height: 125px;
+    position: relative;
+}
+.overview-panel .market-item-loader {
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: grey;
+    background-color: rgba(255, 255, 255, 0.75);
+    z-index: 10;
+}
+
+.overview-panel .market-item-loader i {
+    position: relative;
+    font-size: 2em;
+    right: -45%;
+    top: 15%;
+}
+
 .overview-panel .market-list {
     width: 85%;
     margin-top: 20px;
-    padding-left: 25px;
-    padding-right: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+
+    /*width: 100%;*/
+    height: 100%;
+    /*position: absolute;*/
+    top: 0;
+    left: 0;
+}
+.overview-panel .market-list-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+
+#market-list-loader {
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: grey;
+    background-color: rgba(255, 255, 255, 0.75);
+    z-index: 10;
+}
+
+#market-list-loader i {
+    position: relative;
+    font-size: 2em;
+    right: -45%;
+    top: 40%;
 }
 
 .overview-panel .market-list .market-item-header {
+    font-family: "lato-regular";
     border-bottom: 1px solid #272E32;
     padding-bottom: 10px;
     position: relative;
@@ -618,10 +733,14 @@ a:visited {
 }
 
 .overview-panel .market-list #current-spot:hover {
-    color: #E6E6E6;
+    /*font-family: "lato-bold";*/
+    color:black;
 }
 
+
 .overview-panel .market-list .market-item-stats {
+
+
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -634,10 +753,12 @@ a:visited {
 }
 
 .overview-panel .market-list .market-item-stats table tr:first-child {
-    color: #68CEDE;
+    font-family: "lato-light";
+    color: #0960FF;
 }
 
 .overview-panel .market-list .market-item-stats td {
+    font-family: "lato-regular";
     text-align: center;
     width: 33%;
     margin: 0;
@@ -663,7 +784,7 @@ a:visited {
     display: inline-block;
     vertical-align: top;
     margin-left: 50px;
-    width: -webkit-calc(100% - 360px);
+    width: -webkit-calc(100% - 360x);
     width: calc(100% - 360px);
     height: 455px;
     position: relative;
@@ -676,10 +797,10 @@ a:visited {
 }
 
 .graph-panel .chart-wrap {
-    width: -webkit-calc(100% - 150px);
-    width: calc(100% - 150px);
+    width: -webkit-calc(100%);
+    width: calc(100%);
     height: 100%;
-    background-color:white;
+    /*background-color:white;*/
 }
 
 .graph-panel .chart-y-label {
@@ -759,7 +880,7 @@ a:visited {
 
 .current_gold {
     margin-top: -24px;
-    margin-left: 170px;
+    margin-left: 150px;
     margin-bottom: 0;
     color:white;
 }
@@ -777,6 +898,10 @@ a:visited {
     color: #A7FF8B;
 }
 
+.current_gold .pos-change-main {
+    color: #A7FF8B
+}
+
 #my_gold_value {
     position: absolute;
     margin-top: -23px;
@@ -786,7 +911,33 @@ a:visited {
 .my_stack {
     clear: both;
     margin-top: 30px;
+    font-family: "lato-regular";
 
+
+}
+/*Transparent Divs*/
+.my_stack .table-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.my_stack .table-loader {
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: grey;
+    background-color: rgba(255, 255, 255, 0.75);
+    z-index: 10;
+}
+
+.my_stack .table-loader i {
+    position: relative;
+    font-size: 2em;
+    right: -48%;
+    top: 45%;
 }
 
 .my_stack table {
@@ -804,7 +955,7 @@ a:visited {
     width: 16%;
     padding-top: 10px;
     padding-bottom: 10px;
-    font-family: "monster_r";
+    font-family: "lato-bold";
     font-weight: bold;
     border-bottom: 1px solid grey;
 }
@@ -814,10 +965,15 @@ a:visited {
     padding-bottom: 10px;
 
 }
-
+.my_stack table tbody > tr {
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    font-family: "lato-light";
+}
 .my_stack table tbody > tr:hover {
     background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
+    font-family: "lato-bold";
 }
 
 .my_stack table caption {
@@ -846,9 +1002,13 @@ a:visited {
     cursor: pointer;
 }
 
+.my_stack table caption section .stack_ctrl i {
+    vertical-align: middle;
+}
+
 .coin_mini {
-    width: 35px;
-    height: 35px;
+    width: 64px;
+    height: 64px;
     border-radius: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -900,7 +1060,7 @@ a:visited {
 
 .coin_detail {
     float: left;
-     padding-bottom: 50px;
+    padding-bottom: 50px;
     background-color: white;   border-color: #e7eaec;   border-image: none;   border-style: solid solid none;   border-width: 4px 0px 0;   color: inherit;   margin-bottom: 0;
     padding: 14px 15px 7px;   min-height: 48px;
     border-top-width: 5px;     padding-top: 50px;     padding-right: 50px;     padding-left: 50px;     padding-bottom: 50px;
@@ -965,7 +1125,7 @@ a:visited {
 }
 
 strong {
-    font-family: "monster_r";
+    font-family: "lato-bold";
     font-weight: 700;
 }
 /* * * * * * * * * * * * * * * *
@@ -980,15 +1140,32 @@ input {
     height: 27px;
     padding: 0 10px;
     border: none;
-    color: white;
-    font-family: "monster_h";
+    font-family: "lato-light";
     font-size: 13px;
     border-radius: 5px;
     outline: 0;
+
+}
+#btn-logo {
+    padding-top: 2px;
+  position: absolute;
+  color: rgb(76, 76, 76);
+}
+ .light {
+    color:white;
+}
+
+ .dark {
+    color:black;
+}
+#search {
+    background-color: white;
 }
 
 input:focus {
     outline: 2px solid #68CEDE;
+    /*box-shadow: 0 0 10px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);*/
 }
 
 select {
@@ -1004,7 +1181,7 @@ select {
     height: 27px;
     color: white;
     border: none;
-    font-family: "monster_h";
+    font-family: "lato-light";
     font-size: 13px;
     padding-left: 10px;
     border-radius: 5px;
@@ -1061,6 +1238,9 @@ select {
 
         padding-left: 0;
     }
+    .coin_wrapper {
+        margin-left: 0;
+    }
     .coin_main {
         width: 100%;
         text-align: center;
@@ -1091,10 +1271,14 @@ select {
         display: none;
     }
     .my_stack .label-and-search {
+
         display: none;
     }
     .overview-panel {
         width: 100%;
+    }
+    .overview-panel .market-item-loader i {
+        right: -48%;
     }
     .overview-panel .mobile-toggle {
         display: block;

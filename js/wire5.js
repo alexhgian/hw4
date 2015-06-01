@@ -33,7 +33,7 @@ var loadFile = function(event) {
 
 
 
-// displays current date 
+// displays current date
 window.onload = function () {
 
   var currentdate = new Date();
@@ -56,7 +56,7 @@ window.onload = function () {
                   // Parse the string into a JSON obj
                   console.log('Success: '+req.responseText);
                   successUpload(req.responseText);
-                 
+
                 } else {
 
                     console.log("Error: ", req.statusText); // Error Message
@@ -74,7 +74,7 @@ window.onload = function () {
 
 
 //associating image with the class
-function successUpload(data) {  
+function successUpload(data) {
   var qty = parseFloat(document.getElementById('qty').value);
   var item =  document.getElementById('item').value;
   var metal = document.getElementById('metal').value;
@@ -84,7 +84,7 @@ function successUpload(data) {
 
   var bodyData = {
       item : item,
-      metal: metal,
+      metal: metal.toLowerCase(),
       quantity: qty,
       premium: premium,
       percent: percent,
@@ -92,7 +92,7 @@ function successUpload(data) {
       image : {
               'name': JSON.parse(data).name,
               '__type': 'File'
-      }      
+      }
   }
 
   var req = new XMLHttpRequest();
@@ -119,7 +119,7 @@ function getparseData () {
   var req1 = new XMLHttpRequest();
   req1.onreadystatechange = function(oEvent) {
       if (req1.readyState === 4) {
-          if (req1.status === 200) { // Handle Success and Failure  
+          if (req1.status === 200) { // Handle Success and Failure
             // Parse the string into a JSON obj
             var tmpObj1 = JSON.parse(req1.responseText);
             console.log('Success');
@@ -140,7 +140,7 @@ function getparseData () {
 
 
 function populateDropdown(tmpObj) {
-    
+
     var goldObj = _.where(tmpObj, {
         metal: "Gold"
     });
@@ -217,7 +217,7 @@ function populateDropdown(tmpObj) {
           goldTotal.innerHTML = (parseFloat(qty.value) * fineness).toFixed(3);
           total.innerHTML = (price * parseFloat(qty.value) * fineness).toFixed(3);
           totalPremium.innerHTML = ((price * parseFloat(qty.value) * fineness) + parseFloat(premium.value)).toFixed(3) ;
-        
+
          qty.onkeyup = updateValues;
          premium.onkeyup = updateValues;
     };

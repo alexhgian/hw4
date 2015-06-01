@@ -11,7 +11,7 @@
     <script data-require="underscore.js@*" data-semver="1.6.0" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 
 
-    <script src="../js/velocity.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css">
     <script src="../js/main.js"></script>
     <script src="../js/wire5.js"></script>
 
@@ -24,123 +24,127 @@
 </head>
 
 <body>
-    <script>
-    loadTopNav();
-    </script>
-    <script>
-    loadSideNav(1);
-    </script>
-    <section class="main-section">
-        <section class="coin_wrapper">
-            <div class="mobile-nav">
-                <a href="wire3.html">
-                    <svg class="icon icon-keyboard-arrow-left">
-                        <symbol id="icon-keyboard-arrow-left" viewBox="0 0 1024 1024">
-                            <title>keyboard-arrow-left</title>
-                            <path class="path1" d="M657.707 696.96l-195.627-195.627 195.627-195.627-60.373-60.373-256 256 256 256z"></path>
+<script>
+loadTopNav();
+</script>
+<script>
+loadSideNav(1);
+</script>
+<section class="main-section">
+    <section class="coin_wrapper">
+        <div class="mobile-nav">
+            <a href="wire3.html">
+                <svg class="icon icon-keyboard-arrow-left">
+                    <symbol id="icon-keyboard-arrow-left" viewBox="0 0 1024 1024">
+                        <title>keyboard-arrow-left</title>
+                        <path class="path1" d="M657.707 696.96l-195.627-195.627 195.627-195.627-60.373-60.373-256 256 256 256z"></path>
+                    </symbol>
+                    <use xlink:href="#icon-keyboard-arrow-left"></use>
+                </svg>
+            </a>
+            ADD ITEM
+        </div>
+
+        <div class="coin_main">
+            <a href="wire3.html">
+                <div class="breadcrumb">
+                    <svg class="icon icon-play-arrow-rev">
+                        <symbol id="icon-play-arrow" viewBox="0 0 1024 1024">
+                            <title>play-arrow</title>
+                            <path class="path1" d="M682.667 213.333v597.333l-469.333-298.667z"></path>
                         </symbol>
-                        <use xlink:href="#icon-keyboard-arrow-left"></use>
+                        <use xlink:href="#icon-play-arrow"></use>
                     </svg>
-                </a>
-                ADD ITEM
-            </div>
-            <div class="coin_main">
-                <a href="wire3.html">
-                    <div class="breadcrumb">
-                        <svg class="icon icon-play-arrow-rev">
-                            <symbol id="icon-play-arrow" viewBox="0 0 1024 1024">
-                                <title>play-arrow</title>
-                                <path class="path1" d="M682.667 213.333v597.333l-469.333-298.667z"></path>
-                            </symbol>
-                            <use xlink:href="#icon-play-arrow"></use>
-                        </svg>
-                        Add Item
-                    </div>
-                </a>
-                <section class="coin_image">
-                    <div class="img_box">
-                        <input type="file" id ="file_upload"  accept="image/*" onchange="loadFile(event)"style="visibility:hidden"; >
-                        <label id="btn-logo" onclick="triggerFunction()"><strong>+</strong></label>
-                        <img id="output" width = "150px" height="150px"/>
-                    </div>
-           
-                </section>
-                <section class="coin_detail">
-                    <table>
-                        <tr>
-                            <td>Metal</td>
-                            <td>
-                                <select id= "metal">
-                                    <option value="Gold">Gold</option>
-                                    <option value="Silver">Silver</option>
-                                    <option value="Platinum">Platinum</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Type</td>
-                            <td>
-                                <select id="item">
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Purchase Date</td>
-                            <td>
-                                <input class="coin-field" type="text" size = "12" id="datepicker" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Qty.</td>
-                            <td>
-                                <input name="qty" type = "number" id="qty" value="1" min = "0"required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Premium</td>
-                            <td>
-                                <input name="premium" type = "number" id="premium" value="47.00"min = "0" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Market Price</td>
-                            <td id="price" >1270.00</td>
-                        </tr>
-                        <tr>
-                            <td>Gold %</td>
-                            <td id="percent">0.999</td>
-                        </tr>
-                        <tr>
-                            <td>Weight/unit (g)</td>
-                            <td id="weight">1.244</td>
-                        </tr>
-                        <tr>
-                            <td>Gold ozt/u</td>
-                            <td id="goldo">0.0400</td>
-                        </tr>
-                        <tr>
-                            <td>Total au (ozt)</td>
-                            <td id="totala">0.0400</td>
-                        </tr>
-                        <tr>
-                            <td><strong>TOTAL</strong></td>
-                            <td><strong id="total">1199.10</strong></td>
-                        </tr>
-                        <tr>
-                            <td><strong>TOTAL W/ Premium</strong></td>
-                            <td><strong id="totalPremium">1199.10</strong></td>
-                        </tr>
-                    </table>
-                    
-                    <span type="submit" id="save">Save to my Stack</span>
-                    <a href="wire3.html"><span id="cancel">Cancel</span></a>
-                </section>
-            </div>
-        </section>
+                    Add Item
+                </div>
+            </a>
+            <section class="coin_image">
+                <div class="img_box">
+                    <input type="file" id ="file_upload"  accept="image/*" onchange="loadFile(event)"style="visibility:hidden"; >
+                    <label id="btn-logo" onclick="triggerFunction()"><i class="fa fa-plus fa-2x"></i></label>
+                    <img id="output" width = "150px" height="150px"/>
+                </div>
+
+            </section>
+            <section class="coin_detail">
+                <table>
+                    <tr>
+                        <td>Metal</td>
+                        <td>
+                            <select id= "metal">
+                                <option value="Gold">Gold</option>
+                                <option value="Silver">Silver</option>
+                                <option value="Platinum">Platinum</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Type</td>
+                        <td>
+                            <select id="item">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Purchase Date</td>
+                        <td>
+                            <input class="light coin-field" type="text" size = "12" id="datepicker" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Qty.</td>
+                        <td>
+                            <input name="qty" class="light" type = "number" id="qty" value="1" min = "0"required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Premium</td>
+                        <td>
+                            <input name="premium"  class="light" type = "number" id="premium" value="47.00"min = "0" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Market Price</td>
+                        <td id="price" >1270.00</td>
+                    </tr>
+                    <tr>
+                        <td>Gold %</td>
+                        <td id="percent">0.999</td>
+                    </tr>
+                    <tr>
+                        <td>Weight/unit (g)</td>
+                        <td id="weight">1.244</td>
+                    </tr>
+                    <tr>
+                        <td>Gold ozt/u</td>
+                        <td id="goldo">0.0400</td>
+                    </tr>
+                    <tr>
+                        <td>Total au (ozt)</td>
+                        <td id="totala">0.0400</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TOTAL</strong></td>
+                        <td><strong id="total">1199.10</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>TOTAL W/ Premium</strong></td>
+                        <td><strong id="totalPremium">1199.10</strong></td>
+                    </tr>
+                </table>
+
+                <span type="submit" id="save">Save to my Stack</span>
+                <a href="wire3.html"><span id="cancel">Cancel</span></a>
+            </section>
+        </div>
     </section>
-    <script>
-    loadFooter();
-    </script>
+
+</section>
+</section>
+<script>
+loadFooter();
+
+</script>
 </body>
 
 </html>
