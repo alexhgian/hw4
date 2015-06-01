@@ -1144,13 +1144,18 @@ input {
     font-size: 13px;
     border-radius: 5px;
     outline: 0;
+
+}
+#btn-logo {
+    padding-top: 2px;
+  position: absolute;
+  color: rgb(76, 76, 76);
+}
+ .light {
+    color:white;
 }
 
-input .light {
-    color:black;
-}
-
-input .dark {
+ .dark {
     color:black;
 }
 #search {

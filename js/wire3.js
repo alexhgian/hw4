@@ -70,9 +70,8 @@ function appendRow(id, data) {
 
 // Create a function and invoke on onload and invoke on an interveral after that
 window.onload = function update() {
-    // initalize a timer that would be called on the next reset
-    // Search AJAXer with custom delay timer which only invokes after a give time
-    // after finish typing
+    // initalize a timer's callback will be called next time the timer is reset
+    // after the user is finished typing
     Cache.initTimer(function(){
         var search = document.getElementById('search');
 
