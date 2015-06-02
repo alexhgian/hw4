@@ -119,6 +119,9 @@ Redirects to Home page with metal info without the need to go to login for conve
 * implement the chart from zingchart where values are called from Parse and set into x,y-axis as a chart
 * Inside wire2.chart.js prepare data of all metals for the chart to display
    * using function getAxis() in cacheit.js to fill in gaps in data and optimize it
+   * Getting the chart right was posbilty the most time consuming aspect of this page.
+   * The chart did not like it if some datas are missing so we had to make sure all the dates are filled in using getAxis()
+   * As well as the labels being in sync with the data
 * Using promise library to optimize load time by parallelizing async requests to Quandl using the method getMetalPrice()
 
 ###wire3.html | wire3.js | wire3.chart.js
