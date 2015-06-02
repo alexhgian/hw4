@@ -1,5 +1,5 @@
 #CacheIt
-Team
+The Team
 * Alex Gian 
 * Sergio Leon
 * Bal Krishna Oli
