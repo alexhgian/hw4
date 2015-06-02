@@ -155,7 +155,7 @@ function updateTime() {
         nyTimeOpen.setUTCHours(7);
         marketOpenEl.innerHTML = "Market is close";
         timeString = 'opening in ' + getHourDiff(nyTime, nyTimeOpen) + 'h ' + ('0' + (60 - nyTime.getUTCMinutes())).slice(-2) + 'm';
-    } else if (nyTime.getDay() == 6) { // Saturday
+    } else if (nyTime.getUTCDay() == 6) { // Saturday
         nyTimeOpen.setDate(nyTimeOpen.getDate() + 2);
         nyTimeOpen.setUTCHours(7);
         marketOpenEl.innerHTML = "Market is close";

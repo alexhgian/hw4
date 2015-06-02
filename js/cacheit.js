@@ -71,7 +71,8 @@ function CacheIt(appId, apiKey){
                 toggleNode.innerHTML=value+pf;
             }
         },
-        getClass: function(i, className, option, cb){
+        getClass: function(i, className, option, callback){
+            var cb = callback || function() {};
             var p = new promise.Promise();// Create a Promise
             var req = new XMLHttpRequest();
             var id = (i)? '/'+i : '';
@@ -87,6 +88,7 @@ function CacheIt(appId, apiKey){
                         p.done(null, tmpObj);// Resolve that Promise!
                     } else {
                         cb(req.statusText, true);
+                        p.done(true, req.statusText);// Resolve that Promise!
                     }
                 }
             };
