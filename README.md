@@ -1,9 +1,10 @@
 #CacheIt
-Alex Gian 
-Sergio Leon
-Bal Krishna Oli
-Joshua Yuen
-Kristine Nguyen
+Team
+* Alex Gian 
+* Sergio Leon
+* Bal Krishna Oli
+* Joshua Yuen
+* Kristine Nguyen
 
 ##Project Structure
 ```
