@@ -1,3 +1,10 @@
+#CacheIt
+Alex Gian 
+Sergio Leon
+Bal Krishna Oli
+Joshua Yuen
+Kristine Nguyen
+
 ##Project Structure
 ```
 package.js                 -- Dev. Packages (gulp, gulp-live-server)
