@@ -99,6 +99,7 @@
 }
 
 /* SASS VARIABLES */
+
 /* * * * * * * * * * * * * * * *
 *                             *
 *        GENERAL STYLE        *
@@ -956,7 +957,7 @@ input.reg {
 }
 
 .my_stack table th {
-    width: 16%;
+    /*width: 16%;*/
     padding-top: 10px;
     padding-bottom: 10px;
     font-family: "lato-bold";
@@ -1208,20 +1209,24 @@ select {
     border: 1px solid #18a689;
 }
 
-#cancel {
+.ci-button {
     /*     background: #1C3A3F; */
     /*     border: 1px solid #151515; */
     border: 1px solid #b9bec2;
     background: white;
     color: grey;
     text-decoration: none;
-    width: 275px;
-    height: 40px;
+
     line-height: 40px;
     margin-top: 15px;
 }
 
-#cancel:hover {
+.ci-button .large {
+    width: 275px;
+    height: 40px;
+}
+
+.ci-button:hover {
     border: 1px solid rgba(0, 0, 0, 0.50);
 }
 /* * * * * * * * * * * * * * * *

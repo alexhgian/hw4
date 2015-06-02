@@ -28,8 +28,25 @@
 <body>
 
 <script>
+var tmpNum = 1;
+var currentMetal = '';
+switch(window.location.hash){
+    case '#gold':
+    currentMetal = 'gold';
+    tmpNum = 1;
+    break;
+    case '#silver':
+    currentMetal = 'silver';
+    tmpNum = 2;
+    break;
+    case '#platinum':
+    currentMetal = 'platinum';
+    tmpNum = 3;
+    break;
+}
+
 loadTopNav();
-loadSideNav(1);
+loadSideNav(tmpNum);
 </script>
 
 <section class="main-section">
@@ -136,8 +153,9 @@ loadSideNav(1);
                         <section class="label-and-search">
                             <h3>My Gold</h3>
                             <div class="stack_ctrl">
+                                <i id="search-spinner" class="fa fa-spinner fa-spin" style="visibility: hidden;"></i>
                                 <input id="search" type="search" placeholder="Search"/>
-                                <a href="wire5.html">
+                                <a id="add-item-button">
                                     <i class="fa fa-plus fa-2x"></i>
                                 </a>
                             </div>
@@ -145,12 +163,15 @@ loadSideNav(1);
                     </caption>
                     <thead>
                         <tr>
+
                             <th class="stack_img_col">Image</th>
                             <th>Item</th>
                             <th>Qty.</th>
                             <th class="weight_compr"><span>Weight/unit (g)</span></th>
                             <th class="percent_compr"><span>% au</span></th>
                             <th>Value</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody id="table-data"></tbody>

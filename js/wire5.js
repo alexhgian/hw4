@@ -1,25 +1,12 @@
 var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
-
+var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
 var price = 1250.60;
 
 //"+" triggers the hidden button for previewing image.
 function triggerFunction() {
     document.getElementById('file_upload').click();
 }
-
-//formatting the date
-// function dateToString(date) {
-//     var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June',
-//     'July', 'August', 'September', 'October', 'November', 'December' ];
-//
-//     var month = date.getMonth() ;
-//     var day = date.getDate();
-//     var dateOfString = (('' + month).length < 2 ? '' : '') +  monthNames[month] + ' ';
-//     dateOfString += (('' + day).length < 2 ? '0' : '') + day + ' ';
-//     dateOfString += date.getFullYear();
-//     return dateOfString;
-// }
 
 //this function lets to preview the image
 var loadFile = function(event) {
@@ -37,6 +24,14 @@ var loadFile = function(event) {
 
 // displays current date
 window.onload = function () {
+
+    // All with class back button will have the proper metal hash to return properly
+    var bb = document.getElementsByClassName('back-button')
+    for( var i = 0; i<bb.length; i++){
+        bb[i].href="wire3.html"+window.location.hash;
+	}
+
+
     var imgReq = document.getElementsByClassName('coin_image-required')[0];
     imgReq.style.visibility = "hidden";
 
@@ -73,6 +68,7 @@ window.onload = function () {
         req.open("POST", serverUrl, true);
         req.setRequestHeader("X-Parse-Application-Id", appId);
         req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+        req.setRequestHeader("X-Parse-Session-Token", sessionToken);
         req.setRequestHeader("Content-Type", file.type);
         req.send(file);
     });
@@ -89,37 +85,78 @@ function successUpload(data) {
     var weight = parseFloat(document.getElementById('weight').innerHTML);
     var date = document.getElementById('datepicker').value;
 
-    var bodyData = {
-        date : date,
-        item : item,
-        metal: metal.toLowerCase(),
-        quantity: qty,
-        premium: premium,
-        percent: percent,
-        weight: weight,
-        image : {
-            'name': JSON.parse(data).name,
-            '__type': 'File'
-        }
+    var deleteObj;
+    var overviewBody = {};
+    otherWeight = 0;
+
+    var action = getParameterByName('action');
+    console.log('URL Action: '+action);
+    console.log('URL HASH: '+window.location.hash);
+    if(action=='edit'){
+        // Get Object ID of coin so it can be located and displayed
+        var editId = cookie.get('coinId');
+        otherWeight = cookie.get('weight');
+        deleteObj={
+            'method': 'DELETE',
+            'path': '/1/classes/coin/'+editId
+        };
+    }
+    var calcWeight = (weight*qty*percent)-otherWeight;
+    switch(metal.toLowerCase()){
+        case 'gold':
+        overviewBody={"totalGold":{"__op":"Increment","amount":calcWeight}};
+        break;
+        case 'silver':
+        overviewBody={"totalSilver":{"__op":"Increment","amount":calcWeight}};
+        break;
+        case 'platinum':
+        overviewBody={"totalPlatinum":{"__op":"Increment","amount":calcWeight}};
+        break;
     }
 
+    var batchData = {
+        'requests':[{
+            'method': 'POST',
+            'path': '/1/classes/coin',
+            'body': {
+                date : date,
+                item : item,
+                metal: metal.toLowerCase(),
+                quantity: qty,
+                premium: premium,
+                percent: percent,
+                weight: weight,
+                image : {
+                    'name': JSON.parse(data).name,
+                    '__type': 'File'
+                }
+            }
+        },{
+            'method': 'PUT',
+            'path': '/1/classes/Overview/sV6tdOBQCe',
+            'body': overviewBody
+        }]
+    };
+    if(deleteObj){
+        batchData.requests.push(deleteObj);
+    }
     var req = new XMLHttpRequest();
     req.onreadystatechange = function(oEvent) {
         if (req.readyState === 4) {
-            if (req.status === 201) { // Handle Success and Failure
+            if (req.status === 200) { // Handle Success and Failure
                 console.log('Success');
-                document.location.href=("wire3.html");
+                document.location.href="wire3.html"+window.location.hash;
             } else {
 
                 console.log("Error: ", req.statusText); // Error Message
             }
         }
     };
-    req.open("POST", " https://api.parse.com/1/classes/coin", true);
+    req.open("POST", " https://api.parse.com/1/batch", true);
     req.setRequestHeader("X-Parse-Application-Id", appId);
     req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
     req.setRequestHeader("Content-Type", 'application/json');
-    req.send(JSON.stringify(bodyData));
+    req.send(JSON.stringify(batchData));
 };
 
 //getting parse data from info class
@@ -171,16 +208,34 @@ function populateDropdown(tmpObj) {
     var total = document.getElementById('total');
     var totalPremium = document.getElementById('totalPremium');
 
+
+
+    var currentObj = goldObj;
+    switch(window.location.hash)
+    {
+        case '#gold':
+        currentObj = goldObj;
+        metalEl.options[0].selected = true;
+        break;
+        case '#silver':
+        metalEl.options[1].selected = true;
+        console.log('setting silver');
+        currentObj = silverObj;
+        break;
+        case '#platinum':
+        metalEl.options[2].selected = true;
+        currentObj = platinumObj;
+        break;
+    }
+
     // Initial Info
-    goldObj.forEach(function(val, key) {
+    currentObj.forEach(function(val, key) {
         var opt = document.createElement('option');
         opt.value = val.name;
         opt.text = val.name;
         typeEl.appendChild(opt);
 
     });
-
-    var currentObj = goldObj;
     function updateValues() {
         var coinInfoEl  = getCoinInfo(typeEl.value, currentObj);
         var fineness = parseFloat(coinInfoEl.weight)*parseFloat(coinInfoEl.percent);
@@ -249,4 +304,10 @@ function getCoinInfo(name, metalObject) {
     return _.findWhere(metalObject, {
         name: name
     });
+}
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }

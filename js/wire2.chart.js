@@ -3,7 +3,9 @@ var myChart2 = function(parseData, gData, sData, pData, start, end){
     // Create Chart Data
     var series = []
 
+
     if(!gData || !sData || !pData || !parseData) {
+        console.error('Some Data was null!');
         return null;
     }
 
@@ -11,9 +13,11 @@ var myChart2 = function(parseData, gData, sData, pData, start, end){
     var gpData = getAxis(start, end, parseData.totalGoldArray, gData);
     var spData = getAxis(start, end, parseData.totalSilverArray, sData);
     var ppData = getAxis(start, end, parseData.totalPlatinumArray, pData);
-    console.log("Processed Gold Data: ");
-    console.log(gpData);
 
+    var min = Math.min(gpData.min,spData.min,ppData.min);
+    var max = Math.max(gpData.max,spData.max,ppData.max);
+    //console.log('Max is : ' + max)
+    currentScale = 0+':'+(max+((max+min)/10)+10)+':'+ ((max<200)?10:200);
     var myChartData = {
         "background-color":"none",
         "type":"line",
@@ -58,7 +62,7 @@ var myChart2 = function(parseData, gData, sData, pData, start, end){
             "label":{
                 "text":"Price"
             },
-            "values":"0:2700:50",
+            "values":currentScale,
             "line-width":0,
             "tick":{
                 "visible":false
