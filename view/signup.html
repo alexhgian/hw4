@@ -7,15 +7,16 @@
     <meta name="author" content="CSE134B Dream Team">
     <title>Sign Up For CoinBucket</title>
 
-    <link rel="stylesheet" type="text/css" href="../bower_components/pure/pure-min.css">
-    <link rel="stylesheet" type="text/css" href="../style/style.css">
+
 
     <meta name=viewport content="width=device-width, initial-scale=.8, minimum-scale = .8, user-scalable=yes">
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 
+    <link rel="stylesheet" type="text/css" href="../bower_components/pure/pure-min.css">
+    <link rel="stylesheet" type="text/css" href="../style/style.css">
+
     <script src="../js/main.js"></script>
-    <script src="../js/component/cookies.min.js"></script>
 </head>
 
 <body>
@@ -102,26 +103,6 @@
                     req.send(JSON.stringify(bodyData));
                 });
         }
-
-         // Using the 1kb Promise.js Utility Library for Promises and AJAX
-        /*function(){
-
-            promise.get('https://api.parse.com/1/login', encodedString, {
-                        "Accept": "application/json",
-                        "X-Parse-Application-Id": "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W",
-                        "X-Parse-REST-API-Key": "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1"
-                    }).then(function(error, text, xhr) {
-                        if (error) {
-                            console.log('Error ' + xhr.status);
-                            return;
-                        }
-                        var tmpObj = JSON.parse(text);
-                        //Cookies another 1kb
-                        console.log(tmpObj);
-                        Cookies.set('sessionToken', tmpObj.sessionToken);
-                        console.log(Cookie.get('sessionToken'));
-                    });
-        }*/
     </script>
     <script>loadFooter();</script>
 </body>

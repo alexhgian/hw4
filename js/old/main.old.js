@@ -342,50 +342,55 @@ function loadFooter(){
 //
 // 	drawGraph();
 //
-// 	/* * * * * * * * * * * * * *
-// 	 *                         *
-// 	 *     MOBILE HANDLING     *
-// 	 *                         *
-// 	 * * * * * * * * * * * * * */
-//
-// 	 $('.mtb-1').click(function(){
-// 	 	$('.graph-panel').removeClass('graph-panel-show');
-// 	 	$('.market-status').fadeIn(0);
-// 	 	$('.market-list').fadeIn(0);
-// 	 	if( page == "wire3.html")
-// 	 		$('.my_stack').fadeIn(0);
-// 	 	$('.mtb-2').removeClass('mobile-toggle-selected');
-// 	 	$('.mtb-1').addClass('mobile-toggle-selected');
-//
-// 	 });
-//
-// 	 $('.mtb-2').click(function(){
-// 	 	$('.market-status').fadeOut(0);
-// 	 	$('.market-list').fadeOut(0);
-// 	 	if( page == "wire3.html")
-// 	 		$('.my_stack').fadeOut(0);
-// 	 	$('.mtb-1').removeClass('mobile-toggle-selected');
-// 	 	$('.mtb-2').addClass('mobile-toggle-selected');
-// 	 	$('.graph-panel').addClass('graph-panel-show');
-// 	 	drawGraph();
-// 	 });
-//
-// 	 var resizer = function(){
-// 	 	winWidth = $(window).width();
-// 	 	winHeight = $(window).height();
-//
-// 	 	if (winWidth > 999){
-// 	 		$('.graph-panel').removeClass('graph-panel-show');
-// 	 		$('.market-status').fadeIn(0);
-// 	 		$('.market-list').fadeIn(0);
-// 	 		if( page == "wire3.html")
-// 	 			$('.my_stack').fadeIn(0);
-// 	 		$('.mtb-2').removeClass('mobile-toggle-selected');
-// 	 		$('.mtb-1').addClass('mobile-toggle-selected');
-// 	 	}
-// 	 };
-//
-// 	 $(window).resize(resizer);
-//
-//
-// 	});
+	/* * * * * * * * * * * * * *
+	 *                         *
+	 *     MOBILE HANDLING     *
+	 *                         *
+	 * * * * * * * * * * * * * */
+
+	//  $('.mtb-1').click(function(){
+	//  	$('.graph-panel').removeClass('graph-panel-show');
+	//  	$('.market-status').fadeIn(0);
+	//  	$('.market-list').fadeIn(0);
+	//  	if( page == "wire3.html")
+	//  		$('.my_stack').fadeIn(0);
+	//  	$('.mtb-2').removeClass('mobile-toggle-selected');
+	//  	$('.mtb-1').addClass('mobile-toggle-selected');
+	//
+	//  });
+	//
+	//  $('.mtb-2').click(function(){
+	//  	$('.market-status').fadeOut(0);
+	//  	$('.market-list').fadeOut(0);
+	//  	if( page == "wire3.html")
+	//  		$('.my_stack').fadeOut(0);
+	//  	$('.mtb-1').removeClass('mobile-toggle-selected');
+	//  	$('.mtb-2').addClass('mobile-toggle-selected');
+	//  	$('.graph-panel').addClass('graph-panel-show');
+	//  	drawGraph();
+	//  });
+	//
+	//  var resizer = function(){
+	//  	winWidth = $(window).width();
+	//  	winHeight = $(window).height();
+	//
+	//  	if (winWidth > 999){
+	//  		$('.graph-panel').removeClass('graph-panel-show');
+	//  		$('.market-status').fadeIn(0);
+	//  		$('.market-list').fadeIn(0);
+	//  		if( page == "wire3.html")
+	//  			$('.my_stack').fadeIn(0);
+	//  		$('.mtb-2').removeClass('mobile-toggle-selected');
+	//  		$('.mtb-1').addClass('mobile-toggle-selected');
+	//  	}
+	//  };
+	//
+	//  $(window).resize(resizer);
+	//
+	//
+	// });
+
+	var mbt1 = document.getElementsByClassName('mtb-1');
+
+	console.log("Mobile Handling: ");
+	console.log(mtb1);

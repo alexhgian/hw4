@@ -1,4 +1,4 @@
-var myChart = function(data, totalData, start, end){
+var myChart = function(currentMetal, data, totalData, start, end){
 
     // Create Chart Data
     var series = []
@@ -9,10 +9,28 @@ var myChart = function(data, totalData, start, end){
         return null;
     }
 
+    // Select the array history to display
+    var selectHistory = '';
 
-    var cData = getAxis(start, end, data.totalGoldArray, totalData);
-    //console.log(cData);
+    switch(currentMetal){
+        case 'Gold':
 
+        selectHistory = 'totalGoldArray';
+        break;
+        case 'Silver':
+
+        selectHistory = 'totalSilverArray';
+        break;
+        case 'Platinum':
+
+        selectHistory = 'totalPlatinumArray';
+        break;
+    }
+
+    // Optimize the data and fill in gaps of days if missing with previous day.
+    var cData = getAxis(start, end, data[selectHistory], totalData);
+    currentScale = cData.min+':'+(cData.max+((cData.max+cData.min)/4)+10)+':'+ ((cData.max<200)?10:200);
+    console.log(cData);
     var myChartData = {
         "background-color":"none",
         "type":"line",
@@ -57,7 +75,7 @@ var myChart = function(data, totalData, start, end){
             "label":{
                 "text":"Price"
             },
-            "values":"1000:3000:50",
+            "values":currentScale,
             "line-width":0,
             "tick":{
                 "visible":false
@@ -97,12 +115,12 @@ var myChart = function(data, totalData, start, end){
             "active-area":false
         },
         "series":[{
-            "text": "Gold Total",
+            "text": currentMetal+" Total",
             // "values": myValue1,
             "values":cData.data1,
             "line-color": "red"
         },{
-            "text": "1ozt Gold",
+            "text": "1ozt "+currentMetal,
             "values":cData.data2,
             "line-color": "lightgreen"
         }]

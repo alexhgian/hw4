@@ -3,7 +3,6 @@ var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
 var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
 var overviewId = 'sV6tdOBQCe';
-var currentMetal = 'gold';
 
 // Initialize our CacheIT Library containing our reusable code.
 var Cache = CacheIt(appId,apiKey);
@@ -124,7 +123,7 @@ window.onload = function update() {
             var currentPrice = current.bid;
             var totalString = current.totalString;
             var currentMetalAsInt = current.position;
-            
+
             getTableData({
                 metal:currentMetal,
                 item: search.value
@@ -204,7 +203,7 @@ window.onload = function update() {
                     id:'chartDiv',
                     height:455,
                     width:"100%",
-                    data: myChart(data, marketData,previousDate,currentDate)
+                    data: myChart(Cache.upperFirst(currentMetal), data, marketData,previousDate,currentDate)
                 });
             });
         });

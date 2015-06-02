@@ -28,8 +28,25 @@
 <body>
 
 <script>
+var tmpNum = 1;
+var currentMetal = '';
+switch(window.location.hash){
+    case '#gold':
+    currentMetal = 'gold';
+    tmpNum = 1;
+    break;
+    case '#silver':
+    currentMetal = 'silver';
+    tmpNum = 2;
+    break;
+    case '#platinum':
+    currentMetal = 'platinum';
+    tmpNum = 3;
+    break;
+}
+
 loadTopNav();
-loadSideNav(1);
+loadSideNav(tmpNum);
 </script>
 
 <section class="main-section">
