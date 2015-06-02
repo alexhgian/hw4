@@ -136,6 +136,10 @@ Redirects to Home page with metal info without the need to go to login for conve
    * also uses getAxis()
    * Handles Quandl server issue or network issues with `Cachit.chartDown` which displays an error message.
    * Same difficulties were had here as well with data syncronization
+* Added View link if any elements are click except for the edit and delete buttons of course.
+  * And eventListener is listen for the click and assigns the objectId for the coin in a cookie to be used in `wire4.html`
+* Edit, and Delete button 
+  * Similar to view using a combination of the query string, hash, and cookie 
 
 ###wire4.html | wire4.js
 **View Item Detail**
@@ -153,3 +157,10 @@ Redirects to Home page with metal info without the need to go to login for conve
 * Upload Image and the detail info of the coin back to parse.
 * Have ajax function to associate image and coin info with the class in parse.
 * Error Message if user forgets to add image
+* 
+
+###updateitem.js | wire5.js
+
+**Edit item**
+* Reuses `wire5.js` with the query string `?action=edit`
+* ex. http://localhost:3000/view/updateitem.html?action=edit#platinum
