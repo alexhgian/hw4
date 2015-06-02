@@ -134,6 +134,7 @@ Redirects to Home page with metal info without the need to go to login for conve
 * Similar to wire2.chart.js, wire3.chart.js prepares data for a specific metal
    * also uses getAxis()
    * Handles Quandl server issue or network issues with `Cachit.chartDown` which displays an error message.
+   * Same difficulties were had here as well with data syncronization
 
 ###wire4.html | wire4.js
 **View Item Detail**
