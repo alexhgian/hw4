@@ -155,7 +155,7 @@ loadSideNav(tmpNum);
                             <div class="stack_ctrl">
                                 <i id="search-spinner" class="fa fa-spinner fa-spin" style="visibility: hidden;"></i>
                                 <input id="search" type="search" placeholder="Search"/>
-                                <a href="wire5.html">
+                                <a id="add-item-button">
                                     <i class="fa fa-plus fa-2x"></i>
                                 </a>
                             </div>
@@ -163,12 +163,15 @@ loadSideNav(tmpNum);
                     </caption>
                     <thead>
                         <tr>
+
                             <th class="stack_img_col">Image</th>
                             <th>Item</th>
                             <th>Qty.</th>
                             <th class="weight_compr"><span>Weight/unit (g)</span></th>
                             <th class="percent_compr"><span>% au</span></th>
                             <th>Value</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody id="table-data"></tbody>

@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../style/style.css">
     <link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css">
-    
+
     <script src="../bower_components/underscore/underscore-min.js"></script>
 
     <script src="../js/main.js"></script>
@@ -25,12 +25,28 @@
 loadTopNav();
 </script>
 <script>
-loadSideNav(1);
+var tmpNum = 1;
+var currentMetal = '';
+switch(window.location.hash){
+    case '#gold':
+    currentMetal = 'gold';
+    tmpNum = 1;
+    break;
+    case '#silver':
+    currentMetal = 'silver';
+    tmpNum = 2;
+    break;
+    case '#platinum':
+    currentMetal = 'platinum';
+    tmpNum = 3;
+    break;
+}
+loadSideNav(tmpNum);
 </script>
 <section class="main-section">
     <section class="coin_wrapper">
         <div class="mobile-nav">
-            <a href="wire3.html">
+            <a class='back-button' href="wire3.html">
                 <svg class="icon icon-keyboard-arrow-left">
                     <symbol id="icon-keyboard-arrow-left" viewBox="0 0 1024 1024">
                         <title>keyboard-arrow-left</title>
@@ -43,7 +59,7 @@ loadSideNav(1);
         </div>
 
         <div class="coin_main">
-            <a href="wire3.html">
+            <a class='back-button' href="wire3.html">
                 <div class="breadcrumb">
                     <svg class="icon icon-play-arrow-rev">
                         <symbol id="icon-play-arrow" viewBox="0 0 1024 1024">
@@ -132,7 +148,7 @@ loadSideNav(1);
                 </table>
 
                 <span type="submit" id="save">Save to my Stack</span>
-                <a href="wire3.html"><span id="cancel">Cancel</span></a>
+                <a class="back-button" href="wire3.html"><span id="cancel" class=" ci-button large">Cancel</span></a>
             </section>
         </div>
     </section>

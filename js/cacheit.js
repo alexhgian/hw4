@@ -97,6 +97,53 @@ function CacheIt(appId, apiKey){
             req.send();
             return p;// Return the Promise
         },
+        delete: function(id, metal, weight, sessionToken, callback){
+            cb = callback || function(){};
+            var p = new promise.Promise();// Create a Promise
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function(oEvent) {
+                if (req.readyState === 4) {
+                    if (req.status === 200) { // Handle Success and Failure
+                        var tmpObj = JSON.parse(req.responseText);
+                        cb(tmpObj, false);
+                        p.done(null, tmpObj);// Resolve that Promise!
+                    } else {
+                        cb(req.statusText, true);
+                    }
+                }
+            };
+            var overviewBody = {};
+            switch(metal.toLowerCase()){
+                case 'gold':
+                overviewBody={"totalGold":{"__op":"Increment","amount":-weight}};
+                break;
+                case 'silver':
+                overviewBody={"totalSilver":{"__op":"Increment","amount":-weight}};
+                break;
+                case 'platinum':
+                overviewBody={"totalPlatinum":{"__op":"Increment","amount":-weight}};
+                break;
+            }
+            var batchData = {
+                'requests':[{
+                    'method': 'DELETE',
+                    'path': '/1/classes/coin/'+id,
+                    'body': overviewBody
+                },{
+                    'method': 'PUT',
+                    'path': '/1/classes/Overview/sV6tdOBQCe',
+                    'body': overviewBody
+                }]
+            };
+
+            req.open("POST", 'https://api.parse.com/1/batch', true);
+            req.setRequestHeader("X-Parse-Application-Id", appId);
+            req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+            req.setRequestHeader("X-Parse-Session-Token", sessionToken);
+            req.setRequestHeader("Content-Type", 'application/json');
+            req.send(JSON.stringify(batchData));
+            return p;// Return the Promise
+        },
         // Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
         // through my proxy server cse134b.herokuapp.com
         // parameters: cb - a callback that returns an obj and err
@@ -130,7 +177,7 @@ function CacheIt(appId, apiKey){
                     "type":"bar",
                     "labels":[
                         {
-                            "text":"Sorry, the chart is down! Try again later.",
+                            "text":"Sorry, the market server is down! Try again later.",
                             "vertical-align": "middle",
                             "width" : 1,
                             "height" : 1,
@@ -308,7 +355,7 @@ function CacheIt(appId, apiKey){
             }
 
         });
-    
+
     	return {
     		'data1': data1,
     		'data2': data2,

@@ -16,10 +16,10 @@ function getTotalData(cb){
             if (req.status === 200) { // Handle Success and Failure
                 // Parse the string into a JSON obj
                 var tmpObj = JSON.parse(req.responseText);
-                console.log(tmpObj.results);
+                //console.log(tmpObj.results);
                 cb(tmpObj.results, false);
             } else {
-                console.log("Error: ", req.statusText); // Error Message
+                //console.log("Error: ", req.statusText); // Error Message
                 cb(req.statusText, true);
             }
         }
@@ -41,29 +41,28 @@ window.onload = function(){
     * Get Live Data From Quandl *
     ****************************/
     var pMarket = Cache.getMarketPrice(function(lData){
-        console.log(lData);
+        //console.log(lData);
         var gAsk = document.getElementById('gold-ask');
         var gBid = document.getElementById('gold-bid');
-        var gChange = document.getElementById('gold-change');
+
         gAsk.innerHTML = (lData[0].ask).toFixed(2);
         gBid.innerHTML = (lData[0].bid).toFixed(2);
-        gChange.innerHTML = (lData[0].bid - lData[0].ask).toFixed(2);
+        Cache.toggleClass('gold-change','pos-change','neg-change', lData[0].oneDayChange);
 
         var sAsk = document.getElementById('silver-ask');
         var sBid = document.getElementById('silver-bid');
-        var sChange = document.getElementById('silver-change');
+
 
         sAsk.innerHTML = (lData[1].ask).toFixed(2);
         sBid.innerHTML = (lData[1].bid).toFixed(2);
-        sChange.innerHTML = (lData[1].bid - lData[1].ask).toFixed(2);
+        Cache.toggleClass('silver-change','pos-change','neg-change', lData[1].oneDayChange);
 
         var pAsk = document.getElementById('platinum-ask');
         var pBid = document.getElementById('platinum-bid');
-        var pChange = document.getElementById('platinum-change');
 
         pAsk.innerHTML = (lData[2].ask).toFixed(2);
         pBid.innerHTML = (lData[2].bid).toFixed(2);
-        pChange.innerHTML = (lData[2].bid - lData[2].ask).toFixed(2);
+        Cache.toggleClass('platinum-change','pos-change','neg-change', lData[2].oneDayChange);
 
         document.getElementById('market-list-loader').style.visibility = "hidden";
     });
@@ -99,21 +98,38 @@ window.onload = function(){
                 percentEl.classList.remove("neg-change");
             }
 
-            /****************************
-            * Get Metal Prices          *
-            ****************************/
+            /****************************************
+            * Get Metal Prices using promises       *
+            ****************************************/
+            // Get the current date and the date 30 days into the past
+            var curTime = new Date();
+            var prevTime = new Date();
+            prevTime.setDate(curTime.getDate()-30);
+            var currentDate = Cache.formatTime(curTime);
+            var previousDate = Cache.formatTime(prevTime);
+
             // Reduce Load Time by through parallel requests using promises
-            var p1 = Cache.getMetalPrice('gold','2015-05-20','2015-05-29');
-            var p2 = Cache.getMetalPrice('silver','2015-05-20','2015-05-29');
-            var p3 = Cache.getMetalPrice('platinum','2015-05-20','2015-05-29');
+            var p1 = Cache.getMetalPrice('gold',previousDate,currentDate);
+            var p2 = Cache.getMetalPrice('silver',previousDate,currentDate);
+            var p3 = Cache.getMetalPrice('platinum',previousDate,currentDate);
 
             promise.join([p1,p2,p3]).then(function(results){
-                console.log('Num of Promises: ' + results.length);
+                // Handle Error
+                if(results[0][0] || results[0][0] || results[0][0] ){
+                    zingchart.render({
+                        id:'chartDiv',
+                        height:455,
+                        width:"100%",
+                        data: Cache.chartDown// Load the error message for the chart if metal price is down.
+                    });
+                    return null;
+                }
+
                 zingchart.render({
                     id:'chartDiv',
                     height:455,
                     width:"100%",
-                    data: myChart2(tData[0], results[0][1], results[1][1], results[2][1],"2015-05-20","2015-05-29")
+                    data: myChart2(tData[0], results[0][1], results[1][1], results[2][1],previousDate,currentDate)
                 });
             });
         });
@@ -143,14 +159,16 @@ function updateTime() {
         nyTimeOpen.setDate(nyTimeOpen.getDate() + 2);
         nyTimeOpen.setUTCHours(7);
         marketOpenEl.innerHTML = "Market is close";
-        timeString = 'opening in ' + getHourDiff(nyTime, nyTimeOpen.setHours(nyTime.getHours() + 8)) + 'h ' + ('0' + (60 - nyTime.getUTCMinutes())).slice(-2) + 'm';
+        timeString = 'opening in ' + getHourDiff(nyTime, nyTimeOpen) + 'h ' + ('0' + (60 - nyTime.getUTCMinutes())).slice(-2) + 'm';
     } else { //Monday - Friday
         if (nyTime.getUTCHours() >= 8 && nyTime.getUTCHours() <= 17) {
             marketOpenEl.innerHTML = "Market is open";
-            timeString = 'closing in ' + (17 - nyTime.getUTCHours()) + 'h ' + ('0' + nyTime.getUTCMinutes()).slice(-2) + 'm';
+            nyTimeOpen.setUTCHours(17);
+            timeString = 'closing in ' + getHourDiff(nyTime, nyTimeOpen) + 'h ' + ('0' + nyTime.getUTCMinutes()).slice(-2) + 'm';
         } else {
             marketOpenEl.innerHTML = "Market is close";
-            timeString = 'opening in ' + getHourDiff(nyTime, nyTimeOpen.setHours(nyTime.getHours() + 8)) + 'h ' + ('0' + (60 - nyTime.getUTCMinutes())).slice(-2) + 'm';
+            nyTimeOpen.setUTCHours(8);
+            timeString = 'opening in ' + getHourDiff(nyTime, nyTimeOpen) + 'h ' + ('0' + (60 - nyTime.getUTCMinutes())).slice(-2) + 'm';
         }
     }
     var timeEl = document.getElementsByClassName('market-time')[0];

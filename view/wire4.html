@@ -15,7 +15,7 @@
     <script src="../js/main.js"></script>
     <script src="../js/cacheit.js"></script>
     <script src="../js/wire4.js"></script>
-    
+
     <title>View Item - CoinBucket</title>
 
 </head>
@@ -25,12 +25,28 @@
     loadTopNav();
     </script>
     <script>
-    loadSideNav(1);
+    var tmpNum = 1;
+    var currentMetal = '';
+    switch(window.location.hash){
+        case '#gold':
+        currentMetal = 'gold';
+        tmpNum = 1;
+        break;
+        case '#silver':
+        currentMetal = 'silver';
+        tmpNum = 2;
+        break;
+        case '#platinum':
+        currentMetal = 'platinum';
+        tmpNum = 3;
+        break;
+    }
+    loadSideNav(tmpNum);
     </script>
     <section class="main-section">
         <section class="coin_wrapper">
             <div class="mobile-nav">
-                <a href="wire3.html">
+                <a class="back-button" href="wire3.html">
                     <svg class="icon icon-keyboard-arrow-left">
                         <symbol id="icon-keyboard-arrow-left" viewBox="0 0 1024 1024">
                             <title>keyboard-arrow-left</title>
@@ -42,7 +58,7 @@
                 ITEM DETAIL
             </div>
             <div class="coin_main">
-                <a href="wire3.html">
+                <a class="back-button" href="wire3.html">
                     <div class="breadcrumb">
                         <svg class="icon icon-play-arrow-rev">
                             <symbol id="icon-play-arrow" viewBox="0 0 1024 1024">
@@ -56,7 +72,7 @@
                 </a>
                 <section class="coin_image">
                     <div class="img_box">
-                        <img height="150" weight="150" id="coin-img" style="margin-top: 24px"></img>
+                        <img height="150" width="150" id="coin-img" style="margin-top: 24px"></img>
                     </div>
                 </section>
                 <section class="coin_detail">

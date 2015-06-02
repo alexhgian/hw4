@@ -13,6 +13,16 @@ var marketPrice;
 
 
 window.onload = function() {
+    // Get Object ID of coin so it can be located and displayed
+    coinId = cookie.get('coinId');
+    console.log(coinId);
+
+    // All with class back button will have the proper metal hash to return properly
+    var bb = document.getElementsByClassName('back-button')
+    for( var i = 0; i<bb.length; i++){
+        bb[i].href="wire3.html"+window.location.hash;
+	}
+    
     var parseData;
     var promise = Cache.getClass(coinId, 'coin',{
         sessionToken: sessionToken
