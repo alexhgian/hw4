@@ -35,7 +35,7 @@ We thought the theme was a bit dark, so we brighten things up with our own color
 
 **Routing for wire3**
 
-We used hashes int he your specifically for wire3.html because there was no other way to differentiate it between what metal was selected and it would be problematic to copy and paste 3 versions of wire3.html just for each metal. So we uses `window.location.hash` to get the hash to determine what metal page it is refering to.
+We used the `hash` in the url specifically for wire3.html because there was no other way to differentiate it between what metal was selected and it would be problematic to copy and paste 3 versions of wire3.html just for each metal. So we uses `window.location.hash` to get the hash to determine what metal page it is refering to.
 We also used this in other pages that require redirect back to wire3.html like wire4 and wire5 which return back to the metal page.
 
 **Backend Web Parse**
