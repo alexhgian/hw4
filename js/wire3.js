@@ -2,6 +2,7 @@
 var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
 var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
+var overviewId = 'sV6tdOBQCe';
 var currentMetal = 'gold';
 
 // Initialize our CacheIT Library containing our reusable code.
@@ -13,6 +14,37 @@ function getTotalData(id, cb){
         sessionToken: sessionToken
     },cb);
 }
+
+function findMetalInfo(metal, data){
+    var currentPrice = 0;
+    var totalString = '';
+    var currentMetalAsInt = 0;
+    switch(currentMetal.toLowerCase()){
+        case 'gold':
+        currentMetalAsInt = 0;
+        currentPrice = data[0].bid;
+        totalString = 'totalGold';
+        break;
+        case 'silver':
+        currentMetalAsInt = 1;
+        currentPrice = data[1].bid;
+        totalString = 'totalSilver';
+        break;
+        case 'platinum':
+        currentMetalAsInt = 2;
+        currentPrice = data[2].bid;
+        totalString = 'totalPlatinum';
+        break;
+    }
+
+    return {
+        bid: currentPrice,
+        position: currentMetalAsInt,
+        totalString: totalString
+    }
+}
+
+
 // getTableData wrapper for getClass method in our custom library
 // Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
 // through our proxy server cse134b.herokuapp.com
@@ -70,37 +102,34 @@ function appendRow(id, data) {
 
 // Create a function and invoke on onload and invoke on an interveral after that
 window.onload = function update() {
+    // Loading Spiner
+    var searchSpin = document.getElementById('search-spinner');
+
+    // Add the listner to the search bar
+    // call resetTimer() which will invoke startTimer's callback
+    var search = document.getElementById('search');
+
+    search.onkeyup = function() {
+        Cache.resetTimer();
+        searchSpin.style.visibility = "visible";
+    }
+
     // initalize a timer's callback will be called next time the timer is reset
     // after the user is finished typing
     Cache.initTimer(function(){
         var search = document.getElementById('search');
 
         Cache.getMarketPrice(function(liveData){
-            var currentPrice = 0;
-            var totalString = '';
-            var currentMetalAsInt = 0;
-
-            switch(currentMetal.toLowerCase()){
-                case 'gold':
-                currentMetalAsInt = 0;
-                currentPrice = liveData[0].bid;
-                totalString = 'totalGold';
-                break;
-                case 'silver':
-                currentMetalAsInt = 1;
-                currentPrice = liveData[1].bid;
-                totalString = 'totalSilver';
-                break;
-                case 'platinum':
-                currentMetalAsInt = 2;
-                currentPrice = liveData[2].bid;
-                totalString = 'totalPlatinum';
-                break;
-            }
+            var current = findMetalInfo(currentMetal, liveData);
+            var currentPrice = current.bid;
+            var totalString = current.totalString;
+            var currentMetalAsInt = current.position;
+            
             getTableData({
                 metal:currentMetal,
                 item: search.value
             }, function(rowData){
+                searchSpin.style.visibility = "hidden";// Loading is finished.
                 console.log((rowData));
                 var myNode = document.getElementById('table-data');
                 while (myNode.firstChild) {
@@ -115,36 +144,15 @@ window.onload = function update() {
         });
     });
 
-    // Add the listner to the search bar
-    // call resetTimer() which will invoke startTimer's callback
-    var search = document.getElementById('search');
-    search.onkeyup = function() {
-        Cache.resetTimer();
-    }
+
 
     // Get the live data required to calculate table and overview panel data
     Cache.getMarketPrice(function(liveData){
-        var currentPrice = 0;
-        var totalString = '';
-        var currentMetalAsInt = 0;
 
-        switch(currentMetal.toLowerCase()){
-            case 'gold':
-            currentMetalAsInt = 0;
-            currentPrice = liveData[0].bid;
-            totalString = 'totalGold';
-            break;
-            case 'silver':
-            currentMetalAsInt = 1;
-            currentPrice = liveData[1].bid;
-            totalString = 'totalSilver';
-            break;
-            case 'platinum':
-            currentMetalAsInt = 2;
-            currentPrice = liveData[2].bid;
-            totalString = 'totalPlatinum';
-            break;
-        }
+        var current = findMetalInfo(currentMetal, liveData);
+        var currentPrice = current.bid;
+        var totalString = current.totalString;
+        var currentMetalAsInt = current.position;
 
         // Top part of the overview panel
         var dpVal = liveData[currentMetalAsInt].oneDayPercentChange;
@@ -165,7 +173,7 @@ window.onload = function update() {
         document.getElementById('mloader').style.visibility = "hidden";
 
         // Get Total for Overview Panel
-        getTotalData('sV6tdOBQCe', function(data, err){
+        getTotalData(overviewId, function(data, err){
             if(err) { return console.log(err); }// Handle Error
 
             var totalPanelElement = document.getElementById('total-value')
@@ -180,7 +188,7 @@ window.onload = function update() {
             var currentDate = Cache.formatTime(curTime);
             var previousDate = Cache.formatTime(prevTime);
 
-            getMetalPrice('gold',previousDate,currentDate, function(marketData, err){
+            Cache.getMetalPrice(currentMetal,previousDate,currentDate, function(marketData, err){
                 if(err){
                     zingchart.render({
                         id:'chartDiv',

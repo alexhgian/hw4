@@ -3,7 +3,9 @@ var myChart2 = function(parseData, gData, sData, pData, start, end){
     // Create Chart Data
     var series = []
 
+
     if(!gData || !sData || !pData || !parseData) {
+        console.error('Some Data was null!');
         return null;
     }
 

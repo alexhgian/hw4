@@ -42,9 +42,9 @@ function loadSideNav(selected){
 	document.write("    <aside>");
 	document.write("        <a href=\"wire2.html\">");
 	if(selected == 0)
-		document.write("        <figure class='nav-selected'>");
+	document.write("        <figure class='nav-selected'>");
 	else
-		document.write("        <figure>");
+	document.write("        <figure>");
 	document.write("            <br\/>");
 	document.write("              <svg class=\"icon-home2\">");
 	document.write("                    <symbol id=\"icon-home2\" viewBox=\"0 0 1024 1024\">");
@@ -59,27 +59,27 @@ function loadSideNav(selected){
 	document.write("        <\/a> ");
 	document.write("        <a href=\"wire3.html\">");
 	if(selected == 1)
-		document.write("        <figure class='nav-selected'>");
+	document.write("        <figure class='nav-selected'>");
 	else
-		document.write("        <figure>");
+	document.write("        <figure>");
 	document.write("            Au");
 	document.write("            <figcaption>My Gold<\/figcaption>");
 	document.write("        <\/figure>       ");
 	document.write("        <\/a> ");
 	document.write("        <a href=\"wire3.html\">");
 	if(selected == 2)
-		document.write("        <figure class='nav-selected'>");
+	document.write("        <figure class='nav-selected'>");
 	else
-		document.write("        <figure>");
+	document.write("        <figure>");
 	document.write("            Ag");
 	document.write("            <figcaption>My Silver<\/figcaption>");
 	document.write("        <\/figure>       ");
 	document.write("        <\/a> ");
 	document.write("        <a href=\"wire3.html\">");
 	if(selected == 3)
-		document.write("        <figure class='nav-selected'>");
+	document.write("        <figure class='nav-selected'>");
 	else
-		document.write("        <figure>");
+	document.write("        <figure>");
 	document.write("            Pt");
 	document.write("            <figcaption>My Platinum<\/figcaption>");
 	document.write("        <\/figure>");
@@ -92,4 +92,66 @@ function loadFooter(){
 	document.write("        &copy; 2015 CoinBucket");
 	document.write("    <\/footer> ");
 
+}
+
+function getAxis(start, end, d1, d2) {
+	var axis = [];
+	var startTime = new Date(start);
+	var endTime = new Date(end);
+
+	var limit = 100;
+	var counter = 0;
+
+	var rd1 = d1.reverse();
+	var rd2 = d2.reverse();
+	var data1 = [];
+	var data2 = [];
+
+	var results = {
+		data1: [],
+		data2: [],
+		xAxis: []
+	}
+
+	var d1Prev=0;
+	var d2prev=0;
+	while (true) {
+		var tmpFormat = startTime.getUTCFullYear() + '-' +
+		('0' + (startTime.getUTCMonth() + 1)).slice(-2) + '-' +
+		('0' + startTime.getUTCDate()).slice(-2);
+
+		if(rd1.length>0){
+			var tmpD1 = new Date(rd1[rd1.length - 1][0]);
+			if (startTime.getTime() == tmpD1.getTime()) {
+				d1Prev=rd1.pop()[1];
+			}
+		}
+		data1.push(d1Prev);
+
+		if(rd2.length>0){
+			var tmpD2 = new Date(rd2[rd2.length - 1][0]);
+			if (startTime.getTime() == tmpD2.getTime()) {
+				d2prev=rd2.pop()[1];
+			}
+		}
+		data2.push(d2prev);
+
+		axis.push(tmpFormat);
+		startTime.setDate(startTime.getDate() + 1);
+		if (startTime.getTime() > endTime.getTime()) {
+			//console.log("Break");
+			break;
+		}
+
+		counter++;
+		if (counter > limit) {
+			break;
+		}
+	}
+
+	return {
+		'data1': data1,
+		'data2': data2,
+		'xAxis': axis
+	};
 }

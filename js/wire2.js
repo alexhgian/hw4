@@ -2,34 +2,9 @@
 var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
 var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
-var currentMetal = 'gold';
-var TROY_PER_GRAM = 0.0321507466;
 
-
-// Gets the Ask, Bid price and calculates change from a live data feed (monex.com)
-// through my proxy server cse134b.herokuapp.com
-function getLiveData (cb){
-    var req = new XMLHttpRequest();
-    // Request Handler
-    req.onreadystatechange = function(oEvent) {
-        if (req.readyState === 4) {
-            if (req.status === 200) { // Handle Success and Failure
-                // Parse the string into a JSON obj
-                var tmpObj = JSON.parse(req.responseText);
-                cb(tmpObj, false);
-                // console.log(tmpObj);
-            } else {
-                console.log("Error: ", req.statusText); // Error Message
-                cb(req.statusText, true);
-            }
-        }
-    };
-
-    // Open the request with the Url Encoded String for login
-    req.open("GET", "http://cse134b.herokuapp.com/jm", true);
-    req.send(); // Finally send the request
-}
-
+// Initialize our CacheIT Library containing our reusable code.
+var Cache = CacheIt(appId,apiKey);
 
 // Get the totals and percentage
 function getTotalData(cb){
@@ -65,7 +40,7 @@ window.onload = function(){
     /****************************
     * Get Live Data From Quandl *
     ****************************/
-    getLiveData(function(lData){
+    var pMarket = Cache.getMarketPrice(function(lData){
         console.log(lData);
         var gAsk = document.getElementById('gold-ask');
         var gBid = document.getElementById('gold-bid');
@@ -91,10 +66,14 @@ window.onload = function(){
         pChange.innerHTML = (lData[2].bid - lData[2].ask).toFixed(2);
 
         document.getElementById('market-list-loader').style.visibility = "hidden";
+    });
 
-        /****************************
-        * Get Total                 *
-        ****************************/
+    /****************************
+    * Get Total                 *
+    ****************************/
+    pMarket.then(function(err, lData){
+        if(err){ console.error(err); return err;}
+
         getTotalData(function(tData){
             // Total Metal
             var total = ((lData[0].bid*tData[0].totalGold) +
@@ -123,36 +102,28 @@ window.onload = function(){
             /****************************
             * Get Metal Prices          *
             ****************************/
-            getMetalPrice('gold','2015-05-20','2015-05-29', function(gData, err){
+            // Reduce Load Time by through parallel requests using promises
+            var p1 = Cache.getMetalPrice('gold','2015-05-20','2015-05-29');
+            var p2 = Cache.getMetalPrice('silver','2015-05-20','2015-05-29');
+            var p3 = Cache.getMetalPrice('platinum','2015-05-20','2015-05-29');
 
-                getMetalPrice('silver','2015-05-20','2015-05-29', function(sData, err){
-
-                    getMetalPrice('platinum','2015-05-20','2015-05-29', function(pData, err){
-                        console.log('Gold: ');
-                        console.log('Silver: ');
-                        console.log('Platinum: ');
-                        console.log(gData);
-                        console.log(sData);
-                        console.log(pData);
-                        console.log('Parse: ');
-                        console.log(tData);
-                        // Load Up the zingchart
-                        zingchart.render({
-                            id:'chartDiv',
-                            height:455,
-                            width:"100%",
-                            data: myChart2(tData[0], gData, sData, pData,"2015-05-20","2015-05-29")
-                        });
-                    });
+            promise.join([p1,p2,p3]).then(function(results){
+                console.log('Num of Promises: ' + results.length);
+                zingchart.render({
+                    id:'chartDiv',
+                    height:455,
+                    width:"100%",
+                    data: myChart2(tData[0], results[0][1], results[1][1], results[2][1],"2015-05-20","2015-05-29")
                 });
             });
         });
+
     });
     updateTime();
 }
 
 
-
+// Opening Closing time calculations
 function updateTime() {
     var timeString = '';
     // market-time
@@ -179,17 +150,10 @@ function updateTime() {
             timeString = 'closing in ' + (17 - nyTime.getUTCHours()) + 'h ' + ('0' + nyTime.getUTCMinutes()).slice(-2) + 'm';
         } else {
             marketOpenEl.innerHTML = "Market is close";
-            timeString = 'opening in ' + (nyTime.getUTCHours() + 8) + 'h ' + ('0' + (60 - nyTime.getUTCMinutes())).slice(-2) + 'm';
+            timeString = 'opening in ' + getHourDiff(nyTime, nyTimeOpen.setHours(nyTime.getHours() + 8)) + 'h ' + ('0' + (60 - nyTime.getUTCMinutes())).slice(-2) + 'm';
         }
     }
-
-
     var timeEl = document.getElementsByClassName('market-time')[0];
-    // var nyTimeEl = document.getElementsByClassName('newyork-time')[0];
-    // var open = document.getElementsByClassName('newyork-open-time')[0];
-
-    // nyTimeEl.innerHTML = 'New York Time: ' + nyTime.toUTCString();
-    //open.innerHTML = 'Open Date/Time: ' + nyTimeOpen.toUTCString();
     timeEl.innerHTML = timeString;
 }
 

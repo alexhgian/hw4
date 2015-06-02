@@ -32,50 +32,9 @@ function CacheIt(appId, apiKey){
         }, callbackThreshold);
     }
 
-    //Get the metal prices from a start to end date
-    function getMetalPrice(metal, start, end, cb)
-    {
-        var p = new promise.Promise();// Create a Promise
-        var json_url = "https://www.quandl.com/api/v1/datasets/WSJ/"; // there is a daily limit of 50 connections for unregistered users. You can create an account and add your security token like: https://www.quandl.com/api/v1/datasets/WSJ/PL_MKT.csv?auth_token=933vrq6wUfABXEf_sgH7&trim_start=2015-05-01 However the security is updated daily. Also you can use your own, or third party proxy like http://websitescraper.herokuapp.com/?url=https://www.quandl.com/api/v1/datasets/WSJ/AU_EIB.csv for additional 50 connections. This proxy will accept any url and return you the data, also helping to deal with same origin policy
-        switch (metal) {
-            case 'gold':
-            json_url+="AU_EIB";
-            break;
-            case 'silver':
-            json_url+="AG_EIB";
-            break;
-            case 'platinum':
-            json_url+="PL_MKT";
-            break;
-        }
-        json_url+=".csv?auth_token=933vrq6wUfABXEf_sgH7&trim_start="+start;
-        if(end){
-            json_url+="&trim_end="+end;
-        }
-        getCSV(json_url, cb);
-        return p;// Return the Promise
-
-    }
-
     //Get the csv
     function getCSV(url, cb) {
-        var req = new XMLHttpRequest();
-        // Request Handler
-        req.onreadystatechange = function(oEvent) {
-            if (req.readyState === 4) {
-                if (req.status === 200) { // Handle Success and Failure
-                    cb(csvArray(req.responseText), false);
-                } else {
-                    console.log("Error: ", req.statusText); // Error Message
-                    cb(req.statusText, true);
-                }
-            }
-        };
-        // Open the request with the Url Encoded String for login
-        req.open("GET", url, true);
-        // Set Request Header
-        req.setRequestHeader("Accept", 'text');
-        req.send(); // Finally send the request
+
     }
 
     //CSV to JSON used in the monex scrapper
@@ -91,8 +50,6 @@ function CacheIt(appId, apiKey){
         if(result[result.length-1]) { result.pop(); }
         return result.reverse(); //JSON
     }
-
-
 
     return {
         formatTime : function(dateTime){
@@ -153,10 +110,12 @@ function CacheIt(appId, apiKey){
                         // Parse the string into a JSON obj
                         var tmpObj = JSON.parse(req.responseText);
                         cb(tmpObj, false);
+                        p.done(null, tmpObj);
                         // console.log(tmpObj);
                     } else {
                         //console.log("Error: ", req.statusText); // Error Message
                         cb(req.statusText, true);
+                        p.done(true, req.statusText);
                     }
                 }
             };
@@ -185,7 +144,50 @@ function CacheIt(appId, apiKey){
                     }
                 ]
             },
-            getMetalPrice : getMetalPrice,
+            //Get the metal prices from a start to end date
+            getMetalPrice : function(metal, start, end, callback)
+            {
+                cb = callback || function(){};// NOOP
+                var p = new promise.Promise();// Create a Promise
+                var json_url = "https://www.quandl.com/api/v1/datasets/WSJ/"; // there is a daily limit of 50 connections for unregistered users. You can create an account and add your security token like: https://www.quandl.com/api/v1/datasets/WSJ/PL_MKT.csv?auth_token=933vrq6wUfABXEf_sgH7&trim_start=2015-05-01 However the security is updated daily. Also you can use your own, or third party proxy like http://websitescraper.herokuapp.com/?url=https://www.quandl.com/api/v1/datasets/WSJ/AU_EIB.csv for additional 50 connections. This proxy will accept any url and return you the data, also helping to deal with same origin policy
+                switch (metal) {
+                    case 'gold':
+                    json_url+="AU_EIB";
+                    break;
+                    case 'silver':
+                    json_url+="AG_EIB";
+                    break;
+                    case 'platinum':
+                    json_url+="PL_MKT";
+                    break;
+                }
+                json_url+=".csv?auth_token=933vrq6wUfABXEf_sgH7&trim_start="+start;
+                if(end){
+                    json_url+="&trim_end="+end;
+                }
+
+                var req = new XMLHttpRequest();
+                // Request Handler
+                req.onreadystatechange = function(oEvent) {
+                    if (req.readyState === 4) {
+                        if (req.status === 200) { // Handle Success and Failure
+                            cb(csvArray(req.responseText), false);
+                            p.done(null, csvArray(req.responseText));
+                        } else {
+                            console.log("Error: ", req.statusText); // Error Message
+                            cb(req.statusText, true);
+                            p.done(true, req.statusText);
+                        }
+                    }
+                };
+                // Open the request with the Url Encoded String for login
+                req.open("GET", json_url, true);
+                // Set Request Header
+                req.setRequestHeader("Accept", 'text');
+                req.send(); // Finally send the request
+                return p;// Return the Promise
+
+            },
             TROY_PER_GRAM : 0.0321507466,
 
             //Timer Library reset, start, and stop
