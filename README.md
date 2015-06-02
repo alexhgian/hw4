@@ -54,6 +54,7 @@ This was achieved by accessing JMBullion's third party service that provides the
 * underscore.js - Useful algorithm used in wire5 for find, sorting, extracting data
 * purecss - around 4k css framework - mostly for the login and signup to quickly design it, may change later on.
 * gulp - for build automation, at the moment it only deploys a development server with auto reload, later we'll have optmization like concat, uglify, and rename for better cacheing
+
 ##Specific Feature Details 
 ###cacheit.js
 A work in progress utility library as we refactor our reusable. 
