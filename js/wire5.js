@@ -2,6 +2,10 @@ var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
 var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
 var price = 1250.60;
+var priceObject = {};
+
+// Initialize our CacheIT Library containing our reusable code.
+var Cache = CacheIt(appId,apiKey);
 
 //"+" triggers the hidden button for previewing image.
 function triggerFunction() {
@@ -24,54 +28,69 @@ var loadFile = function(event) {
 
 // displays current date
 window.onload = function () {
+    var pricePromise = Cache.getMarketPrice(function(mData, err){
+        if(err){
+            console.log("Oh no an error!");
+            return err;
+        }
+        priceObject=mData;
+
+    });
+
+
 
     // All with class back button will have the proper metal hash to return properly
     var bb = document.getElementsByClassName('back-button')
     for( var i = 0; i<bb.length; i++){
         bb[i].href="wire3.html"+window.location.hash;
-	}
+    }
 
 
     var imgReq = document.getElementsByClassName('coin_image-required')[0];
     imgReq.style.visibility = "hidden";
 
     var currentdate = new Date();
-
     document.getElementById('datepicker').value = currentdate.toDateString();
-    getparseData();
 
-    //uplaod to server parse
-    document.getElementById("save")
-    .addEventListener("click", function() {
-        var input = document.getElementById('file_upload');
-        var file = input.files[0];
-        if(!file){
-            var imgReq = document.getElementsByClassName('coin_image-required')[0];
-            imgReq.style.visibility = "visible";
-        }
-        var serverUrl = 'https://api.parse.com/1/files/' + file.name;
-        var req = new XMLHttpRequest();
 
-        req.onreadystatechange = function(oEvent) {
-            if (req.readyState === 4) {
-                if (req.status === 201) { // Handle Success and Failure
-                    // Parse the string into a JSON obj
-                    console.log('1Success: '+req.responseText);
-                    successUpload(req.responseText);
-                } else {
 
-                    console.log("Error: ", req.statusText); // Error Message
-                }
+
+    pricePromise.then(function(){
+        getparseData();
+        //uplaod to server parse
+        document.getElementById("save")
+        .addEventListener("click", function() {
+            var input = document.getElementById('file_upload');
+            var file = input.files[0];
+            if(!file){
+                var imgReq = document.getElementsByClassName('coin_image-required')[0];
+                imgReq.style.visibility = "visible";
             }
-        };
+            var serverUrl = 'https://api.parse.com/1/files/' + file.name;
+            var req = new XMLHttpRequest();
 
-        req.open("POST", serverUrl, true);
-        req.setRequestHeader("X-Parse-Application-Id", appId);
-        req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
-        req.setRequestHeader("X-Parse-Session-Token", sessionToken);
-        req.setRequestHeader("Content-Type", file.type);
-        req.send(file);
+            req.onreadystatechange = function(oEvent) {
+                if (req.readyState === 4) {
+                    if (req.status === 201) { // Handle Success and Failure
+                        // Parse the string into a JSON obj
+                        console.log('1Success: '+req.responseText);
+                        successUpload(req.responseText);
+                    } else {
+
+                        console.log("Error: ", req.statusText); // Error Message
+                    }
+                }
+            };
+
+            req.open("POST", serverUrl, true);
+            req.setRequestHeader("X-Parse-Application-Id", appId);
+            req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+            req.setRequestHeader("X-Parse-Session-Token", sessionToken);
+            req.setRequestHeader("Content-Type", file.type);
+            req.send(file);
+        });
     });
+
 };
 
 
@@ -161,6 +180,9 @@ function successUpload(data) {
 
 //getting parse data from info class
 function getparseData () {
+
+
+
     var req1 = new XMLHttpRequest();
     req1.onreadystatechange = function(oEvent) {
         if (req1.readyState === 4) {
@@ -209,20 +231,23 @@ function populateDropdown(tmpObj) {
     var totalPremium = document.getElementById('totalPremium');
 
 
-
+    price = priceObject[0].bid;
     var currentObj = goldObj;
     switch(window.location.hash)
     {
         case '#gold':
         currentObj = goldObj;
+        price = priceObject[0].bid;
         metalEl.options[0].selected = true;
         break;
         case '#silver':
+        price = priceObject[1].bid;
         metalEl.options[1].selected = true;
         console.log('setting silver');
         currentObj = silverObj;
         break;
         case '#platinum':
+        price = priceObject[2].bid;
         metalEl.options[2].selected = true;
         currentObj = platinumObj;
         break;
@@ -236,7 +261,12 @@ function populateDropdown(tmpObj) {
         typeEl.appendChild(opt);
 
     });
+    
+    setPrice(price);
+    updateValues();
+
     function updateValues() {
+        console.log("updateValue: price="+ price);
         var coinInfoEl  = getCoinInfo(typeEl.value, currentObj);
         var fineness = parseFloat(coinInfoEl.weight)*parseFloat(coinInfoEl.percent);
         percent.innerHTML = coinInfoEl.percent;
@@ -253,12 +283,15 @@ function populateDropdown(tmpObj) {
         switch (this.value) {
             case 'Gold':
             currentObj = goldObj;
+            price = priceObject[0].bid;
             break;
             case 'Silver':
             currentObj = silverObj;
+            price = priceObject[1].bid;
             break;
             case 'Platinum':
             currentObj = platinumObj;
+            price = priceObject[2].bid;
             break;
         }
         while (typeEl.firstChild) {
@@ -308,6 +341,10 @@ function getCoinInfo(name, metalObject) {
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
+    results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+function setPrice(p){
+    document.getElementById('price').innerHTML=p;
 }

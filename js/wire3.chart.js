@@ -29,7 +29,7 @@ var myChart = function(currentMetal, data, totalData, start, end){
 
     // Optimize the data and fill in gaps of days if missing with previous day.
     var cData = getAxis(start, end, data[selectHistory], totalData);
-    currentScale = cData.min+':'+(cData.max+((cData.max+cData.min)/4)+10)+':'+ ((cData.max<200)?10:200);
+    currentScale = 0+':'+(cData.max+((cData.max+cData.min)/4)+10)+':'+ ((cData.max<200)?10:200);
     console.log(cData);
     var myChartData = {
         "background-color":"none",
