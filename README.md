@@ -27,6 +27,7 @@ view/                      -- HTML Views
    wire3.html              -- Specific metal info page
    wire4.html              -- View Item Details page
    wire5.html              -- Add Item Details page
+   updateitem.html         -- Edit/update Item page
 ```
 ## Design decisions
 **Reworked CSS**
