@@ -57,6 +57,9 @@ This was achieved by accessing JMBullion's third party service that provides the
 * gulp - for build automation, at the moment it only deploys a development server with auto reload, later we'll have optmization like concat, uglify, and rename for better cacheing
 
 ##Specific Feature Details 
+###main.js
+Converted all Jquery into raw javascript
+
 ###cacheit.js
 A work in progress utility library as we refactor our reusable. 
 
