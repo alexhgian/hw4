@@ -26,7 +26,7 @@ var myChart = function(currentMetal, data, totalData, start, end){
         selectHistory = 'totalPlatinumArray';
         break;
     }
-
+    
     // Optimize the data and fill in gaps of days if missing with previous day.
     var cData = getAxis(start, end, data[selectHistory], totalData);
     currentScale = 0+':'+(cData.max+((cData.max+cData.min)/4)+10)+':'+ ((cData.max<200)?10:200);

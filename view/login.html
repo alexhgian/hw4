@@ -40,69 +40,77 @@
                 <div id="alert-box">
                     Please enter your user information. <br>
                     <strong>
-                    Demo Login Info<br>
-                    Username: alex<br>
-                    Password: password
-                </strong>
+                        Demo Login Info<br>
+                        Username: alex<br>
+                        Password: password
+                    </strong>
                 </div>
             </fieldset>
         </form>
     </div>
+
     <script>
-	    // Wait till the DOM completely loads before allowing the script to run.
-        window.onload = function() {
-            document.getElementById("submitButton")
-            .addEventListener("click", function() {
-	            // APP and API Key for Parse
-	            var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
-                var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
+    // Wait till the DOM completely loads before allowing the script to run.
+    window.onload = function() {
+        document.getElementById("submitButton")
+        .addEventListener("click", function() {
+            // APP and API Key for Parse
+            var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
+            var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
 
-                // Get the username and password from the DOM
-                var username = document.getElementById('username').value;
-                var password = document.getElementById('password').value;
+            // Get the username and password from the DOM
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
 
-                // URL Encode the string so it gets sent properlly
-                var encodedString = encodeURI('username=' + username + '&password=' + password);
-                console.log(encodedString);
+            // URL Encode the string so it gets sent properlly
+            var encodedString = encodeURI('username=' + username + '&password=' + password);
+            console.log(encodedString);
 
-				// Create a request
-                var req = new XMLHttpRequest();
+            // Create a request
+            var req = new XMLHttpRequest();
 
-				// Request Handler
-				req.onreadystatechange = function (oEvent) {
-					if (req.readyState === 4) {
-						if (req.status === 200) {                 // CASE SUCESS
-							// Parse the string into a JSON obj
-							var tmpObj = JSON.parse(req.responseText);
-							// Cookies wrapper library at 1kb for convenience
-							cookie.set('sessionToken', tmpObj.sessionToken);
-							console.log('Session Token: '+ cookie.get('sessionToken'));
-                            window.location.href = "wire2.html";
-						} else {                      // CASE ERROR
-                            var errorMessage = "Invalid information.<br>Please try again.";
-                            /*
-                            if (username === "")
-                                errorMessage = errorMessage + "Username is required!<br>";
-                            if (password === "")
-                                errorMessage = errorMessage + "Password is required!<br>";
-                            */
-							console.log("Error: ", req.statusText);
-                            document.getElementById('alert-box').style.color = "RED";
-                            document.getElementById('alert-box').innerHTML = errorMessage;
-						}
-					}
-				};
+            // Request Handler
+            req.onreadystatechange = function (oEvent) {
+                if (req.readyState === 4) {
+                    if (req.status === 200) {                 // CASE SUCESS
+                        // Parse the string into a JSON obj
+                        var tmpObj = JSON.parse(req.responseText);
+                        // Cookies wrapper library at 1kb for convenience
+                        cookie.set({
+                            'cacheit_overviewId': tmpObj.overview.objectId,
+                            'cacheit_sessionToken': tmpObj.sessionToken,
+                            'cacheit_email': tmpObj.email,
+                            'cacheit_username' : tmpObj.username,
+                            'cacheit_createAt' : tmpObj.createAt
+                        });
 
-				// Open the request with the Url Encoded String for login
-                req.open("GET", "https://api.parse.com/1/login?" + encodedString, true);
+                        // cookie.set('intercomLogin',tmpObj);
+                        window.location.href = "wire2.html";
+                    } else {                      // CASE ERROR
+                        var errorMessage = "Invalid information.<br>Please try again.";
+                        /*
+                        if (username === "")
+                        errorMessage = errorMessage + "Username is required!<br>";
+                        if (password === "")
+                        errorMessage = errorMessage + "Password is required!<br>";
+                        */
+                        console.log("Error: ", req.statusText);
+                        document.getElementById('alert-box').style.color = "RED";
+                        document.getElementById('alert-box').innerHTML = errorMessage;
+                    }
+                }
+            };
 
-                // Set Request Header for Parse
-                req.setRequestHeader("X-Parse-Application-Id", appId);
-                req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
-                req.send();  // Finally send the request
-            });
+            // Open the request with the Url Encoded String for login
+            req.open("GET", "https://api.parse.com/1/login?" + encodedString, true);
 
-        }
+            // Set Request Header for Parse
+            req.setRequestHeader("X-Parse-Application-Id", appId);
+            req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+            req.send();  // Finally send the request
+        });
+
+    }
     </script>
     <script>loadFooter();</script>
 </body>

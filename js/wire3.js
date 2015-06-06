@@ -181,8 +181,8 @@ function appendRow(id, data) {
 
             // Search for the coins with the match
             getTableData({
-                metal:currentMetal,
-                item: {"$in":search.value}
+                metal: currentMetal,
+                item: search.value
             }, function(rowData, err){
                 if(err){console.error(err); return err;}
                 searchSpin.style.visibility = "hidden";// Loading is finished.

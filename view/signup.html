@@ -48,63 +48,71 @@
             </fieldset>
         </form>
     </div>
+
     <script>
-        window.onload = function() {
-            function reqListener() {
-                console.log(this.responseText);
+
+    window.onload = function() {
+        function reqListener() {
+            console.log(this.responseText);
+        }
+
+        var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
+        var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
+
+        document.getElementById("submitButton")
+        .addEventListener("click", function() {
+            var username = document.getElementById('username').value;
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            var encodedString = encodeURI('username=' + username + '&password=' + password);
+            console.log(encodedString);
+
+            var bodyData = {
+                'username': username,
+                'password': password,
+                'email': email
             }
 
-            var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
-            var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function(oEvent) {
+                if (req.readyState === 4) {
+                    if (req.status === 201) {           // CASE SUCCESS
+                        // Parse the string into a JSON obj
+                        var tmpObj = JSON.parse(req.responseText);
+                        console.log('Success');
+                        console.log(tmpObj.results);
+                        cookie.set('sessionToken', tmpObj.sessionToken);
+                        console.log(cookie.get('sessionToken'));
+                        window.location.href = "wire2.html";
 
-            document.getElementById("submitButton")
-                .addEventListener("click", function() {
-                    var username = document.getElementById('username').value;
-                    var email = document.getElementById('email').value;
-                    var password = document.getElementById('password').value;
-                    var encodedString = encodeURI('username=' + username + '&password=' + password);
-                    console.log(encodedString);
 
-                    var bodyData = {
-                        'username': username,
-                        'password': password,
-                        'email': email
+                    } else {                            // CASE ERROR
+                        console.log("Error: ", req.statusText);
+                        var errorMessage = "";
+                        if (username === "")
+                        errorMessage = errorMessage + "Username is required!<br>";
+                        if (email === "")
+                        errorMessage = errorMessage + "Email is required!<br>";
+                        if (password === "")
+                        errorMessage = errorMessage + "Password is required!<br>";
+                        document.getElementById('alert-box').style.color = "RED";
+                        document.getElementById('alert-box').innerHTML = errorMessage;
                     }
+                }
+            };
+            req.open("POST", " https://api.parse.com/1/users", true);
+            req.setRequestHeader("X-Parse-Application-Id", appId);
+            req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+            req.setRequestHeader("Content-Type", 'application/json');
+            req.send(JSON.stringify(bodyData));
+        });
+    }
 
-                    var req = new XMLHttpRequest();
-                    req.onreadystatechange = function(oEvent) {
-                        if (req.readyState === 4) {
-                            if (req.status === 201) {           // CASE SUCCESS
-                                // Parse the string into a JSON obj
-                                var tmpObj = JSON.parse(req.responseText);
-                                console.log('Success');
-                                console.log(tmpObj.results);
-                                cookie.set('sessionToken', tmpObj.sessionToken);
-                                console.log(cookie.get('sessionToken'));
-                                window.location.href = "wire2.html";
-                            } else {                            // CASE ERROR
-                                console.log("Error: ", req.statusText);
-                                var errorMessage = "";
-                                if (username === "")
-                                    errorMessage = errorMessage + "Username is required!<br>";
-                                if (email === "")
-                                    errorMessage = errorMessage + "Email is required!<br>";
-                                if (password === "")
-                                    errorMessage = errorMessage + "Password is required!<br>";
-                                document.getElementById('alert-box').style.color = "RED";
-                                document.getElementById('alert-box').innerHTML = errorMessage;
-                            }
-                        }
-                    };
-                    req.open("POST", " https://api.parse.com/1/users", true);
-                    req.setRequestHeader("X-Parse-Application-Id", appId);
-                    req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
-                    req.setRequestHeader("Content-Type", 'application/json');
-                    req.send(JSON.stringify(bodyData));
-                });
-        }
     </script>
+
     <script>loadFooter();</script>
+
+
 </body>
 
 </html>
