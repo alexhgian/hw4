@@ -28,22 +28,15 @@
     <div id="w0-wrapper">
         <form class="pure-form pure-form-stacked reg">
             <fieldset>
-                <legend>Log In</legend>
-                <label for="username">Username</label>
-                <input class="reg" id="username" name="username" type="text" placeholder="Username" style="background-color: white; color:black" required>
+                <legend>Reset Password</legend>
+                <label for="email">Enter your email</label>
+                <input class="reg" id="password" name="password1" type="password" placeholder="Enter new password" style="background-color: white; color:black" required/>
+                <input class="reg" id="password2" name="password2" type="email" placeholder="Reenter new password" style="background-color: white; color:black" required/>
 
-                <label for="password">Password</label>
-                <input class="reg" id="password" name="password" type="password" placeholder="Password" style="background-color: white; color:black" required>
+                <button id="submitButton" type="button" class="pure-button pure-button-primary" disabled>Reset</button>
 
-                <button id="submitButton" type="button" class="pure-button pure-button-primary">Log In</button>
-
-                <div id="alert-box">
-                    Please enter your user information. <br>
-                    <strong>
-                        Demo Login Info<br>
-                        Username: alex<br>
-                        Password: password
-                    </strong>
+                <div id="alert-email">
+                    Password has been changed.
                 </div>
             </fieldset>
         </form>
@@ -52,19 +45,40 @@
     <script>
     // Wait till the DOM completely loads before allowing the script to run.
     window.onload = function() {
-        document.getElementById("submitButton")
-        .addEventListener("click", function() {
+        var button = document.getElementById("submitButton");
+        var email1 = document.getElementById("password1");
+        var email2 = document.getElementById("password2");
+        email1.onkeyup = function(){
+            console.log(this.value)
+            if(this.value == email2.value){
+                button.disabled=false;
+            } else {
+                button.disabled=true;
+            }
+        }
+        email2.onkeyup = function(){
+            console.log(this.value)
+            if(this.value == email1.value){
+                button.disabled=false;
+            } else {
+                button.disabled=true;
+            }
+        }
+
+
+
+        button.addEventListener("click", function() {
             // APP and API Key for Parse
             var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
             var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
 
             // Get the username and password from the DOM
-            var username = document.getElementById('username').value;
-            var password = document.getElementById('password').value;
+            var email = document.getElementById('email').value;
+            // var password = document.getElementById('password').value;
 
             // URL Encode the string so it gets sent properlly
-            var encodedString = encodeURI('username=' + username + '&password=' + password);
-            console.log(encodedString);
+            // var encodedString = encodeURI('username=' + username + '&password=' + password);
+            // console.log(encodedString);
 
             // Create a request
             var req = new XMLHttpRequest();
@@ -75,25 +89,11 @@
                     if (req.status === 200) {                 // CASE SUCESS
                         // Parse the string into a JSON obj
                         var tmpObj = JSON.parse(req.responseText);
-                        // Cookies wrapper library at 1kb for convenience
-                        cookie.set({
-                            'cacheit_overviewId': tmpObj.overview.objectId,
-                            'cacheit_sessionToken': tmpObj.sessionToken,
-                            'cacheit_email': tmpObj.email,
-                            'cacheit_username' : tmpObj.username,
-                            'cacheit_createAt' : tmpObj.createAt
-                        });
+                        startTimer();
 
-                        // cookie.set('intercomLogin',tmpObj);
-                        window.location.href = "wire2.html";
                     } else {                      // CASE ERROR
                         var errorMessage = "Invalid information.<br>Please try again.";
-                        /*
-                        if (username === "")
-                        errorMessage = errorMessage + "Username is required!<br>";
-                        if (password === "")
-                        errorMessage = errorMessage + "Password is required!<br>";
-                        */
+
                         console.log("Error: ", req.statusText);
                         document.getElementById('alert-box').style.color = "RED";
                         document.getElementById('alert-box').innerHTML = errorMessage;
@@ -102,13 +102,24 @@
             };
 
             // Open the request with the Url Encoded String for login
-            req.open("GET", "https://api.parse.com/1/login?" + encodedString, true);
+            req.open("POST", "https://api.parse.com/1/requestPasswordReset", true);
 
             // Set Request Header for Parse
             req.setRequestHeader("X-Parse-Application-Id", appId);
             req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
-            req.send();  // Finally send the request
+            req.send(JSON.stringify({email:email}));  // Finally send the request
         });
+        var counter = 0;
+        var max = 5;
+        var startTimer = function(){
+            document.getElementById('timer').innerHTML=max-counter;
+            counter++;
+            if(counter>max){
+                window.location.href = "login.html";
+            } else {
+                setTimeout(startTimer, 1000);
+            }
+        }
 
     }
     </script>

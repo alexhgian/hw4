@@ -164,9 +164,12 @@ window.addEventListener('load', function(){
 
 	//Logout Button
 	var logoutButton = document.getElementById('logout');
-	logoutButton.addEventListener('click', function(){
-		logout();
-	});
+	if(logoutButton){
+		logoutButton.addEventListener('click', function(){
+			logout();
+		});
+	}
+
 
 });
 
