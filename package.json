@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/cse134b-cacheit/hw4",
   "dependencies": {
+    "gh-pages": "^0.3.0",
     "gulp-live-server": "0.0.14"
   }
 }
