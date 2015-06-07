@@ -2,10 +2,17 @@
 // API ID and API Key for parse
 var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
-var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
+var sessionToken = cookie.get('cacheit_sessionToken');
 
 // Initialize our CacheIT Library containing our reusable code.
 var Cache = CacheIt(appId,apiKey);
+
+Cache.isLoggedIn(sessionToken, function(data, err){
+    if(err){
+        window.location.href = "login.html";
+        return err;
+    }
+});
 
 // Get the totals and percentage
 function getTotalData(cb){

@@ -6,7 +6,12 @@ var overviewId = 'sV6tdOBQCe';
 
 // Initialize our CacheIT Library containing our reusable code.
 var Cache = CacheIt(appId,apiKey);
-
+Cache.isLoggedIn(cookie.get('cacheit_sessionToken'), function(data, err){
+    if(err){
+        window.location.href = "login.html";
+        return err;
+    }
+});
 // Get the totals and percentage
 function getTotalData(id, cb){
     Cache.getClass(id, 'Overview',{

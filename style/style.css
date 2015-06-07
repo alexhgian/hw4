@@ -203,7 +203,14 @@ nav a {
     /*color: #E6E6E6;*/
     color: white;
 }
-
+#logout {
+    float: right;
+    font-size: 2em;
+    margin-right: 75px;
+}
+.main-logo {
+    margin-left: 75px;
+}
 
 .mobile-nav {
     position: fixed;

@@ -6,7 +6,12 @@ var priceObject = {};
 
 // Initialize our CacheIT Library containing our reusable code.
 var Cache = CacheIt(appId,apiKey);
-
+Cache.isLoggedIn(cookie.get('cacheit_sessionToken'), function(data, err){
+    if(err){
+        window.location.href = "login.html";
+        return err;
+    }
+});
 //"+" triggers the hidden button for previewing image.
 function triggerFunction() {
     document.getElementById('file_upload').click();
@@ -261,7 +266,7 @@ function populateDropdown(tmpObj) {
         typeEl.appendChild(opt);
 
     });
-    
+
     setPrice(price);
     updateValues();
 

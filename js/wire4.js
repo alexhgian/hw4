@@ -5,7 +5,12 @@ var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
 
 // Initialize our CacheIT Library containing our reusable code.
 var Cache = CacheIt(appId,apiKey);
-
+Cache.isLoggedIn(cookie.get('cacheit_sessionToken'), function(data, err){
+    if(err){
+        window.location.href = "login.html";
+        return err;
+    }
+});
 var TROY_PER_OZ = 1.09714286;
 var coinId = 'ngj0Gq7piW';
 var currentMetal;
@@ -22,7 +27,7 @@ window.onload = function() {
     for( var i = 0; i<bb.length; i++){
         bb[i].href="wire3.html"+window.location.hash;
 	}
-    
+
     var parseData;
     var promise = Cache.getClass(coinId, 'coin',{
         sessionToken: sessionToken
