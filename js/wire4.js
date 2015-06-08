@@ -1,7 +1,7 @@
 // API ID and API Key for parse
 var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
-var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
+var sessionToken = '';
 
 // Initialize our CacheIT Library containing our reusable code.
 var Cache = CacheIt(appId,apiKey);
@@ -10,7 +10,12 @@ Cache.isLoggedIn(cookie.get('cacheit_sessionToken'), function(data, err){
         window.location.href = "login.html";
         return err;
     }
+    sessionToken=cookie.get('cacheit_sessionToken');
+    overviewId=cookie.get('cacheit_overviewId');
+    userId=cookie.get('cacheit_userId');
 });
+
+
 var TROY_PER_OZ = 1.09714286;
 var coinId = 'ngj0Gq7piW';
 var currentMetal;

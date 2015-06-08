@@ -17,7 +17,7 @@ var myChart2 = function(parseData, gData, sData, pData, start, end){
     var min = Math.min(gpData.min,spData.min,ppData.min);
     var max = Math.max(gpData.max,spData.max,ppData.max);
     //console.log('Max is : ' + max)
-    currentScale = 0+':'+(max+((max+min)/10)+10)+':'+ ((max<200)?10:200);
+    currentScale = 0+':'+(max+((max+min)/10)+100)+':'+ ((max<200)?10:200);
     var myChartData = {
         "background-color":"none",
         "type":"line",

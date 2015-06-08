@@ -7,7 +7,8 @@ function loadTopNav(){
 	document.write("            <\/symbol>");
 	document.write("            <use xlink:href=\"#icon-spinner2\"><\/use>");
 	document.write("        <\/svg>");
-	document.write("        <a href=\"wire2.html\"><i class=\"fa fa-archive\"></i> CoinBucket<\/a>");
+	document.write("        <a class=\"main-logo\" href=\"wire2.html\"><i class=\"fa fa-archive\"></i> CoinBucket<\/a>");
+	document.write("   <a id=\"logout\" href=\"index.html\"><i class=\"fa fa-sign-out\"></i></a>");
 	document.write("        <svg class=\"icon-cog\">");
 	document.write("            <symbol id=\"icon-cog\" viewBox=\"0 0 1024 1024\">");
 	document.write("                <title>cog<\/title>");
@@ -28,7 +29,7 @@ function loadTopNavPersist(){
 	document.write("            <use xlink:href=\"#icon-spinner2\"><\/use>");
 	document.write("        <\/svg>");
 	document.write("        <a class=\"main-logo\" href=\"wire2.html\"><i class=\"fa fa-archive\"></i> CoinBucket<\/a>");
-	document.write("   <a id=\"logout\" href=\"\"><i class=\"fa fa-sign-out\"></i></a>");
+	document.write("   <a id=\"logout\" href=\"index.html\"><i class=\"fa fa-sign-out\"></i></a>");
 	document.write("        <svg class=\"icon-cog\">");
 	document.write("            <symbol id=\"icon-cog\" viewBox=\"0 0 1024 1024\">");
 	document.write("                <title>cog<\/title>");
@@ -196,6 +197,7 @@ function removeClass(el, cName){
 	}
 }
 function logout(){
+	console.log('Logged out');
 	cookie.set('cacheit_sessionToken', null);
 	window.location.href = "index.html";
 }

@@ -99,7 +99,7 @@ function CacheIt(id, key){
             req.send();
             return p;// Return the Promise
         },
-        delete: function(id, metal, weight, sessionToken, callback){
+        delete: function(id, oid, metal, weight, sessionToken, callback){
             cb = callback || function(){};
             var p = new promise.Promise();// Create a Promise
             var req = new XMLHttpRequest();
@@ -133,7 +133,7 @@ function CacheIt(id, key){
                     'body': overviewBody
                 },{
                     'method': 'PUT',
-                    'path': '/1/classes/Overview/sV6tdOBQCe',
+                    'path': '/1/classes/Overview/'+oid,
                     'body': overviewBody
                 }]
             };
@@ -265,7 +265,7 @@ function CacheIt(id, key){
                     }
                 }
             };
-        
+
             req.open("GET", "https://api.parse.com/1/users/me", true);
             // Open the request with the Url Encoded String for login
             req.setRequestHeader("X-Parse-Application-Id", appId);
@@ -369,23 +369,15 @@ function CacheIt(id, key){
         data1.forEach(function(val, key){
             data1[key] = val*data2[key];
 
-            if(data1[key]>data2[key]){
-                if(data1[key]>max){
-                    max=data1[key];
-                }
-                if(data2[key]<min){
-                    min=data1[key];
-                }
-            } else {
-                if(data2[key]>max){
-                    max=data1[key];
-                }
-                if(data1[key]<min){
-                    min=data1[key];
-                }
-            }
-
         });
+
+        var min1 = Math.min.apply(null, data1);
+        var min2 = Math.min.apply(null, data2);
+        var max1 = Math.max.apply(null, data1);
+        var max2 = Math.max.apply(null, data2);
+
+        min = Math.min(min1,min2);
+        max = Math.max(max1,max2);
 
         return {
             'data1': data1,

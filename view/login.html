@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="description" content="bullion management site, rare coins, gold, silver, platinum">
     <meta name="author" content="CSE134B CacheIt">
-    <title>Log In To CoinBucket</title>
+    <title>Recover Password</title>
 
     <meta name=viewport content="width=device-width, initial-scale=.8, minimum-scale = .8, user-scalable=yes">
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
@@ -19,7 +19,7 @@
 
 <body>
     <nav>
-        CoinBucket
+        <a href="index.html" style="color:white">CoinBucket</a>
     </nav>
     <div class="mobile-nav">
         <a href="index.html" style="color:white">CoinBucket</a>
@@ -38,7 +38,13 @@
                 <button id="submitButton" type="button" class="pure-button pure-button-primary">Log In</button>
 
                 <div id="alert-box">
-                    Please enter your user information. <br>
+                    Please enter your user information.
+                </div>
+                <div>
+                    Not signed up? <a href="signup.html" style="color:blue">Sign up here.</a> <br><br>
+                    Forgot your password? <a href="reset.html" style="color:blue">Reset it here.</a>
+                    <br>
+                    <br>
                     <strong>
                         Demo Login Info<br>
                         Username: alex<br>
@@ -50,6 +56,7 @@
     </div>
 
     <script>
+    var numberTried = 0;
     // Wait till the DOM completely loads before allowing the script to run.
     window.onload = function() {
         document.getElementById("submitButton")
@@ -79,6 +86,7 @@
                         cookie.set({
                             'cacheit_overviewId': tmpObj.overview.objectId,
                             'cacheit_sessionToken': tmpObj.sessionToken,
+                            'cacheit_userId': tmpObj.objectId,
                             'cacheit_email': tmpObj.email,
                             'cacheit_username' : tmpObj.username,
                             'cacheit_createAt' : tmpObj.createAt
@@ -87,7 +95,8 @@
                         // cookie.set('intercomLogin',tmpObj);
                         window.location.href = "wire2.html";
                     } else {                      // CASE ERROR
-                        var errorMessage = "Invalid information.<br>Please try again.";
+                        var errorMessage = "Invalid information.<br>Please try again. ("+numberTried+")";
+                        numberTried++;
                         /*
                         if (username === "")
                         errorMessage = errorMessage + "Username is required!<br>";

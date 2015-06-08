@@ -7,12 +7,10 @@
     <meta name="author" content="CSE134B CacheIT">
     <title>Sign Up For CoinBucket</title>
 
-
-
     <meta name=viewport content="width=device-width, initial-scale=.8, minimum-scale = .8, user-scalable=yes">
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    
+
     <link rel="stylesheet" type="text/css" href="../bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="../bower_components/pure/pure-min.css">
     <link rel="stylesheet" type="text/css" href="../style/style.css">
@@ -22,10 +20,10 @@
 
 <body>
     <nav>
-        CoinBucket
+        <a href="index.html" style="color:white">CoinBucket</a>
     </nav>
     <div class="mobile-nav">
-        CoinBucket
+        <a href="index.html" style="color:white">CoinBucket</a>
     </div>
 
     <div id="w0-wrapper">
@@ -44,7 +42,9 @@
                 <button id="submitButton" type="button" class="pure-button pure-button-primary">Register</button>
 
                 <div id="alert-box">
-                    Please enter your user information.
+                    Please enter your user information.<br>
+                    Signed up already? <a href="login.html" style="color:blue">Login Here.</a>
+
                 </div>
             </fieldset>
         </form>
@@ -52,13 +52,14 @@
 
     <script>
 
+    var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
+    var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
+
     window.onload = function() {
         function reqListener() {
             console.log(this.responseText);
         }
 
-        var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
-        var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
 
         document.getElementById("submitButton")
         .addEventListener("click", function() {
@@ -82,10 +83,26 @@
                         var tmpObj = JSON.parse(req.responseText);
                         console.log('Success');
                         console.log(tmpObj.results);
-                        cookie.set('sessionToken', tmpObj.sessionToken);
-                        console.log(cookie.get('sessionToken'));
-                        window.location.href = "wire2.html";
+                        cookie.set('cacheit_sessionToken', tmpObj.sessionToken);
+                        console.log(cookie.get('cacheit_sessionToken'));
 
+                        initParse(tmpObj, function(data, err){
+                            console.log('initParse() ' + err);
+                            if(err){ return err; }
+                            postUser(tmpObj.objectId, data.objectId, tmpObj.sessionToken, function(data1, err1){
+                                if(err1){ return err1; }
+                                cookie.set({
+                                    'cacheit_overviewId': data.objectId,
+                                    'cacheit_sessionToken': tmpObj.sessionToken,
+                                    'cacheit_userId': tmpObj.objectId,
+                                    'cacheit_email': tmpObj.email,
+                                    'cacheit_username' : tmpObj.username,
+                                    'cacheit_createAt' : tmpObj.createAt
+                                });
+                                window.location.href = "login.html";
+                            });
+
+                        });
 
                     } else if(req.status === 400){
                         document.getElementById('alert-box').style.color = "RED";
@@ -112,7 +129,73 @@
             req.send(JSON.stringify(bodyData));
         });
     }
+    function initParse(obj, cb){
+        console.log('initParse() obj: ');
+        console.log(obj.objectId);
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function(oEvent) {
+            if (req.readyState === 4) {
+                if (req.status === 201) {
+                    var data = JSON.parse(req.responseText);
+                    cb(data, false);
+                } else {
+                    var data = JSON.parse(req.responseText);
+                    cb(data, true);
+                }
+            }
+        }
 
+        var bodyData = {
+            "ACL" : {
+            },
+            totalSilver:0,
+            totalGold:0,
+            totalPlatinum:0,
+            totalGoldArray:[],
+            totalSilverArray:[],
+            totalPlatinumArray:[]
+        }
+        bodyData.ACL[obj.objectId] = {
+            "read": true,
+            "write": true
+        }
+        req.open("POST", " https://api.parse.com/1/classes/Overview", true);
+        req.setRequestHeader("X-Parse-Application-Id", appId);
+        req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+        req.setRequestHeader("Content-Type", 'application/json');
+        req.send(JSON.stringify(bodyData));
+    }
+    function postUser(uid,pid, session, cb){
+
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function(oEvent) {
+            if (req.readyState === 4) {
+                if (req.status === 200) {
+                    var data = JSON.parse(req.responseText);
+                    cb(data, false);
+                } else {
+                    var data = JSON.parse(req.responseText);
+                    cb(data, true);
+                }
+            }
+        }
+
+        var bodyData = {
+            "overview":{
+                "__type": "Pointer",
+                "className": "Overview",
+                "objectId": ""
+            }
+        };
+        bodyData.overview.objectId = pid;
+
+        req.open("PUT", " https://api.parse.com/1/users/"+uid, true);
+        req.setRequestHeader("X-Parse-Application-Id", appId);
+        req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+        req.setRequestHeader("X-Parse-Session-Token", session);
+        req.setRequestHeader("Content-Type", 'application/json');
+        req.send(JSON.stringify(bodyData));
+    }
     </script>
 
     <script>loadFooter();</script>
@@ -120,7 +203,7 @@
     <!-- Add this just before your closing </body> tag -->
     <!-- Replace 'APP_ID' with your app ID -->
     <script>
-      window.intercomSettings = { app_id: 's4x71x8w' };
+    window.intercomSettings = { app_id: 's4x71x8w' };
     </script>
     <!-- Replace 'APP_ID' with your app ID -->
     <script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/s4x71x8w';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()</script>

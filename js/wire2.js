@@ -2,16 +2,19 @@
 // API ID and API Key for parse
 var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
-var sessionToken = cookie.get('cacheit_sessionToken');
+var sessionToken = '';
+var overviewId = '';
 
 // Initialize our CacheIT Library containing our reusable code.
 var Cache = CacheIt(appId,apiKey);
 
-Cache.isLoggedIn(sessionToken, function(data, err){
+Cache.isLoggedIn(cookie.get('cacheit_sessionToken'), function(data, err){
     if(err){
-        window.location.href = "login.html";
+        // window.location.href = "login.html";
         return err;
     }
+    sessionToken=cookie.get('cacheit_sessionToken');
+    overviewId=cookie.get('cacheit_overviewId');
 });
 
 // Get the totals and percentage
@@ -45,9 +48,9 @@ function getTotalData(cb){
 
 window.onload = function(){
 
-    /****************************
-    * Get Live Data From Quandl *
-    ****************************/
+    /**
+    * Get Live Data From Quandl
+    */
     var pMarket = Cache.getMarketPrice(function(lData){
         //console.log(lData);
         var gAsk = document.getElementById('gold-ask');
@@ -75,9 +78,9 @@ window.onload = function(){
         document.getElementById('market-list-loader').style.visibility = "hidden";
     });
 
-    /****************************
-    * Get Total                 *
-    ****************************/
+    /**
+    * Get Total
+    */
     pMarket.then(function(err, lData){
         if(err){ console.error(err); return err;}
 
@@ -106,9 +109,9 @@ window.onload = function(){
                 percentEl.classList.remove("neg-change");
             }
 
-            /****************************************
-            * Get Metal Prices using promises       *
-            ****************************************/
+            /**
+            * Get Metal Prices using promises
+            */
             // Get the current date and the date 30 days into the past
             var curTime = new Date();
             var prevTime = new Date();

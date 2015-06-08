@@ -19,7 +19,7 @@
 
 <body>
     <nav>
-        CoinBucket
+        <a href="index.html" style="color:white">CoinBucket</a>
     </nav>
     <div class="mobile-nav">
         <a href="index.html" style="color:white">CoinBucket</a>
@@ -33,8 +33,9 @@
                 <input class="reg" id="email" name="email" type="email" placeholder="Email" style="background-color: white; color:black" required/>
 
                 <button id="submitButton" type="button" class="pure-button pure-button-primary">Reset</button>
-
-                <div id="alert-email" hidden>
+                <div id="alert-box">
+                </div>
+                <div id="alert-email" style="visibility:hidden">
                     An email has been sent to your inbox.<br> You'll be redirect to login in <span id="timer">0</span> sec<br>
                     <a href="login.html" style="color:blue"> Or click here to go to login.</a>
                 </div>
@@ -47,6 +48,7 @@
     window.onload = function() {
         document.getElementById("submitButton")
         .addEventListener("click", function() {
+            document.getElementById('alert-box').innerHTML = '';
             // APP and API Key for Parse
             var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
             var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
@@ -69,7 +71,7 @@
                         // Parse the string into a JSON obj
                         var tmpObj = JSON.parse(req.responseText);
                         startTimer();
-
+                        document.getElementById("submitButton").disabled=true;
                     } else {                      // CASE ERROR
                         var errorMessage = "Invalid information.<br>Please try again.";
 
@@ -91,6 +93,7 @@
         var counter = 0;
         var max = 5;
         var startTimer = function(){
+            document.getElementById('alert-email').style.visibility = 'visible';
             document.getElementById('timer').innerHTML=max-counter;
             counter++;
             if(counter>max){

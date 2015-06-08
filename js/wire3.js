@@ -1,8 +1,8 @@
 // API ID and API Key for parse
 var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
-var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
-var overviewId = 'sV6tdOBQCe';
+var sessionToken = '';
+var overviewId = '';
 
 // Initialize our CacheIT Library containing our reusable code.
 var Cache = CacheIt(appId,apiKey);
@@ -11,7 +11,14 @@ Cache.isLoggedIn(cookie.get('cacheit_sessionToken'), function(data, err){
         window.location.href = "login.html";
         return err;
     }
+    sessionToken=cookie.get('cacheit_sessionToken');
+    overviewId=cookie.get('cacheit_overviewId');
+    userId=cookie.get('cacheit_userId');
+
+    console.log('overviewId: ');
+    console.log(overviewId);
 });
+
 // Get the totals and percentage
 function getTotalData(id, cb){
     Cache.getClass(id, 'Overview',{
@@ -134,13 +141,16 @@ function appendRow(id, data) {
     deleteButton.addEventListener('click', function(){
         var metal = this.parentNode.parentNode.getAttribute('metal');
         var weight = this.parentNode.parentNode.getAttribute('weight');
+        console.log(metal);
 
-        Cache.delete( this.parentNode.parentNode.id,metal,weight, sessionToken)
+        Cache.delete( this.parentNode.parentNode.id,overviewId,metal,weight, sessionToken)
         .then(function(err, data){
-            console.log('Success');
-            setTimeout(function(){
-                update();
-            },500);
+            updateHistory(function(){
+                setTimeout(function(){
+                    update();
+                },500);
+            })
+
         });
     });
 
@@ -290,3 +300,92 @@ function appendRow(id, data) {
 };
 
 window.onload = update;
+
+/**
+* Update History
+*/
+function updateHistory(cb) {
+    var oPromise = Cache.getClass(overviewId, 'Overview', {
+        'sessionToken': sessionToken
+    });
+
+    oPromise.then(function(error, data) {
+        console.log(data);
+        var newData = updateArrays(data);
+        setClass(overviewId, newData, sessionToken, function(data, err) {
+    
+            cb(data, err)
+        });
+    });
+}
+
+function updateArrays(data) {
+    var gold = data.totalGoldArray[data.totalGoldArray.length - 1];
+    var silver = data.totalSilverArray[data.totalSilverArray.length - 1];
+    var platinum = data.totalPlatinumArray[data.totalPlatinumArray.length - 1];
+    var currentDateStr = formatTimeLocal(new Date());
+    console.log(data.totalGoldArray);
+
+    if (gold) {
+        if (gold[0] == currentDateStr) {
+            data.totalGoldArray[data.totalGoldArray.length - 1][1] = data.totalGold;
+        } else {
+            data.totalGoldArray.push([currentDateStr, data.totalGold]);
+        }
+    } else {
+        data.totalGoldArray.push([currentDateStr, data.totalGold]);
+    }
+
+    if (silver) {
+        if (silver[0] == currentDateStr) {
+            data.totalSilverArray[data.totalSilverArray.length - 1][1] = data.totalSilver;
+        } else {
+            data.totalSilverArray.push([currentDateStr, data.totalSilver]);
+        }
+    } else {
+        data.totalSilverArray.push([currentDateStr, data.totalSilver]);
+    }
+    if (platinum) {
+        if (platinum[0] == currentDateStr) {
+            data.totalPlatinumArray[data.totalPlatinumArray.length - 1][1] = data.totalPlatinum;
+        } else {
+            data.totalPlatinumArray.push([currentDateStr, data.totalPlatinum]);
+        }
+    } else {
+        data.totalPlatinumArray.push([currentDateStr, data.totalPlatinum]);
+    }
+    console.log(data);
+    return data;
+}
+
+function formatTimeLocal(dateTime) {
+    return dateTime.getFullYear() + '-' +
+        ('0' + (dateTime.getMonth() + 1)).slice(-2) + '-' +
+        ('0' + dateTime.getDate()).slice(-2);
+}
+
+function setClass(i, myObj, sessionToken, callback) {
+    var cb = callback || function() {};
+    var p = new promise.Promise(); // Create a Promise
+    var req = new XMLHttpRequest();
+    var id = (i) ? '/' + i : '';
+
+    req.onreadystatechange = function(oEvent) {
+        if (req.readyState === 4) {
+            if (req.status === 200) { // Handle Success and Failure
+                var tmpObj = JSON.parse(req.responseText);
+                cb(tmpObj, false);
+                p.done(null, tmpObj); // Resolve that Promise!
+            } else {
+                cb(req.statusText, true);
+                p.done(true, req.statusText); // Resolve that Promise!
+            }
+        }
+    };
+    req.open("PUT", 'https://api.parse.com/1/classes/Overview' + id, true);
+    req.setRequestHeader("X-Parse-Application-Id", appId);
+    req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+    req.setRequestHeader("X-Parse-Session-Token", sessionToken);
+    req.send(JSON.stringify(myObj));
+    return p; // Return the Promise
+}

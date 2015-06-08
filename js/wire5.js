@@ -1,6 +1,7 @@
 var appId = "iFY8hb8r6Ue1Qh98NBCP1tWshhexxQS1tOsRTk0W";
 var apiKey = "xPKaGBUFnH5vhMN8W77wuuGFoeesi4zbl0H2bLL1";
-var sessionToken = 'r:tKoZwbnY0hyxNI7KEd9iRNQZf';
+var sessionToken = '';
+var userId = '';
 var price = 1250.60;
 var priceObject = {};
 
@@ -11,7 +12,11 @@ Cache.isLoggedIn(cookie.get('cacheit_sessionToken'), function(data, err){
         window.location.href = "login.html";
         return err;
     }
+    sessionToken=cookie.get('cacheit_sessionToken');
+    overviewId=cookie.get('cacheit_overviewId');
+    userId=cookie.get('cacheit_userId');
 });
+
 //"+" triggers the hidden button for previewing image.
 function triggerFunction() {
     document.getElementById('file_upload').click();
@@ -45,7 +50,7 @@ window.onload = function () {
 
 
     // All with class back button will have the proper metal hash to return properly
-    var bb = document.getElementsByClassName('back-button')
+    var bb = document.getElementsByClassName('back-button');
     for( var i = 0; i<bb.length; i++){
         bb[i].href="wire3.html"+window.location.hash;
     }
@@ -101,6 +106,7 @@ window.onload = function () {
 
 //associating image with the class
 function successUpload(data) {
+
     var qty = parseFloat(document.getElementById('qty').value);
     var item =  document.getElementById('item').value;
     var metal = document.getElementById('metal').value;
@@ -128,21 +134,29 @@ function successUpload(data) {
     var calcWeight = (weight*qty*percent)-otherWeight;
     switch(metal.toLowerCase()){
         case 'gold':
-        overviewBody={"totalGold":{"__op":"Increment","amount":calcWeight}};
+        overviewBody={
+            "totalGold":{"__op":"Increment","amount":calcWeight}}
+            ;
         break;
         case 'silver':
-        overviewBody={"totalSilver":{"__op":"Increment","amount":calcWeight}};
+        overviewBody={
+            "totalSilver":{"__op":"Increment","amount":calcWeight}
+        };
         break;
         case 'platinum':
-        overviewBody={"totalPlatinum":{"__op":"Increment","amount":calcWeight}};
+        overviewBody={
+            "totalPlatinum":{"__op":"Increment","amount":calcWeight}
+        };
         break;
     }
+
 
     var batchData = {
         'requests':[{
             'method': 'POST',
             'path': '/1/classes/coin',
             'body': {
+                'ACL' : {},
                 date : date,
                 item : item,
                 metal: metal.toLowerCase(),
@@ -157,10 +171,15 @@ function successUpload(data) {
             }
         },{
             'method': 'PUT',
-            'path': '/1/classes/Overview/sV6tdOBQCe',
+            'path': '/1/classes/Overview/'+overviewId,
             'body': overviewBody
         }]
     };
+    batchData.requests[0].body.ACL[userId] = {
+        "read": true,
+        "write": true
+    };
+
     if(deleteObj){
         batchData.requests.push(deleteObj);
     }
@@ -169,7 +188,10 @@ function successUpload(data) {
         if (req.readyState === 4) {
             if (req.status === 200) { // Handle Success and Failure
                 console.log('Success');
-                document.location.href="wire3.html"+window.location.hash;
+                updateHistory(function(data1, error1){
+                    document.location.href="wire3.html"+window.location.hash;
+                });
+
             } else {
 
                 console.log("Error: ", req.statusText); // Error Message
@@ -179,15 +201,13 @@ function successUpload(data) {
     req.open("POST", " https://api.parse.com/1/batch", true);
     req.setRequestHeader("X-Parse-Application-Id", appId);
     req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+    req.setRequestHeader("X-Parse-Session-Token", sessionToken);
     req.setRequestHeader("Content-Type", 'application/json');
     req.send(JSON.stringify(batchData));
-};
+}
 
 //getting parse data from info class
 function getparseData () {
-
-
-
     var req1 = new XMLHttpRequest();
     req1.onreadystatechange = function(oEvent) {
         if (req1.readyState === 4) {
@@ -206,9 +226,10 @@ function getparseData () {
     req1.open("GET", "https://api.parse.com/1/classes/Info", true);
     req1.setRequestHeader("X-Parse-Application-Id", appId);
     req1.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+    req1.setRequestHeader("X-Parse-Session-Token", sessionToken);
     req1.setRequestHeader("Content-Type", 'application/json');
     req1.send();
-};
+}
 
 
 function populateDropdown(tmpObj) {
@@ -336,7 +357,7 @@ function populateDropdown(tmpObj) {
         qty.onkeyup = updateValues;
         premium.onkeyup = updateValues;
     };
-};
+}
 
 function getCoinInfo(name, metalObject) {
     return _.findWhere(metalObject, {
@@ -352,4 +373,94 @@ function getParameterByName(name) {
 
 function setPrice(p){
     document.getElementById('price').innerHTML=p;
+}
+
+
+
+/**
+* Update History
+*/
+function updateHistory(cb) {
+    var oPromise = Cache.getClass(overviewId, 'Overview', {
+        'sessionToken': sessionToken
+    });
+
+    oPromise.then(function(error, data) {
+        console.log(data);
+        var newData = updateArrays(data);
+        setClass(overviewId, newData, sessionToken, function(data, err) {    
+            cb(data, err)
+        });
+    });
+}
+
+function updateArrays(data) {
+    var gold = data.totalGoldArray[data.totalGoldArray.length - 1];
+    var silver = data.totalSilverArray[data.totalSilverArray.length - 1];
+    var platinum = data.totalPlatinumArray[data.totalPlatinumArray.length - 1];
+    var currentDateStr = formatTimeLocal(new Date());
+    console.log(data.totalGoldArray);
+
+    if (gold) {
+        if (gold[0] == currentDateStr) {
+            data.totalGoldArray[data.totalGoldArray.length - 1][1] = data.totalGold;
+        } else {
+            data.totalGoldArray.push([currentDateStr, data.totalGold]);
+        }
+    } else {
+        data.totalGoldArray.push([currentDateStr, data.totalGold]);
+    }
+
+    if (silver) {
+        if (silver[0] == currentDateStr) {
+            data.totalSilverArray[data.totalSilverArray.length - 1][1] = data.totalSilver;
+        } else {
+            data.totalSilverArray.push([currentDateStr, data.totalSilver]);
+        }
+    } else {
+        data.totalSilverArray.push([currentDateStr, data.totalSilver]);
+    }
+    if (platinum) {
+        if (platinum[0] == currentDateStr) {
+            data.totalPlatinumArray[data.totalPlatinumArray.length - 1][1] = data.totalPlatinum;
+        } else {
+            data.totalPlatinumArray.push([currentDateStr, data.totalPlatinum]);
+        }
+    } else {
+        data.totalPlatinumArray.push([currentDateStr, data.totalPlatinum]);
+    }
+    console.log(data);
+    return data;
+}
+
+function formatTimeLocal(dateTime) {
+    return dateTime.getFullYear() + '-' +
+        ('0' + (dateTime.getMonth() + 1)).slice(-2) + '-' +
+        ('0' + dateTime.getDate()).slice(-2);
+}
+
+function setClass(i, myObj, sessionToken, callback) {
+    var cb = callback || function() {};
+    var p = new promise.Promise(); // Create a Promise
+    var req = new XMLHttpRequest();
+    var id = (i) ? '/' + i : '';
+
+    req.onreadystatechange = function(oEvent) {
+        if (req.readyState === 4) {
+            if (req.status === 200) { // Handle Success and Failure
+                var tmpObj = JSON.parse(req.responseText);
+                cb(tmpObj, false);
+                p.done(null, tmpObj); // Resolve that Promise!
+            } else {
+                cb(req.statusText, true);
+                p.done(true, req.statusText); // Resolve that Promise!
+            }
+        }
+    };
+    req.open("PUT", 'https://api.parse.com/1/classes/Overview' + id, true);
+    req.setRequestHeader("X-Parse-Application-Id", appId);
+    req.setRequestHeader("X-Parse-REST-API-Key", apiKey);
+    req.setRequestHeader("X-Parse-Session-Token", sessionToken);
+    req.send(JSON.stringify(myObj));
+    return p; // Return the Promise
 }
