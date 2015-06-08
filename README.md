@@ -6,7 +6,9 @@ The Team
 * Joshua Yuen
 * Kristine Nguyen
 * 
+
 ##Change Log (since hw4)
+
 * Inventory History by updating an array for each type of metal when delete, updating, add
 * Multiple Login is properly implemented now. All coins should be private to the user.
 * Tweaked Login attempt message
