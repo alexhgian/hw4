@@ -5,6 +5,18 @@ The Team
 * Bal Krishna Oli
 * Joshua Yuen
 * Kristine Nguyen
+* 
+
+##Change Log (since hw4)
+
+* Inventory History by updating an array for each type of metal when delete, updating, add
+* Multiple Login is properly implemented now. All coins should be private to the user.
+* Tweaked Login attempt message
+* Reset Password Impelemented. Will send recover email.
+* Ran out of time for minification, Gulp is only used to launch a development server at the moment
+* Discovered a bug with calcuating scale for the graph. Now it properly finds the min and max and scales approriately.
+
+
 
 ##Project Structure
 ```
